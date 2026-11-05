@@ -1,0 +1,43 @@
+name: Go
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      # Skip the Go checks until the repo has some Go code.
+      - name: Check if there is Go code
+        id: code
+        run: |
+          if [ -n "$(find . -name '*.go' -not -path './.git/*' | head -1)" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No Go code yet, skipping checks."
+          fi
+
+      - name: Format
+        if: steps.code.outputs.found == 'true'
+        run: |
+          go fmt ./...
+          git diff --exit-code
+
+      - name: Vet
+        if: steps.code.outputs.found == 'true'
+        run: go vet ./...
+
+      - name: Test
+        if: steps.code.outputs.found == 'true'
+        run: go test ./...
+
+      - name: Race test
+        if: steps.code.outputs.found == 'true'
+        run: go test -race ./...
