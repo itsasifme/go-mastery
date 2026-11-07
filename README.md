@@ -148,7 +148,7 @@ There are no tests yet. These commands still check that all the code builds and 
 
 `go test -race` needs cgo and a C compiler. On Windows without `gcc` it fails with `-race requires cgo`. On Linux (and in GitHub Actions) it works.
 
-Some examples print things in a different order each run, or leave a goroutine stuck on purpose. None of them crash or hang, so the checks still pass.
+Some examples print in a different order each run. Some crash on purpose (a deadlock or a panic) to show a problem, and each of those has a `// fix:` line to try. The checks still pass, because `go test` doesn't run `main`.
 
 ## Go version
 
