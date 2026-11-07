@@ -7,11 +7,13 @@ An unbuffered channel can't hold any value. A send waits until someone receives,
 | Example | Run | What it shows |
 | --- | --- | --- |
 | `01-basic` | `go run ./02-concurrency/02-channels/01-unbuffered/01-basic` | `main` waits for a value from a goroutine |
-| `02-blocked-receive` | `go run ./02-concurrency/02-channels/01-unbuffered/02-blocked-receive` | A goroutine waits to receive, but nobody sends |
-| `03-blocked-send` | `go run ./02-concurrency/02-channels/01-unbuffered/03-blocked-send` | A goroutine waits to send, but nobody receives |
+| `02-blocked-send` | `go run ./02-concurrency/02-channels/01-unbuffered/02-blocked-send` | A goroutine waits to send, but nobody receives: deadlock |
+| `03-blocked-receive` | `go run ./02-concurrency/02-channels/01-unbuffered/03-blocked-receive` | A goroutine waits to receive, but nobody sends: deadlock |
+| `04-ping-pong` | `go run ./02-concurrency/02-channels/01-unbuffered/04-ping-pong` | `main` and a goroutine take strict turns |
+| `05-leak` | `go run ./02-concurrency/02-channels/01-unbuffered/05-leak` | Senders stuck forever with no error: a goroutine leak |
 
 ## Things to remember
 
-- `02` and `03` were first written as "deadlock" examples, but they don't crash.
-- The stuck goroutine runs in the background, and the program simply ends when `main` returns.
-- Go only shows `all goroutines are asleep - deadlock!` when every goroutine is stuck, including `main`.
+- `02` and `03` deadlock on purpose. Go reports it only when every goroutine is stuck, including `main`.
+- If `main` keeps running, stuck goroutines leak silently (`05`).
+- `02`, `03` and `05` have a `// fix:` line to try.
