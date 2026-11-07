@@ -14,5 +14,5 @@ You can limit a channel to send-only (`chan<- T`) or receive-only (`<-chan T`). 
 ## Things to remember
 
 - In real code, make a normal channel and pass it to functions as send-only or receive-only, like in `04`.
-- `02` and `03` only show the types. Their goroutines get stuck, so they usually print nothing.
+- `02` and `03` only show the types. Their goroutines get stuck, so they only print `main done`. Each has `// fix:` lines to try.
 - `01` waits with `time.Sleep`. It works here, but it's not a real way to sync. Use a WaitGroup or a channel instead.
