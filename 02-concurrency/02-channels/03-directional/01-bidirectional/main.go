@@ -1,3 +1,12 @@
+// Bidirectional channel: a normal chan can both send and receive.
+//
+// sendData and readData take the same chan int. One sends, the other
+// receives.
+//
+// Note: time.Sleep is a hack to wait for the goroutines. The real fix is
+// a WaitGroup (see 05-waitgroup).
+//
+// Run: go run ./02-concurrency/02-channels/03-directional/01-bidirectional
 package main
 
 import (
@@ -6,19 +15,19 @@ import (
 )
 
 func sendData(ch chan int) {
-	ch <- 42 // Sending data to the channel
+	ch <- 42
 }
 
 func readData(ch chan int) {
-	x := <-ch // Receiving data from the channel
-	fmt.Println("x: ", x)
+	x := <-ch
+	fmt.Println("x:", x)
 }
 
 func main() {
-	ch := make(chan int) // Declaring a bidirectional channel
+	ch := make(chan int) // can send and receive
 
-	go sendData(ch) // Sending data to the channel
-	go readData(ch) // Reading data from the channel
+	go sendData(ch)
+	go readData(ch)
 
-	time.Sleep(time.Second) // Wait for goroutines to complete
+	time.Sleep(time.Second) // hack: wait for the goroutines
 }
