@@ -17,7 +17,7 @@
 //
 // Try: change 11 to 10. It "works", and that's the trap.
 //
-// Run: go run ./02-concurrency/02-channels/02-buffered/06-bigger-buffer
+// Run: go run ./02-concurrency/02-channels/02-buffered/05-bigger-buffer
 package main
 
 import "fmt"
