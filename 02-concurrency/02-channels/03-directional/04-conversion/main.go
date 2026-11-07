@@ -1,18 +1,27 @@
+// Channel conversion: turn a normal channel into send-only or receive-only.
+//
+// This is how directional channels are used in real code: make one normal
+// channel, then give each side only the access it needs.
+//
+// Note: the conversions here are optional. Go converts automatically when
+// you pass ch to a function that takes chan<- int or <-chan int.
+//
+// Run: go run ./02-concurrency/02-channels/03-directional/04-conversion
 package main
 
 import "fmt"
 
 func sendData(ch chan<- int) {
-	ch <- 42 // Sending data to the channel
+	ch <- 42
 }
 
 func main() {
-	ch := make(chan int) // Declaring a bidirectional channel
+	ch := make(chan int) // normal channel
 
-	sendCh := (chan<- int)(ch) // Converting to send-only channel
-	go sendData(sendCh)        // Sending data to the channel
+	sendCh := (chan<- int)(ch) // send-only view
+	go sendData(sendCh)
 
-	readCh := (<-chan int)(ch) // Converting to receive-only channel
-	x := <-readCh              // Receiving data from the channel
-	fmt.Println("x: ", x)
+	readCh := (<-chan int)(ch) // receive-only view
+	x := <-readCh
+	fmt.Println("x:", x)
 }
