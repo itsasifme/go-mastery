@@ -1,3 +1,9 @@
+// Unbuffered channel: a receive waits until someone sends.
+//
+// main waits at <-ch until the goroutine sends, so no Sleep or WaitGroup
+// is needed.
+//
+// Run: go run ./02-concurrency/02-channels/01-unbuffered/01-basic
 package main
 
 import (
@@ -6,14 +12,13 @@ import (
 )
 
 func main() {
-	// Creating an unbuffered channel
 	ch := make(chan int)
 
 	go func() {
-		time.Sleep(time.Second) // Simulating some work
-		ch <- 5                 // Sending a value to the channel
+		time.Sleep(time.Second) // simulate work
+		ch <- 5
 	}()
 
-	x := <-ch      // Receiving the value from the channel
-	fmt.Println(x) // Output: 5
+	x := <-ch // blocks ~1s until the send
+	fmt.Println(x)
 }
