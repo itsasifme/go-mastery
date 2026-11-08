@@ -6,6 +6,9 @@
 //
 // This is why the later examples use close(done) to say "I'm finished".
 //
+// Here the workers do nothing but wait for stop. To keep working and
+// still listen for stop, a worker needs select (see select/05-for-select).
+//
 // Try: replace close(stop) with stop <- struct{}{}. A send reaches only
 // one receiver, so only one worker stops. The other two wait forever, and
 // the program deadlocks.
