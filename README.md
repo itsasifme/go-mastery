@@ -90,10 +90,10 @@ Every planned topic already has its folder, so adding code later won't change an
 02-concurrency/
 ├── 01-goroutines/
 ├── 02-channels/
-│   ├── 01-unbuffered/
-│   ├── 02-buffered/
-│   ├── 03-directional/
-│   └── 04-closing/
+│   ├── 01-directional/
+│   ├── 02-closing/
+│   ├── 03-unbuffered/
+│   └── 04-buffered/
 ├── 03-select/
 ├── 04-context/
 │   ├── 01-cancellation/
@@ -132,7 +132,7 @@ Each example has its own folder with a `main.go`. Run it from the repo root:
 
 ```bash
 go run ./01-fundamentals/09-interfaces/01-shapes
-go run ./02-concurrency/02-channels/02-buffered/01-basic
+go run ./02-concurrency/02-channels/04-buffered/01-basic
 ```
 
 ## Checks
