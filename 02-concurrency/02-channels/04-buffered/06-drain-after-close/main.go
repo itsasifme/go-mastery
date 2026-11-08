@@ -7,7 +7,7 @@
 //
 // Try: uncomment "ch <- 4". Sending on a closed channel panics.
 //
-// Run: go run ./02-concurrency/02-channels/04-closing/02-drain-after-close
+// Run: go run ./02-concurrency/02-channels/04-buffered/06-drain-after-close
 package main
 
 import "fmt"
