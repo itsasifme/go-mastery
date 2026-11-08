@@ -6,7 +6,7 @@
 // Note: the conversions here are optional. Go converts automatically when
 // you pass ch to a function that takes chan<- int or <-chan int.
 //
-// Run: go run ./02-concurrency/02-channels/03-directional/04-conversion
+// Run: go run ./02-concurrency/02-channels/01-directional/04-conversion
 package main
 
 import "fmt"
