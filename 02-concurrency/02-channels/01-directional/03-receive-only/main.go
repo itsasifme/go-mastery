@@ -7,7 +7,7 @@
 // Comment out the 2 lines marked "problem", then uncomment the "fix:"
 // lines.
 //
-// Run: go run ./02-concurrency/02-channels/03-directional/03-receive-only
+// Run: go run ./02-concurrency/02-channels/01-directional/03-receive-only
 package main
 
 import "fmt"
