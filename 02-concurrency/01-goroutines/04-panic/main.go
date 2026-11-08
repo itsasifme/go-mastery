@@ -16,14 +16,17 @@ import (
 func main() {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("main recovered:", r) // never runs
+			fmt.Println("main recovered:", r) // never runs because recover only works in the goroutine that panics
 		}
 	}()
 
-	go func() {
-		// defer func() { fmt.Println("recovered:", recover()) }() // fix: recover in the same goroutine
-		panic("boom")
-	}()
+	go worker()
 
 	time.Sleep(time.Second) // hack: give the goroutine time to panic
+}
+
+// worker panics, and nothing in its own goroutine recovers it.
+func worker() {
+	// defer func() { fmt.Println("recovered:", recover()) }() // fix: recover in the same goroutine
+	panic("boom")
 }
