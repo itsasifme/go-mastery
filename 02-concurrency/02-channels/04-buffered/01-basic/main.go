@@ -6,7 +6,7 @@
 // Try: uncomment "ch <- 3". The buffer is full and nobody receives, so
 // the program deadlocks.
 //
-// Run: go run ./02-concurrency/02-channels/02-buffered/01-basic
+// Run: go run ./02-concurrency/02-channels/04-buffered/01-basic
 package main
 
 import "fmt"
