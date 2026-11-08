@@ -38,7 +38,7 @@ I'm a backend engineer, and I use this repo to learn Go step by step. It starts 
 | --- | --- | --- |
 | 01 | [Goroutines](02-concurrency/01-goroutines/) | ✅ |
 | 02 | [Channels](02-concurrency/02-channels/) | ✅ |
-| 03 | [Select](02-concurrency/03-select/) | 📝 |
+| 03 | [Select](02-concurrency/03-select/) | ✅ |
 | 04 | [Context](02-concurrency/04-context/) | 📝 |
 | 05 | [WaitGroup](02-concurrency/05-waitgroup/) | ✅ |
 | 06 | [errgroup](02-concurrency/06-errgroup/) | 📝 |
