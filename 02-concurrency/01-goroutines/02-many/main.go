@@ -14,11 +14,14 @@ import (
 
 func main() {
 	for i := 0; i < 5; i++ {
-		go func(id int) {
-			fmt.Println("goroutine", id)
-		}(i)
+		go printID(i)
 	}
 
 	fmt.Println("running:", runtime.NumGoroutine()) // main + the ones not done yet
 	time.Sleep(time.Second)                         // hack: wait for them (real fix: WaitGroup)
+}
+
+// printID prints which goroutine is running.
+func printID(id int) {
+	fmt.Println("goroutine", id)
 }
