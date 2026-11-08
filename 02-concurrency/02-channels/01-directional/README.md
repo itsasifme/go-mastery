@@ -6,10 +6,10 @@ You can limit a channel to send-only (`chan<- T`) or receive-only (`<-chan T`). 
 
 | Example | Run | What it shows |
 | --- | --- | --- |
-| `01-bidirectional` | `go run ./02-concurrency/02-channels/03-directional/01-bidirectional` | A normal channel passed to a sender and a reader |
-| `02-send-only` | `go run ./02-concurrency/02-channels/03-directional/02-send-only` | A send-only channel type |
-| `03-receive-only` | `go run ./02-concurrency/02-channels/03-directional/03-receive-only` | A receive-only channel type |
-| `04-conversion` | `go run ./02-concurrency/02-channels/03-directional/04-conversion` | Turn a normal channel into send-only and receive-only |
+| `01-bidirectional` | `go run ./02-concurrency/02-channels/01-directional/01-bidirectional` | A normal channel passed to a sender and a reader |
+| `02-send-only` | `go run ./02-concurrency/02-channels/01-directional/02-send-only` | A send-only channel type |
+| `03-receive-only` | `go run ./02-concurrency/02-channels/01-directional/03-receive-only` | A receive-only channel type |
+| `04-conversion` | `go run ./02-concurrency/02-channels/01-directional/04-conversion` | Turn a normal channel into send-only and receive-only |
 
 ## Things to remember
 
