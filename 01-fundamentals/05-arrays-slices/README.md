@@ -13,8 +13,8 @@ Arrays have a fixed size. Slices are flexible and are what you use most of the t
 
 ## Things to remember
 
-- Always use the result of `append`. It may create a new array behind the scenes.
-- Slicing a slice doesn't copy it. Both slices share the same data.
+- **Always use the result of `append`.** It may create a new array behind the scenes.
+- Slicing a slice doesn't copy it. **Both slices share the same data.**
 - A nil slice and an empty slice both have length 0, but JSON shows them as `null` and `[]`.
 
 ## Go version notes

@@ -13,9 +13,9 @@ A map stores key and value pairs.
 
 ## Things to remember
 
-- Reading from a nil map is fine. Writing to it panics.
+- Reading from a nil map is fine. **Writing to it panics.**
 - The order of a `for range` loop over a map is random on purpose.
-- Maps aren't safe when two goroutines write at the same time. The program crashes, and `recover` can't stop it.
+- **Maps aren't safe when two goroutines write at the same time.** The program crashes, and `recover` can't stop it.
 
 ## Go version notes
 

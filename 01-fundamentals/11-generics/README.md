@@ -12,7 +12,7 @@ Generics let you write one function or type that works with many types.
 
 ## Things to remember
 
-- Use generics when the code is the same for every type. Use interfaces when the behavior is different.
+- **Use generics when the code is the same for every type. Use interfaces when the behavior is different.**
 - `~int` means "any type built on `int`".
 - A method can't have its own type parameters.
 

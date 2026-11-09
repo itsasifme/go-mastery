@@ -12,7 +12,7 @@ How to create variables and constants in Go, and where they can be used.
 
 ## Things to remember
 
-- Every type has a zero value. A new variable is never "empty" or random.
+- **Every type has a zero value.** A new variable is never "empty" or random.
 - `:=` only works inside functions.
-- Using `:=` inside an `if` block can create a new `err` that hides the outer one. `go vet` won't warn you about it.
+- Using `:=` inside an `if` block **can create a new `err` that hides the outer one**. `go vet` won't warn you about it.
 - An unused local variable is a compile error.
