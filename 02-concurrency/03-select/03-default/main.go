@@ -6,11 +6,13 @@
 //	trySend     send if there's room, otherwise give up
 //	tryReceive  take a value if one is waiting, otherwise move on
 //
-// A common use: a log or metrics channel that drops data when it's full,
-// instead of slowing the whole program down.
-//
 // Note: don't put a default case in a loop that only waits. The loop
 // spins and burns CPU. Leave default out, so select waits properly.
+//
+// Real use:
+//   - a metrics or log channel that drops data when full, instead of
+//     slowing down requests.
+//   - a quick "is there work?" check before doing something else.
 //
 // Run: go run ./02-concurrency/03-select/03-default
 package main
@@ -23,7 +25,7 @@ func main() {
 	v, ok := tryReceive(ch)
 	fmt.Println("receive:", v, ok) // 0 false: nothing there yet
 
-	for i := 1; i <= 3; i++ {
+	for i := range 3 {
 		if trySend(ch, i) {
 			fmt.Println("sent", i)
 		} else {
@@ -32,7 +34,7 @@ func main() {
 	}
 
 	v, ok = tryReceive(ch)
-	fmt.Println("receive:", v, ok) // 1 true
+	fmt.Println("receive:", v, ok) // 0 true: the first value sent
 }
 
 // trySend sends v if there's room, and reports whether it did.
