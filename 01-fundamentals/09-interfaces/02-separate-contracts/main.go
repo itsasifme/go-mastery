@@ -1,5 +1,16 @@
-// Go program to illustrate the concept of multiple interfaces
-
+// Separate contracts: one type can satisfy several small interfaces.
+//
+// author has details() and articles(), so it satisfies both AuthorDetails
+// and AuthorArticles. Each variable only sees the methods of its own
+// interface.
+//
+// Real use:
+//   - io.Reader and io.Writer: an os.File is both, but a function that
+//     only reads asks for a Reader.
+//   - a function asks for the smallest interface it needs, so it's easy
+//     to test with a tiny fake.
+//
+// Run: go run ./01-fundamentals/09-interfaces/02-separate-contracts
 package main
 
 import "fmt"
