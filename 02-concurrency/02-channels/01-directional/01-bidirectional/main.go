@@ -4,7 +4,11 @@
 // receives.
 //
 // Note: time.Sleep is a hack to wait for the goroutines. The real fix is
-// a WaitGroup (see 05-waitgroup).
+// a WaitGroup (see waitgroup/01-basic).
+//
+// Real use:
+//   - inside the one function that creates a channel and wires producers
+//     and consumers together. Everywhere else, pass a directional type.
 //
 // Run: go run ./02-concurrency/02-channels/01-directional/01-bidirectional
 package main
