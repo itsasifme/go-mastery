@@ -6,7 +6,11 @@
 //
 // Always call ticker.Stop when you're done with a ticker.
 //
-// Run: go run ./02-concurrency/03-select/07-ticker
+// Real use:
+//   - health checks, flushing metrics every few seconds, refreshing a
+//     cache, or sending heartbeats to a server.
+//
+// Run: go run ./02-concurrency/03-select/08-ticker
 package main
 
 import (
