@@ -7,6 +7,10 @@
 //
 // Try: uncomment "ch <- 4". Sending on a closed channel panics.
 //
+// Real use:
+//   - graceful shutdown: close the job queue, workers finish the jobs
+//     already in it, then exit. No queued job is lost.
+//
 // Run: go run ./02-concurrency/02-channels/04-buffered/06-drain-after-close
 package main
 
@@ -20,7 +24,7 @@ func main() {
 	close(ch)
 	// ch <- 4 // panic: send on closed channel
 
-	for i := 0; i < 4; i++ {
+	for range cap(ch) + 1 { // one more than the values, to see ok == false
 		v, ok := <-ch // ok is false once the channel is closed and empty
 		fmt.Println(v, ok)
 	}
