@@ -7,6 +7,10 @@
 // Comment out the 2 lines marked "problem", then uncomment the "fix:"
 // lines.
 //
+// Real use:
+//   - APIs return <-chan T, like ctx.Done() and time.After, so callers can
+//     wait on the channel but can't send to it or close it.
+//
 // Run: go run ./02-concurrency/02-channels/01-directional/03-receive-only
 package main
 
