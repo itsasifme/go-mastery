@@ -6,6 +6,10 @@
 // Try: remove close(out). The loop keeps waiting for more values, and the
 // program deadlocks.
 //
+// Real use:
+//   - a producer streams rows from a database or lines from a file, then
+//     closes the channel. The consumer just ranges until the end.
+//
 // Run: go run ./02-concurrency/02-channels/02-closing/01-range
 package main
 
@@ -23,8 +27,8 @@ func main() {
 
 // produce sends 1 to 5, then closes the channel.
 func produce(out chan<- int) {
-	for i := 1; i <= 5; i++ {
-		out <- i
+	for i := range 5 {
+		out <- i + 1
 	}
 	close(out) // tells range there are no more values
 }
