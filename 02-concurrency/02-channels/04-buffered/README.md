@@ -2,6 +2,25 @@
 
 A buffered channel can hold a few values. A send only waits when the buffer is full, and a receive only waits when it's empty.
 
+See the [full API overview](../README.md#api).
+
+## Why
+
+**Problem:** with an unbuffered channel, a fast sender waits for a slow receiver at every value. And senders whose result nobody reads get stuck forever.
+
+**Solution:** a buffer of `n`. Up to `n` sends finish without a receiver.
+
+## API
+
+| Syntax | What it does | Example |
+| --- | --- | --- |
+| `make(chan T, n)` | A channel with room for `n` values | [01-basic](01-basic/) |
+| `len(ch)` | How many values are waiting | [01-basic](01-basic/) |
+| `cap(ch)` | The buffer size | [01-basic](01-basic/) |
+| `ch <- v` when full | Waits for a free slot | [02-blocked-send](02-blocked-send/) |
+| `<-ch` when empty | Waits for a value | [03-blocked-receive](03-blocked-receive/) |
+| `close(ch)` | Values already in the buffer can still be read | [06-drain-after-close](06-drain-after-close/) |
+
 ## Examples
 
 | Example | Run | What it shows |
@@ -15,10 +34,10 @@ A buffered channel can hold a few values. A send only waits when the buffer is f
 
 ## Things to remember
 
-- Sends block only when the buffer is full. Uncomment `ch <- 3` in `01` to see it.
+- **Sends block only when the buffer is full.** Uncomment `ch <- 3` in `01` to see it.
 - `len(ch)` = values waiting, `cap(ch)` = buffer size.
 - Make the buffer as big as the number of senders, so none get stuck if the receiver stops early (no goroutine leak). See [`03-unbuffered/05-leak`](../03-unbuffered/05-leak/).
 - `01` runs only in `main`, which is itself a goroutine, just to demo the buffer. In real code, channels are for passing data between goroutines.
 - `02`, `03` and `05` show a problem on purpose. Each has a `// fix:` line to try.
-- A buffer helps a fast and a slow side work at their own speed (`04`). It doesn't fix a design where nobody reads (`05`).
+- A buffer helps a fast and a slow side work at their own speed (`04`). **It doesn't fix a design where nobody reads** (`05`).
 - Closing doesn't throw away buffered values. Receivers get them all first, then see `ok == false` (`06`).
