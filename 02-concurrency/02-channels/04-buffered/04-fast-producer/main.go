@@ -21,6 +21,11 @@
 // the receiver, so "sent" and "got" take turns and the producer is only
 // done at ~800ms.
 //
+// Real use:
+//   - absorbing bursts: a logger buffers log lines, so request handlers
+//     don't wait on slow disk writes.
+//   - reading a file quickly while a slower step processes each line.
+//
 // Run: go run ./02-concurrency/02-channels/04-buffered/04-fast-producer
 package main
 
@@ -29,23 +34,28 @@ import (
 	"time"
 )
 
+// count is how many values are sent and received. Both loops use it, so
+// the receiver never waits for a value that's never sent.
+const count = 5
+
 func main() {
 	ch := make(chan int, 3)
 	start := time.Now()
 
 	go produce(ch, start)
 
-	for i := 1; i <= 5; i++ {
+	for range count {
 		v := <-ch
 		time.Sleep(200 * time.Millisecond) // slow work
 		fmt.Printf("%4dms got  %d\n", time.Since(start).Milliseconds(), v)
 	}
 }
 
-// produce sends 5 values as fast as it can.
+// produce sends count values as fast as it can.
 func produce(out chan<- int, start time.Time) {
-	for i := 1; i <= 5; i++ {
-		out <- i // only waits when the buffer is full
-		fmt.Printf("%4dms sent %d\n", time.Since(start).Milliseconds(), i)
+	for i := range count {
+		v := i + 1
+		out <- v // only waits when the buffer is full
+		fmt.Printf("%4dms sent %d\n", time.Since(start).Milliseconds(), v)
 	}
 }
