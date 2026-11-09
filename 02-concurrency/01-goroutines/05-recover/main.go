@@ -14,6 +14,12 @@
 // panic in the same goroutine (see 04-panic). Use it as a safety net for
 // bugs. For normal failures, return an error instead.
 //
+// Real use:
+//   - net/http recovers a panic per request, so one broken handler doesn't
+//     kill the server.
+//   - background job runners recover per job, log the stack trace, and
+//     move on to the next job.
+//
 // Run: go run ./02-concurrency/01-goroutines/05-recover
 package main
 
@@ -23,7 +29,7 @@ import (
 )
 
 func main() {
-	for i := 1; i <= 3; i++ {
+	for i := range 3 {
 		go job(i)
 	}
 
