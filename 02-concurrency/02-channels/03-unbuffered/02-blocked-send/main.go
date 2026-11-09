@@ -6,6 +6,11 @@
 //
 // Fix: receive the value in main. Uncomment the "fix:" line.
 //
+// Real use:
+//   - a handler returns early on an error and never reads the result. In a
+//     server this doesn't deadlock, it leaks a goroutine on every request
+//     (see 05-leak).
+//
 // Run: go run ./02-concurrency/02-channels/03-unbuffered/02-blocked-send
 package main
 
@@ -24,7 +29,7 @@ func main() {
 
 // send sends one value, then tells main it's finished.
 func send(out chan<- int, done chan<- struct{}) {
-	defer close(done) // tells main we're finished (see 02-closing)
+	defer close(done) // tells main we're finished (see channels/02-closing)
 	out <- 5          // blocks: no receiver
 	fmt.Println("sent")
 }
