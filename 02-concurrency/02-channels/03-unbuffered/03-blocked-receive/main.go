@@ -6,6 +6,11 @@
 //
 // Fix: send a value from main. Uncomment the "fix:" line.
 //
+// Real use:
+//   - a producer fails and returns without sending or closing. The
+//     consumer waits forever, so the request hangs until the client gives
+//     up.
+//
 // Run: go run ./02-concurrency/02-channels/03-unbuffered/03-blocked-receive
 package main
 
@@ -23,9 +28,9 @@ func main() {
 }
 
 // receive waits for one value, then tells main it's finished.
-// <-chan int means receive can only read from it (see 01-directional).
+// <-chan int means receive can only read from it (see channels/01-directional).
 func receive(in <-chan int, done chan<- struct{}) {
-	defer close(done) // tells main we're finished (see 02-closing)
+	defer close(done) // tells main we're finished (see channels/02-closing)
 	x := <-in         // blocks: no sender
 	fmt.Println("x:", x)
 }
