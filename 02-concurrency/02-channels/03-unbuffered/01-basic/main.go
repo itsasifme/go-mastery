@@ -3,6 +3,10 @@
 // main waits at <-ch until the goroutine sends, so no Sleep or WaitGroup
 // is needed.
 //
+// Real use:
+//   - wait for one result from a background task, like loading config
+//     while the rest of startup runs.
+//
 // Run: go run ./02-concurrency/02-channels/03-unbuffered/01-basic
 package main
 
@@ -21,7 +25,7 @@ func main() {
 }
 
 // produce does some work, then sends the result.
-// chan<- int means produce can only send on it (see 01-directional).
+// chan<- int means produce can only send on it (see channels/01-directional).
 func produce(out chan<- int) {
 	time.Sleep(time.Second) // simulate work
 	out <- 5
