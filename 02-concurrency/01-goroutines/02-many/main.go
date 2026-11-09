@@ -3,6 +3,11 @@
 // main starts 5 goroutines, and the print order changes on every run.
 // runtime.NumGoroutine shows how many are still running.
 //
+// Real use:
+//   - net/http runs every incoming request in its own goroutine.
+//   - processing many items at once, like resizing uploaded images or
+//     calling several APIs.
+//
 // Run: go run ./02-concurrency/01-goroutines/02-many
 package main
 
@@ -13,7 +18,7 @@ import (
 )
 
 func main() {
-	for i := 0; i < 5; i++ {
+	for i := range 5 {
 		go printID(i)
 	}
 
