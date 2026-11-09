@@ -7,6 +7,10 @@
 // main. Comment out the 2 lines marked "problem", then uncomment the
 // "fix:" lines.
 //
+// Real use:
+//   - producer signatures like func produce(out chan<- Event): the
+//     compiler stops a producer from reading its own output by mistake.
+//
 // Run: go run ./02-concurrency/02-channels/01-directional/02-send-only
 package main
 
