@@ -6,6 +6,11 @@
 //
 // Fix: receive one value in main to free a slot. Uncomment the "fix:" line.
 //
+// Real use:
+//   - a full job queue makes the HTTP handler wait. That's backpressure:
+//     sometimes what you want, sometimes a hidden slowdown (see
+//     patterns/05-backpressure).
+//
 // Run: go run ./02-concurrency/02-channels/04-buffered/02-blocked-send
 package main
 
@@ -24,7 +29,7 @@ func main() {
 
 // sendThree sends 3 values into a buffer that only has room for 2.
 func sendThree(out chan<- int, done chan<- struct{}) {
-	defer close(done) // tells main we're finished (see 02-closing)
+	defer close(done) // tells main we're finished (see channels/02-closing)
 	out <- 1
 	out <- 2
 	out <- 3 // blocks: buffer full
