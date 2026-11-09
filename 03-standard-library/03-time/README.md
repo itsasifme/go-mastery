@@ -13,8 +13,8 @@ Work with dates, durations, time zones, timers, and tickers.
 
 ## Things to remember
 
-- Go formats dates with a sample date, not with `YYYY-MM-DD`.
-- Compare times with `Equal`, not `==`.
+- **Go formats dates with a sample date, not with `YYYY-MM-DD`.**
+- **Compare times with `Equal`, not `==`.**
 - Always `Stop` a ticker when you're done with it.
 
 ## Go version notes

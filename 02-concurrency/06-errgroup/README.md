@@ -12,7 +12,7 @@
 
 ## Things to remember
 
-- `Wait` waits for all goroutines, then returns the first error.
+- `Wait` waits for all goroutines, then **returns the first error**.
 - The context from `WithContext` is cancelled after the first error.
 
 ## Package note

@@ -12,5 +12,5 @@ Convert between strings and numbers.
 
 ## Things to remember
 
-- `string(65)` gives `"A"`, not `"65"`. Use `strconv.Itoa`.
+- **`string(65)` gives `"A"`, not `"65"`.** Use `strconv.Itoa`.
 - `strconv` is faster and clearer than `fmt.Sprint` for simple conversions.

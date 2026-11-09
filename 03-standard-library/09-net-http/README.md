@@ -12,8 +12,8 @@ Small HTTP servers and clients. Big REST API projects don't belong in this repo.
 
 ## Things to remember
 
-- The default HTTP client has no timeout. Always set one.
-- Always close `resp.Body`.
+- **The default HTTP client has no timeout.** Always set one.
+- **Always close `resp.Body`.**
 
 ## Go version notes
 

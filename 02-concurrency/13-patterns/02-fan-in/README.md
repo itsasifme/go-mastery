@@ -10,5 +10,5 @@ Merge many channels into one.
 
 ## Things to remember
 
-- Use one goroutine per input channel. Close the output when all of them are done.
+- Use one goroutine per input channel. **Close the output when all of them are done.**
 - Values from different inputs can come out in any order.

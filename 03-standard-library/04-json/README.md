@@ -13,8 +13,8 @@ Turn Go values into JSON and back. Basic struct tags are already shown in [struc
 
 ## Things to remember
 
-- Only fields that start with a capital letter are used.
-- Numbers read into `any` become `float64`.
+- **Only fields that start with a capital letter are used.**
+- **Numbers read into `any` become `float64`.**
 - `DisallowUnknownFields` rejects JSON with extra fields.
 
 ## Go version notes

@@ -13,6 +13,6 @@
 ## Things to remember
 
 - A zero `sync.Mutex` is ready to use.
-- Never copy a mutex. `go vet` warns you about it.
+- **Never copy a mutex.** `go vet` warns you about it.
 - Put `defer mu.Unlock()` right after `mu.Lock()`.
-- Locking the same mutex twice in one goroutine gets it stuck forever.
+- **Locking the same mutex twice in one goroutine gets it stuck forever.**

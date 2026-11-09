@@ -12,6 +12,6 @@ Match and replace text with regular expressions.
 
 ## Things to remember
 
-- Compile the pattern once with `regexp.MustCompile`, not inside a loop.
+- **Compile the pattern once with `regexp.MustCompile`, not inside a loop.**
 - Go's regexp is always fast, but it has no back-references and no lookahead.
 - If plain text search is enough, use the `strings` package instead.

@@ -11,5 +11,5 @@ A semaphore limits how many goroutines can do something at the same time.
 
 ## Things to remember
 
-- Take a slot before you start the goroutine, not inside it.
+- **Take a slot before you start the goroutine, not inside it.**
 - If you also need errors, `errgroup.SetLimit` is often simpler.

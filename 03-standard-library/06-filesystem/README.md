@@ -14,7 +14,7 @@ Read, write, and walk through files with `os` and `path/filepath`.
 ## Things to remember
 
 - Use `path/filepath` for file paths. It handles `\` on Windows.
-- When writing a file, check the error from `Close` too.
+- When writing a file, **check the error from `Close` too**.
 
 ## Go version notes
 

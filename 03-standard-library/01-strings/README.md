@@ -12,7 +12,7 @@ Search, split, and build text with the `strings` package.
 
 ## Things to remember
 
-- `s += x` in a loop is slow. Use `strings.Builder`.
+- **`s += x` in a loop is slow.** Use `strings.Builder`.
 - For non-English text, a byte index isn't the same as a character position.
 
 ## Go version notes

@@ -10,5 +10,5 @@ Common ways to build things with goroutines and channels.
 
 ## Things to remember
 
-- Every goroutine needs a clear way to stop. Otherwise it leaks.
+- **Every goroutine needs a clear way to stop.** Otherwise it leaks.
 - Only the sender closes a channel, and only after all sending is done.

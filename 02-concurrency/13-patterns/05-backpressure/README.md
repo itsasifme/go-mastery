@@ -11,5 +11,5 @@ Ways to stop a fast producer from flooding a slow consumer.
 
 ## Things to remember
 
-- A queue with no limit just grows until the program runs out of memory.
+- **A queue with no limit just grows until the program runs out of memory.**
 - Choose on purpose: wait, drop, or reject.

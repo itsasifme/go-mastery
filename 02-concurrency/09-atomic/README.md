@@ -12,8 +12,8 @@
 
 ## Things to remember
 
-- Use atomic for one value. Use a mutex when several fields must change together.
-- Don't mix atomic and normal reads or writes on the same variable.
+- **Use atomic for one value. Use a mutex when several fields must change together.**
+- **Don't mix atomic and normal reads or writes on the same variable.**
 
 ## Go version notes
 

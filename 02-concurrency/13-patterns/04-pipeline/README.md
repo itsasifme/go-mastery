@@ -12,4 +12,4 @@ A chain of steps connected by channels. Each step takes values, changes them, an
 ## Things to remember
 
 - Each step closes its own output channel.
-- If a later step stops early, the earlier steps get stuck unless they also watch `ctx.Done()`.
+- If a later step stops early, **the earlier steps get stuck unless they also watch `ctx.Done()`**.
