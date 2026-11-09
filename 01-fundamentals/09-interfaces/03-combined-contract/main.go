@@ -1,5 +1,15 @@
-// Go program to illustrate the
-// concept of multiple interfaces
+// Combined contract: one interface that requires several methods.
+//
+// Author needs both details() and articles(). author has both, so one
+// variable can call either.
+//
+// Real use:
+//   - io.ReadWriter and io.ReadCloser combine smaller interfaces. An HTTP
+//     response body is an io.ReadCloser.
+//   - a Repository interface with Get, Save and Delete for one kind of
+//     data.
+//
+// Run: go run ./01-fundamentals/09-interfaces/03-combined-contract
 package main
 
 import "fmt"
