@@ -1,3 +1,17 @@
+// Pointers: a pointer holds the address of a value, not the value itself.
+//
+// ptr := &value stores the address of value. *ptr reads or changes the
+// value at that address. Changing *ptr changes value too, while the
+// address stays the same. Pointers to structs work the same way.
+//
+// Real use:
+//   - functions that must change their argument, like
+//     json.Unmarshal(data, &user) filling in a struct.
+//   - passing big structs as *T, so they aren't copied on every call.
+//   - optional fields: a *string in a JSON or database struct is nil when
+//     the value is missing.
+//
+// Run: go run ./01-fundamentals/04-pointers/01-basic
 package main
 
 import (
