@@ -6,6 +6,10 @@
 // Try: uncomment "ch <- 3". The buffer is full and nobody receives, so
 // the program deadlocks.
 //
+// Real use:
+//   - a small queue between two parts of a program, like an HTTP handler
+//     handing jobs to a background worker.
+//
 // Run: go run ./02-concurrency/02-channels/04-buffered/01-basic
 package main
 
