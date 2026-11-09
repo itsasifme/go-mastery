@@ -1,3 +1,15 @@
+// Pointer receiver: a method that changes the original struct.
+//
+// ChangeLength has a *Rectangle receiver, so it changes rect itself, not
+// a copy. Go takes &rect for you when you call rect.ChangeLength(20).
+//
+// Real use:
+//   - methods that update state, like account.Deposit(amount) or
+//     cache.Set(key, value).
+//   - any struct that holds a sync.Mutex: copying it breaks the lock, so
+//     its methods must use a pointer receiver.
+//
+// Run: go run ./01-fundamentals/08-methods/02-pointer-receiver
 package main
 
 import "fmt"
