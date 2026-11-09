@@ -12,4 +12,4 @@ A fixed number of workers take jobs from one channel and send results to another
 ## Things to remember
 
 - Close the jobs channel after the last job, so the workers can stop.
-- Close the results channel only after all workers are done. Use a WaitGroup for that.
+- **Close the results channel only after all workers are done.** Use a WaitGroup for that.

@@ -13,6 +13,6 @@
 
 ## Things to remember
 
-- `Read` can return some data and an error at the same time. Use the data first.
+- **`Read` can return some data and an error at the same time.** Use the data first.
 - `bufio.Scanner` fails on lines longer than 64 KB by default.
-- Always call `Flush` on a `bufio.Writer`.
+- **Always call `Flush` on a `bufio.Writer`.**

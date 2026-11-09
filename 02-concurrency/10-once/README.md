@@ -11,7 +11,7 @@
 
 ## Things to remember
 
-- If the function panics, `Once` still counts it as done.
+- **If the function panics, `Once` still counts it as done.**
 - Calling `once.Do` inside its own function gets stuck forever.
 
 ## Go version notes

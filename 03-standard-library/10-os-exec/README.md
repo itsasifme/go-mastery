@@ -12,7 +12,7 @@ Run other programs from Go.
 
 ## Things to remember
 
-- There's no shell, so things like `*` or quotes aren't processed.
+- **There's no shell**, so things like `*` or quotes aren't processed.
 - Commands are different on Windows and Linux. `go version` works on both.
 
 ## Go version notes

@@ -11,5 +11,5 @@
 
 ## Things to remember
 
-- It only helps when there are many more reads than writes. Measure it first.
+- **It only helps when there are many more reads than writes.** Measure it first.
 - Don't call `RLock` twice in the same goroutine. It can get stuck if a writer is waiting.

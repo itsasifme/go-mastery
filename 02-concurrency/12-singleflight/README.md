@@ -11,7 +11,7 @@
 
 ## Things to remember
 
-- Callers share the error too, not just the result.
+- **Callers share the error too, not just the result.**
 - `Forget` removes a key, so the next call runs again.
 
 ## Package note

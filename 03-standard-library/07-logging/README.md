@@ -12,7 +12,7 @@ The simple `log` package, and structured logs with `log/slog`.
 
 ## Things to remember
 
-- `log.Fatal` exits the program right away, so deferred code doesn't run.
+- **`log.Fatal` exits the program right away, so deferred code doesn't run.**
 - Logs with key and value pairs are easier to search.
 
 ## Go version notes
