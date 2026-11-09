@@ -5,7 +5,11 @@
 // every run. The order of the cases in the code doesn't matter.
 //
 // Note: never count on select picking a case first. If one case must
-// win, see 08-priority.
+// win, see 09-priority.
+//
+// Real use:
+//   - fairness: under load, one busy channel can't starve the others,
+//     because every ready case gets picked sometimes.
 //
 // Run: go run ./02-concurrency/03-select/02-random-pick
 package main
@@ -17,7 +21,7 @@ func main() {
 	b := make(chan int, 1)
 	wins := map[string]int{}
 
-	for i := 0; i < 1000; i++ {
+	for range 1000 {
 		a <- 1
 		b <- 1 // now both cases are ready
 
