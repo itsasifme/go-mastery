@@ -14,6 +14,11 @@
 // Fix: pass the value in as an argument, so each goroutine gets a copy.
 // Use the "fix:" line instead of the goroutine above it.
 //
+// Real use:
+//   - starting one goroutine per item in a slice (URLs, files, user IDs).
+//     Older code passes the item as an argument because of this bug, so
+//     you'll see that style a lot.
+//
 // Run: go run ./02-concurrency/01-goroutines/03-loop-variable
 package main
 
