@@ -4,7 +4,13 @@
 // never print.
 //
 // Fix: uncomment both "fix" lines. That's a quick hack for a demo.
-// The real fix is a WaitGroup (see 05-waitgroup).
+// The real fix is a WaitGroup (see waitgroup/01-basic).
+//
+// Real use:
+//   - fire-and-forget work in a server, like sending a welcome email after
+//     signup. The server keeps running, so the goroutine gets to finish.
+//   - in a CLI tool or batch job, main must wait, or background work is
+//     lost when the program exits.
 //
 // Run: go run ./02-concurrency/01-goroutines/01-basic
 package main
