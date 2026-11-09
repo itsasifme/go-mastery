@@ -10,7 +10,11 @@
 // Try: change timeout to 3 * time.Second. Now the result wins.
 //
 // Note: real code usually uses context.WithTimeout instead, so the slow
-// work can be cancelled too (see 04-context).
+// work can be cancelled too (see context/02-timeout/01-basic).
+//
+// Real use:
+//   - calling an external API with a time limit, and returning an error to
+//     the user instead of hanging.
 //
 // Run: go run ./02-concurrency/03-select/04-timeout
 package main
