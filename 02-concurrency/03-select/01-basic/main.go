@@ -6,7 +6,11 @@
 //
 // The channels have a buffer of 1, so the slow lookup can still send its
 // answer and exit after main stops listening (no goroutine leak, see
-// buffered channels).
+// channels/04-buffered/01-basic).
+//
+// Real use:
+//   - query two replicas or caches and use whichever answers first.
+//   - wait for a result and a shutdown signal at the same time.
 //
 // Run: go run ./02-concurrency/03-select/01-basic
 package main
