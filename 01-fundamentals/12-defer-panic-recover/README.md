@@ -12,7 +12,7 @@
 
 ## Things to remember
 
-- The arguments of a deferred call are evaluated right away, not when it runs.
+- The arguments of a deferred call are **evaluated right away**, not when it runs.
 - `recover` only works inside a deferred function.
-- A panic in another goroutine crashes the whole program.
+- **A panic in another goroutine crashes the whole program.**
 - A `defer` inside a loop runs when the function ends, not after each loop round.

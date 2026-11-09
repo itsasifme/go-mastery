@@ -13,10 +13,10 @@ In Go, an error is just a value that a function returns.
 
 ## Things to remember
 
-- Handle the error or return it. Don't do both.
+- **Handle the error or return it. Don't do both.**
 - After wrapping, use `errors.Is` instead of `==`.
 - A nil pointer stored in an `error` is **not** nil. This is a classic trap.
-- Use `panic` for bugs, not for normal errors.
+- **Use `panic` for bugs, not for normal errors.**
 
 ## Go version notes
 
