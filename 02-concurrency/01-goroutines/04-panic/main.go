@@ -5,6 +5,10 @@
 //
 // Fix: recover inside the goroutine. Uncomment the "fix:" line.
 //
+// Real use:
+//   - one nil pointer in a background goroutine takes down the whole
+//     server, including every other user's request.
+//
 // Run: go run ./02-concurrency/01-goroutines/04-panic
 package main
 
