@@ -7,8 +7,12 @@
 // "send on closed channel", depending on timing.
 //
 // Fix: senders only send. One separate goroutine waits until all senders
-// are done (with a WaitGroup, see 05-waitgroup), then closes ch once.
+// are done (with a WaitGroup, see waitgroup/01-basic), then closes ch once.
 // Comment out the line marked "problem", then uncomment the "fix:" line.
+//
+// Real use:
+//   - a worker pool where many workers send results to one channel. One
+//     extra goroutine closes it after wg.Wait().
 //
 // Run: go run ./02-concurrency/02-channels/02-closing/03-many-senders
 package main
@@ -22,7 +26,7 @@ func main() {
 	ch := make(chan int)
 	var wg sync.WaitGroup
 
-	for id := 1; id <= 2; id++ {
+	for id := range 2 {
 		wg.Add(1)
 		go send(id, ch, &wg)
 	}
