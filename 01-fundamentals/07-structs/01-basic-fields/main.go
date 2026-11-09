@@ -1,5 +1,12 @@
-// Program to access the individual elements of struct
-
+// Struct fields: group related values and read or change them by name.
+//
+// rect.length reads a field, and rect.breadth = 15 changes one.
+//
+// Real use:
+//   - modelling data: a User, an Order, a Config loaded at startup.
+//   - request and response bodies in an HTTP API.
+//
+// Run: go run ./01-fundamentals/07-structs/01-basic-fields
 package main
 
 import "fmt"
