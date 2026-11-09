@@ -1,3 +1,18 @@
+// Interfaces: one function works with any type that has the right methods.
+//
+// Rectangle and Triangle both have area(), so both satisfy Shape.
+// calculate takes a Shape and doesn't care which one it gets. There's no
+// "implements" keyword: having the method is enough.
+//
+// Real use:
+//   - io.Reader: the same code reads from a file, an HTTP body, or a
+//     string.
+//   - swapping a real database for a fake one in tests, through a
+//     UserStore interface.
+//   - payment providers (Stripe, PayPal) behind one PaymentGateway
+//     interface.
+//
+// Run: go run ./01-fundamentals/09-interfaces/01-shapes
 package main
 
 import "fmt"
