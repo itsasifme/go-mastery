@@ -17,6 +17,10 @@
 //
 // Try: change 11 to 10. It "works", and that's the trap.
 //
+// Real use:
+//   - "fixing" a production hang by raising a buffer size. It passes
+//     testing, then hangs again at peak traffic.
+//
 // Run: go run ./02-concurrency/02-channels/04-buffered/05-bigger-buffer
 package main
 
@@ -31,10 +35,10 @@ func main() {
 
 // sendThenRead sends everything first, then reads, all in one goroutine.
 func sendThenRead(ch chan int, n int) {
-	for i := 1; i <= n; i++ {
+	for i := range n {
 		ch <- i // the 11th send waits for a reader...
 	}
-	close(ch) // no more values, so range can stop (see 02-closing)
+	close(ch) // no more values, so range can stop (see channels/02-closing)
 
 	for v := range ch { // ...but the reader only starts after the loop above: deadlock
 		fmt.Println("got", v)
@@ -52,8 +56,8 @@ func sendWhileReading(ch chan int, n int) {
 
 // send sends n values, then closes the channel.
 func send(out chan<- int, n int) {
-	for i := 1; i <= n; i++ {
+	for i := range n {
 		out <- i // when the buffer is full, waits until the reader takes one
 	}
-	close(out) // see 02-closing
+	close(out) // see channels/02-closing
 }
