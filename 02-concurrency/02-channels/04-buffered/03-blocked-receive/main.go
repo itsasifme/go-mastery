@@ -16,8 +16,10 @@ package main
 import "fmt"
 
 func main() {
-	ch := make(chan int, 2)
-	done := make(chan struct{})
+	const bufferSize = 2
+
+	ch := make(chan int, bufferSize)
+	done := make(chan struct{}) // receiveTwo -> main: "I'm finished"
 	ch <- 1
 
 	go receiveTwo(ch, done)
