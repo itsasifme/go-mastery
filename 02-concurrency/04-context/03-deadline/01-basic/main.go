@@ -23,18 +23,27 @@ import (
 	"time"
 )
 
-func main() {
-	const workerCount = 3 // must match the number of "go worker" lines below
+// roundTo rounds the printed time left, to hide timer noise.
+const roundTo = 10 * time.Millisecond
 
-	deadline := time.Now().Add(300 * time.Millisecond)
+func main() {
+	const (
+		workerCount = 3                      // must match the number of "go worker" lines below
+		budget      = 300 * time.Millisecond // time until the deadline
+		quickNeeds  = 100 * time.Millisecond
+		bigNeeds    = 500 * time.Millisecond // more than budget: skipped
+		tinyNeeds   = 50 * time.Millisecond
+	)
+
+	deadline := time.Now().Add(budget)
 	ctx, cancel := context.WithDeadline(context.Background(), deadline)
 	defer cancel()
 
 	done := make(chan struct{}) // workers -> main: "I'm finished"
 
-	go worker(ctx, "quick", 100*time.Millisecond, done)
-	go worker(ctx, "big", 500*time.Millisecond, done) // needs more than the deadline allows
-	go worker(ctx, "tiny", 50*time.Millisecond, done)
+	go worker(ctx, "quick", quickNeeds, done)
+	go worker(ctx, "big", bigNeeds, done)
+	go worker(ctx, "tiny", tinyNeeds, done)
 
 	for range workerCount {
 		<-done // wait for every worker
@@ -46,7 +55,7 @@ func worker(ctx context.Context, name string, needs time.Duration, done chan<- s
 	defer func() { done <- struct{}{} }() // send, not close: others share done
 
 	if d, ok := ctx.Deadline(); ok && time.Until(d) < needs { // not enough time: don't even start
-		left := time.Until(d).Round(10 * time.Millisecond)
+		left := time.Until(d).Round(roundTo)
 		fmt.Printf("%s: skipped, needs %v but only %v left\n", name, needs, left)
 		return
 	}
