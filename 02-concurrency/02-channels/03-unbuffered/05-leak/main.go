@@ -1,9 +1,9 @@
 // Goroutine leak: stuck goroutines don't cause any error.
 //
-// Problem: main takes the first result and moves on. The other senders
+// Problem: main takes the first result and moves on. The other workers
 // wait forever. Go doesn't complain, because main is still running.
 //
-// Fix: give the channel room for every sender, so they can all finish.
+// Fix: give the channel room for every worker, so they can all finish.
 // Change the channel as shown in the "fix:" comment.
 //
 // Real use:
@@ -21,21 +21,21 @@ import (
 )
 
 func main() {
-	const senders = 3
+	const workerCount = 3
 
-	ch := make(chan int) // fix: make(chan int, senders) gives every sender room
+	ch := make(chan int) // fix: make(chan int, workerCount) gives every worker room
 
-	for i := range senders {
-		go send(ch, i)
+	for i := range workerCount {
+		go worker(ch, i)
 	}
 
 	fmt.Println("first:", <-ch)
 
 	time.Sleep(100 * time.Millisecond)                 // give the others time to reach their send
-	fmt.Println("goroutines:", runtime.NumGoroutine()) // main + (senders - 1) stuck. With the fix: just main
+	fmt.Println("goroutines:", runtime.NumGoroutine()) // main + (workerCount - 1) stuck. With the fix: just main
 }
 
-// send sends one value. It's stuck forever if nobody receives it.
-func send(out chan<- int, v int) {
+// worker sends one value. It's stuck forever if nobody receives it.
+func worker(out chan<- int, v int) {
 	out <- v
 }
