@@ -4,7 +4,7 @@
 // or the stop signal. This "for + select" loop is the most common shape
 // of a long-running goroutine in Go.
 //
-// main sends 3 jobs, then closes stop. The worker sees the close and
+// main sends a few jobs, then closes stop. The worker sees the close and
 // stops, then closes done so main knows it really finished.
 //
 // Note: inside select, break only leaves the select, not the for loop.
@@ -20,13 +20,15 @@ package main
 import "fmt"
 
 func main() {
+	const jobCount = 3
+
 	jobs := make(chan int)      // main -> worker: the work
 	stop := make(chan struct{}) // main -> worker: "please stop"
 	done := make(chan struct{}) // worker -> main: "I'm finished"
 
 	go worker(jobs, stop, done)
 
-	for i := range 3 {
+	for i := range jobCount {
 		jobs <- i
 	}
 	close(stop) // tell the worker to stop (see channels/02-closing/02-broadcast)
