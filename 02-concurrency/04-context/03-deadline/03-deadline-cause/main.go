@@ -1,9 +1,9 @@
 // Deadline cause: say why a deadline stopped the work with WithDeadlineCause.
 //
-// A batch runs jobs until a fixed time, when maintenance starts. When the
-// deadline hits, ctx.Err() only says "context deadline exceeded".
-// context.Cause(ctx) returns the error given to WithDeadlineCause, so the
-// batch can report the real reason it stopped.
+// batch runs jobs in a goroutine until a fixed time, when maintenance
+// starts. When the deadline hits, ctx.Err() only says "context deadline
+// exceeded". context.Cause(ctx) returns the error given to
+// WithDeadlineCause, so batch can report the real reason it stopped.
 //
 // Jobs take 100ms each and the deadline is in 250ms, so 2 jobs finish.
 //
@@ -32,18 +32,24 @@ func main() {
 	ctx, cancel := context.WithDeadlineCause(context.Background(), maintenanceAt, errMaintenance)
 	defer cancel()
 
-	runBatch(ctx)
+	done := make(chan struct{}) // batch -> main: "I'm finished"
+
+	go batch(ctx, done)
+
+	<-done // wait until batch stopped
 }
 
-// runBatch runs one job every 100ms until ctx is done.
-func runBatch(ctx context.Context) {
-	for i := 1; ; i++ {
+// batch runs one job every 100ms until ctx is done.
+func batch(ctx context.Context, done chan<- struct{}) {
+	defer close(done) // tells main we're finished, however we return
+
+	for i := 1; ; i++ { // no end: only the deadline stops it
 		select {
 		case <-time.After(100 * time.Millisecond): // simulate a job
 			fmt.Println("job", i, "done")
-		case <-ctx.Done():
-			fmt.Println("Err:  ", ctx.Err())
-			fmt.Println("Cause:", context.Cause(ctx))
+		case <-ctx.Done(): // maintenance starts
+			fmt.Println("Err:  ", ctx.Err())          // the same for every deadline
+			fmt.Println("Cause:", context.Cause(ctx)) // the real reason
 			return
 		}
 	}
