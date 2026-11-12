@@ -25,18 +25,18 @@ package main
 import "fmt"
 
 func main() {
-	const workers = 3
+	const workerCount = 3
 
 	stop := make(chan struct{}) // main -> workers: "please stop"
 	done := make(chan struct{}) // workers -> main: "I'm finished"
 
-	for id := range workers {
+	for id := range workerCount {
 		go worker(id, stop, done)
 	}
 
 	close(stop) // one close wakes every worker
 
-	for range workers {
+	for range workerCount {
 		<-done // one per worker
 	}
 }
