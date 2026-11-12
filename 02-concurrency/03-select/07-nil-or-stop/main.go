@@ -31,12 +31,12 @@ import (
 )
 
 func main() {
-	const producers = 2 // one per "go produce" below
+	const producerCount = 2 // must match the number of "go produce" lines below
 
 	a := make(chan int)
 	b := make(chan int)
-	stop := make(chan struct{})
-	done := make(chan struct{})
+	stop := make(chan struct{}) // stopAfter -> everyone: "please stop"
+	done := make(chan struct{}) // producers -> main: "I'm finished"
 
 	go produce([]int{1, 2, 3}, 0, a, stop, done)
 	go produce([]int{10, 20, 30, 40, 50}, 100*time.Millisecond, b, stop, done)
@@ -45,7 +45,7 @@ func main() {
 
 	readUntilDone(a, b, stop)
 
-	for range producers {
+	for range producerCount {
 		<-done // one per producer: proves none is stuck
 	}
 	fmt.Println("producers finished")
