@@ -33,16 +33,45 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
   - `defer func() { done <- struct{}{} }()` when several goroutines share one `done`
 
 - A function name says exactly what it does. `printBoth` prints two channels. `merge` would sound like fan-in, which returns a channel. Other good names: `readUntilDone`, `stopAfter`, `handleUrgentFirst`.
+- Examples under `02-concurrency/` run their work in a goroutine, even when the lesson could be shown in `main` alone. That's what the topic is about.
+- A goroutine that gets stopped (by `stop`, `ctx`, a timeout) must be **doing work until then**, like real code. Don't let it just sit on `<-ctx.Done()`. Loop over small steps and watch for the stop signal in the same `select`, and show how far it got when it stops:
+
+  ```go
+  for {
+  	select {
+  	case <-time.After(50 * time.Millisecond): // simulate one step of work
+  		steps++
+  	case <-ctx.Done():
+  		fmt.Println("stopped after", steps, "steps:", ctx.Err())
+  		return
+  	}
+  }
+  ```
+
+- How to name the goroutine function:
+  - **Simple demo work** (sleep, send a number, print a step): call it `worker`.
+  - **A specific job the example is about** (a database query, an export, a heartbeat, a fetch): name it for that job, like `query`, `export`, `heartbeat`, `fetch`.
+  - Don't call it `send` or `run`. Those say nothing about the job.
+
+  ```go
+  go worker(ch, done)          // good: simple demo work, main does the receiving
+  go query(ctx, done)          // good: the example is about a slow database call
+  go send(ch, done)            // avoid
+  go run(ctx, "big", d, done)  // avoid
+  ```
+
+  Keep send/receive names only when both sides are in the same file (`sendData` and `readData` in 01-bidirectional), or when the direction itself is the lesson (the directional channel examples).
+
 - Loop over a number with `range`, not a C-style loop:
 
   ```go
   for i := range 3 { ... }        // not: for i := 0; i < 3; i++
-  for range workers { <-done }
+  for range workerCount { <-done }
   ```
 
   Values start at 0. If you need 1 to n, write `i + 1`, and make the comments match.
 
-- No magic numbers. Give a number a name (`const workers = 3`), or get it from the code (`cap(ch) + 1`). Add a short comment on why the constant exists, like "main and pong must use the same number, or one of them waits forever".
+- No magic numbers. Give a number a name (`const workerCount = 3`), or get it from the code (`cap(ch)`). Better still, don't count at all when you can stop on a signal, like reading until `ok` is false. Add a short comment on why the constant exists, like "main and pong must use the same number, or one of them waits forever".
 - Use `time.Duration` for any amount of time, and always write the unit (`200 * time.Millisecond`).
 
 ### Signal channels
@@ -67,8 +96,8 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
 - A comment doesn't repeat a number that can change. Put the number in the code once and describe it in words:
 
   ```go
-  // ❌ The other 2 senders wait forever.    // 3 = main + 2 stuck
-  // ✅ The other senders wait forever.      // main + (senders - 1) stuck
+  // ❌ The other 2 workers wait forever.    // 3 = main + 2 stuck
+  // ✅ The other workers wait forever.      // main + (workerCount - 1) stuck
   ```
 
   The exception is when the numbers are the lesson and won't change, like a timeline of the output ("0ms sent 1 ... 200ms got 1").
