@@ -36,30 +36,39 @@ var (
 
 func main() {
 	ctx, cancel := context.WithCancelCause(context.Background())
-	done := make(chan struct{})
+	done := make(chan struct{}) // export -> main: "I'm finished"
 
 	go export(ctx, done)
 
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond) // let export write a few parts
 	cancel(errShutdown)
 	// cancel(errUserCancelled) // try this instead of errShutdown to see the other cleanup
 
-	<-done
+	<-done // wait until export cleaned up
 }
 
-// export stands in for a long export job. It waits until ctx is cancelled,
-// then cleans up depending on why.
+// export writes the file part by part until ctx is cancelled, then cleans
+// up depending on why.
 func export(ctx context.Context, done chan<- struct{}) {
-	defer close(done)
+	defer close(done) // tells main we're finished, however we return
 
-	<-ctx.Done()
-	fmt.Println("Err:  ", ctx.Err())          // always "context canceled"
-	fmt.Println("Cause:", context.Cause(ctx)) // the real reason
+	parts := 0
+	for {
+		select {
+		case <-time.After(30 * time.Millisecond): // simulate writing one part
+			parts++
+			fmt.Println("export: wrote part", parts)
+		case <-ctx.Done():
+			fmt.Println("Err:  ", ctx.Err())          // always "context canceled"
+			fmt.Println("Cause:", context.Cause(ctx)) // the real reason
 
-	switch cause := context.Cause(ctx); {
-	case errors.Is(cause, errShutdown):
-		fmt.Println("export: saving progress, will resume after restart")
-	case errors.Is(cause, errUserCancelled):
-		fmt.Println("export: deleting the partial file")
+			switch cause := context.Cause(ctx); {
+			case errors.Is(cause, errShutdown):
+				fmt.Println("export: saving progress after part", parts, "to resume after restart")
+			case errors.Is(cause, errUserCancelled):
+				fmt.Println("export: deleting the partial file with", parts, "parts")
+			}
+			return
+		}
 	}
 }
