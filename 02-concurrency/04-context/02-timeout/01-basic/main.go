@@ -26,8 +26,15 @@ import (
 	"time"
 )
 
+const (
+	timeout   = 500 * time.Millisecond
+	rowTime   = 100 * time.Millisecond // how long one row takes to read
+	totalRows = 20                     // the whole query needs totalRows * rowTime
+	roundTo   = 100 * time.Millisecond // round printed times to hide timer noise
+)
+
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel() // still needed, even when the timeout fires
 
 	done := make(chan struct{}) // query -> main: "I'm finished"
@@ -41,23 +48,21 @@ func main() {
 func query(ctx context.Context, done chan<- struct{}) {
 	defer close(done) // tells main we're finished, however we return
 
-	const totalRows = 20 // at 100ms per row, the whole query needs 2s
-
 	start := time.Now()
 	rows := 0
 	for rows < totalRows {
 		select {
-		case <-time.After(100 * time.Millisecond): // simulate reading one row
+		case <-time.After(rowTime): // simulate reading one row
 			rows++
 		case <-ctx.Done(): // closed when the timeout fires
 			err := ctx.Err()
 			fmt.Println("query: read", rows, "of", totalRows, "rows")
-			fmt.Println("took:", time.Since(start).Round(100*time.Millisecond)) // round off the noise: 500.7ms -> 500ms
+			fmt.Println("took:", time.Since(start).Round(roundTo))              // round off the noise: 500.7ms -> 500ms
 			fmt.Println("err:", err)                                            // context deadline exceeded
 			fmt.Println("timed out:", errors.Is(err, context.DeadlineExceeded)) // the right way to check for a timeout
 			return
 		}
 	}
 
-	fmt.Println("query: read all", totalRows, "rows in", time.Since(start).Round(100*time.Millisecond))
+	fmt.Println("query: read all", totalRows, "rows in", time.Since(start).Round(roundTo))
 }
