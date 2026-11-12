@@ -20,12 +20,14 @@ package main
 import "fmt"
 
 func main() {
-	ch := make(chan int, 2)
+	const bufferSize = 2
+
+	ch := make(chan int, bufferSize)
 
 	v, ok := tryReceive(ch)
 	fmt.Println("receive:", v, ok) // 0 false: nothing there yet
 
-	for i := range 3 {
+	for i := range bufferSize + 1 { // one more than fits
 		if trySend(ch, i) {
 			fmt.Println("sent", i)
 		} else {
