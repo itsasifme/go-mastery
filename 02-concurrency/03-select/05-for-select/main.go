@@ -20,9 +20,9 @@ package main
 import "fmt"
 
 func main() {
-	jobs := make(chan int)
-	stop := make(chan struct{})
-	done := make(chan struct{})
+	jobs := make(chan int)      // main -> worker: the work
+	stop := make(chan struct{}) // main -> worker: "please stop"
+	done := make(chan struct{}) // worker -> main: "I'm finished"
 
 	go worker(jobs, stop, done)
 
@@ -35,7 +35,7 @@ func main() {
 
 // worker handles jobs until stop is closed.
 func worker(jobs <-chan int, stop <-chan struct{}, done chan<- struct{}) {
-	defer close(done)
+	defer close(done) // tells main we're finished, however we return
 
 	for {
 		select {
