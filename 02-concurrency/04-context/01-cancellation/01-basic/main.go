@@ -25,18 +25,18 @@ import (
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
-	done := make(chan struct{})
+	done := make(chan struct{}) // worker -> main: "I'm finished"
 
 	go worker(ctx, done)
 
 	time.Sleep(350 * time.Millisecond)
 	cancel() // closes ctx.Done()
-	<-done
+	<-done   // wait until worker really stopped
 }
 
 // worker does one step every 100ms until ctx is cancelled.
 func worker(ctx context.Context, done chan<- struct{}) {
-	defer close(done)
+	defer close(done) // tells main we're finished, however we return
 
 	for i := 1; ; i++ {
 		select {
