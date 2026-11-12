@@ -25,10 +25,14 @@ import (
 )
 
 func main() {
-	timeout := 500 * time.Millisecond
+	const (
+		timeout   = 500 * time.Millisecond
+		fetchTime = 2 * time.Second // longer than timeout, so the timeout wins
+	)
+
 	result := make(chan string, 1)
 
-	go fetch(2*time.Second, result)
+	go fetch(fetchTime, result)
 
 	select {
 	case r := <-result:
