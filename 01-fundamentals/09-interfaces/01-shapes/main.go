@@ -42,11 +42,6 @@ func (t Triangle) area() float32 {
 	return 0.5 * t.base * t.height
 }
 
-// Access method of the interface
-func calculate(s Shape) float32 {
-	return s.area()
-}
-
 // Main function
 func main() {
 
@@ -65,4 +60,9 @@ func main() {
 	// Call calculate() with struct variable t
 	triangleArea := calculate(t)
 	fmt.Println("Area of Triangle (Access via Shape):", triangleArea)
+}
+
+// Access method of the interface
+func calculate(s Shape) float32 {
+	return s.area()
 }
