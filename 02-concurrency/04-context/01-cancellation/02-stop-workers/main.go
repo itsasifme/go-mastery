@@ -25,6 +25,11 @@ import (
 	"time"
 )
 
+const (
+	stepTime = 100 * time.Millisecond // how long one step of work takes
+	runFor   = 250 * time.Millisecond // how long main lets the workers run
+)
+
 func main() {
 	const workerCount = 3
 
@@ -35,7 +40,7 @@ func main() {
 		go worker(ctx, id, done)
 	}
 
-	time.Sleep(250 * time.Millisecond)
+	time.Sleep(runFor)
 	cancel() // one call stops every worker
 
 	for range workerCount {
@@ -53,7 +58,7 @@ func worker(ctx context.Context, id int, done chan<- struct{}) {
 		case <-ctx.Done():
 			fmt.Println("worker", id, "stopped")
 			return
-		case <-time.After(100 * time.Millisecond):
+		case <-time.After(stepTime):
 			fmt.Println("worker", id, "working")
 		}
 	}
