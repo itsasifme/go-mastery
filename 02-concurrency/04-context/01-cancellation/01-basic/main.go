@@ -23,13 +23,18 @@ import (
 	"time"
 )
 
+const (
+	stepTime = 100 * time.Millisecond // how long one step of work takes
+	runFor   = 350 * time.Millisecond // how long main lets worker run
+)
+
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan struct{}) // worker -> main: "I'm finished"
 
 	go worker(ctx, done)
 
-	time.Sleep(350 * time.Millisecond)
+	time.Sleep(runFor)
 	cancel() // closes ctx.Done()
 	<-done   // wait until worker really stopped
 }
@@ -43,7 +48,7 @@ func worker(ctx context.Context, done chan<- struct{}) {
 		case <-ctx.Done():
 			fmt.Println("worker: stopped:", ctx.Err())
 			return
-		case <-time.After(100 * time.Millisecond):
+		case <-time.After(stepTime):
 			fmt.Println("worker: step", i)
 		}
 	}
