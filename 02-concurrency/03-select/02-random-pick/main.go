@@ -21,7 +21,9 @@ func main() {
 	b := make(chan int, 1)
 	wins := map[string]int{}
 
-	for range 1000 {
+	const rounds = 1000 // enough rounds to see a roughly even split
+
+	for range rounds {
 		a <- 1
 		b <- 1 // now both cases are ready
 
