@@ -21,7 +21,10 @@ import (
 )
 
 func main() {
-	const workerCount = 3
+	const (
+		workerCount = 3
+		settleTime  = 100 * time.Millisecond // time for the others to reach their send
+	)
 
 	ch := make(chan int) // fix: make(chan int, workerCount) gives every worker room
 
@@ -31,7 +34,7 @@ func main() {
 
 	fmt.Println("first:", <-ch)
 
-	time.Sleep(100 * time.Millisecond)                 // give the others time to reach their send
+	time.Sleep(settleTime)
 	fmt.Println("goroutines:", runtime.NumGoroutine()) // main + (workerCount - 1) stuck. With the fix: just main
 }
 
