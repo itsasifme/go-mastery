@@ -2,9 +2,9 @@
 //
 // ctx.Err() after a timeout is always "context deadline exceeded", for
 // every timeout in the program. WithTimeoutCause takes an error, and
-// context.Cause(ctx) returns it once the time runs out. query runs in its
-// own goroutine, and when it stops, it reports which limit was hit and
-// checks it with errors.Is.
+// context.Cause(ctx) returns it once the time runs out. query reads rows
+// in its own goroutine. When the timeout stops it, it reports how far it
+// got and which limit was hit, and checks the cause with errors.Is.
 //
 // Note: the cancel function it returns takes no cause. If you call
 // cancel before the timeout, Cause is just context.Canceled.
@@ -40,16 +40,25 @@ func main() {
 	<-done // wait until query stopped
 }
 
-// query stands in for a database call that takes 2 seconds.
+// query reads rows one by one until it has them all, or ctx stops it.
 func query(ctx context.Context, done chan<- struct{}) {
 	defer close(done) // tells main we're finished, however we return
 
-	select {
-	case <-time.After(2 * time.Second): // the query finished in time
-		fmt.Println("query: done")
-	case <-ctx.Done(): // the timeout fired first
-		fmt.Println("Err:  ", ctx.Err())          // the same for every timeout
-		fmt.Println("Cause:", context.Cause(ctx)) // which timeout it was
-		fmt.Println("slow DB:", errors.Is(context.Cause(ctx), errSlowDB))
+	const totalRows = 20 // at 100ms per row, the whole query needs 2s
+
+	rows := 0
+	for rows < totalRows {
+		select {
+		case <-time.After(100 * time.Millisecond): // simulate reading one row
+			rows++
+		case <-ctx.Done(): // the timeout fired first
+			fmt.Println("query: read", rows, "of", totalRows, "rows")
+			fmt.Println("Err:  ", ctx.Err())          // the same for every timeout
+			fmt.Println("Cause:", context.Cause(ctx)) // which timeout it was
+			fmt.Println("slow DB:", errors.Is(context.Cause(ctx), errSlowDB))
+			return
+		}
 	}
+
+	fmt.Println("query: read all", totalRows, "rows")
 }
