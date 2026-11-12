@@ -19,6 +19,11 @@ import (
 	"time"
 )
 
+const (
+	stepTime  = 50 * time.Millisecond  // how long one step of work takes
+	phaseTime = 200 * time.Millisecond // how long main waits before each cancel
+)
+
 func main() {
 	parent, cancelParent := context.WithCancel(context.Background())
 	child1, cancelChild1 := context.WithCancel(parent)
@@ -31,19 +36,19 @@ func main() {
 	go worker(child1, "child1", done)
 	go worker(child2, "child2", done)
 
-	time.Sleep(200 * time.Millisecond) // let every worker do some steps
+	time.Sleep(phaseTime) // let every worker do some steps
 	fmt.Println("main: cancel child1")
 	cancelChild1()
 	<-done // only child1's worker stops. parent and child2 keep running
 
-	time.Sleep(200 * time.Millisecond) // parent and child2 keep working
+	time.Sleep(phaseTime) // parent and child2 keep working
 	fmt.Println("main: cancel parent")
 	cancelParent()
 	<-done // parent's and child2's workers, in any order
 	<-done // child2 stopped only because its parent was cancelled
 }
 
-// worker does one step every 50ms until its ctx is cancelled, then says
+// worker does one step every stepTime until its ctx is cancelled, then says
 // how many steps it did and why it stopped.
 func worker(ctx context.Context, name string, done chan<- struct{}) {
 	defer func() { done <- struct{}{} }() // send, not close: others share done
@@ -51,7 +56,7 @@ func worker(ctx context.Context, name string, done chan<- struct{}) {
 	steps := 0
 	for {
 		select {
-		case <-time.After(50 * time.Millisecond): // simulate one step of work
+		case <-time.After(stepTime): // simulate one step of work
 			steps++
 		case <-ctx.Done():
 			fmt.Println(name+": stopped after", steps, "steps:", ctx.Err())
