@@ -18,13 +18,13 @@ import "fmt"
 
 func main() {
 	ch := make(chan int, 2)
-	done := make(chan struct{})
+	done := make(chan struct{}) // worker -> main: "I'm finished"
 
 	go worker(ch, done)
 
 	// fmt.Println(<-ch) // fix: receive one value to free a slot
 
-	<-done
+	<-done // stuck here: worker never finishes its send
 }
 
 // worker sends 3 values into a buffer that only has room for 2.
