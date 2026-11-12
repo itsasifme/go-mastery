@@ -10,8 +10,8 @@
 // still listen for stop, a worker needs select (see select/05-for-select).
 //
 // Try: replace close(stop) with stop <- struct{}{}. A send reaches only
-// one receiver, so only one worker stops. The other two wait forever, and
-// the program deadlocks.
+// one receiver, so only one worker stops. The other workers wait forever,
+// and the program deadlocks.
 //
 // Real use:
 //   - graceful shutdown: on SIGTERM, close one stop channel and every
