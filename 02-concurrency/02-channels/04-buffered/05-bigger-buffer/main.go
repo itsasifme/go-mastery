@@ -15,7 +15,7 @@
 // until main reads one value. Any buffer size works, even 0. Use the
 // "fix:" line instead of the line above it.
 //
-// Try: change 11 to 10. It "works", and that's the trap.
+// Try: change valueCount to bufferSize. It "works", and that's the trap.
 //
 // Real use:
 //   - "fixing" a production hang by raising a buffer size. It passes
@@ -27,16 +27,21 @@ package main
 import "fmt"
 
 func main() {
-	ch := make(chan int, 10) // made bigger to "fix" a deadlock
+	const (
+		bufferSize = 10             // made bigger to "fix" a deadlock
+		valueCount = bufferSize + 1 // one more value than fits
+	)
 
-	sendThenRead(ch, 11)
-	// sendWhileReading(ch, 11) // fix: use this instead
+	ch := make(chan int, bufferSize)
+
+	sendThenRead(ch, valueCount)
+	// sendWhileReading(ch, valueCount) // fix: use this instead
 }
 
 // sendThenRead sends everything first, then reads, all in one goroutine.
 func sendThenRead(ch chan int, n int) {
 	for i := range n {
-		ch <- i // the 11th send waits for a reader...
+		ch <- i // once the buffer is full, the next send waits for a reader...
 	}
 	close(ch) // no more values, so range can stop (see channels/02-closing)
 
