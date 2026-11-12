@@ -51,8 +51,8 @@ There's no `Cancel()` method. Code that gets a ctx can only watch it. Only its c
 | `Background()` | `Context` | 1.7 | Empty root context | every example |
 | `TODO()` | `Context` | 1.7 | Empty root, "pass a real ctx here later" | none |
 | `WithCancel(parent)` | `ctx, CancelFunc` | 1.7 | Cancel by hand | [01-cancellation/01-basic](01-cancellation/01-basic/), [04-parent-child](01-cancellation/04-parent-child/) |
-| `WithTimeout(parent, d)` | `ctx, CancelFunc` | 1.7 | Cancel after `d` | [02-timeout/01-basic](02-timeout/01-basic/), [03-deadline/02-parent-deadline](03-deadline/02-parent-deadline/) |
-| `WithDeadline(parent, t)` | `ctx, CancelFunc` | 1.7 | Cancel at time `t` | [03-deadline/01-basic](03-deadline/01-basic/) |
+| `WithTimeout(parent, d)` | `ctx, CancelFunc` | 1.7 | Cancel after `d` | [02-timeout/01-basic](02-timeout/01-basic/) |
+| `WithDeadline(parent, t)` | `ctx, CancelFunc` | 1.7 | Cancel at time `t` | [03-deadline/01-basic](03-deadline/01-basic/), [03-deadline/02-parent-deadline](03-deadline/02-parent-deadline/) |
 | `WithValue(parent, key, val)` | `ctx` | 1.7 | Attach a value | [04-values/01-request-id](04-values/01-request-id/) |
 | `WithCancelCause(parent)` | `ctx, CancelCauseFunc` | 1.20 | Cancel with a reason | [01-cancellation/03-cancel-cause](01-cancellation/03-cancel-cause/) |
 | `Cause(ctx)` | `error` | 1.20 | Read the reason | [01-cancellation/03-cancel-cause](01-cancellation/03-cancel-cause/), [02-timeout/03-timeout-cause](02-timeout/03-timeout-cause/), [03-deadline/03-deadline-cause](03-deadline/03-deadline-cause/) |
