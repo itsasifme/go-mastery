@@ -18,7 +18,9 @@ import (
 )
 
 func main() {
-	for i := range 5 {
+	const goroutineCount = 5
+
+	for i := range goroutineCount {
 		go printID(i)
 	}
 
