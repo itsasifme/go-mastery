@@ -18,6 +18,13 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
 ## Go code
 
 - Run `gofmt` (or `goimports`). `go vet ./...` and `go build ./...` must pass.
+- Keep the same order in every `main.go`, top to bottom:
+  1. header comment, `package main`, imports
+  2. package-level `type` (with its methods right after it), `const`, `var`
+  3. `func main`
+  4. the other functions, in the order `main` uses them
+
+  Never put a function or a `const` block above or below `main` out of this order. Every function has a doc comment.
 - Goroutines are **named functions** that take their channels as parameters, with a direction where it fits:
 
   ```go
@@ -71,7 +78,9 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
 
   Values start at 0. If you need 1 to n, write `i + 1`, and make the comments match.
 
-- No magic numbers. Give a number a name (`const workerCount = 3`), or get it from the code (`cap(ch)`). Better still, don't count at all when you can stop on a signal, like reading until `ok` is false. Add a short comment on why the constant exists, like "main and pong must use the same number, or one of them waits forever".
+- **No magic numbers, anywhere.** Every count, buffer size, duration, loop limit and rounding step gets a named constant (`const workerCount = 3`, `stepTime = 100 * time.Millisecond`, `bufferSize = 2`), or comes from the code (`cap(ch)`, `bufferSize + 1`). This includes `time.Sleep`, `time.After`, `WithTimeout`, `Round` and `make(chan T, n)`. Better still, don't count at all when you can stop on a signal, like reading until `ok` is false.
+  - Add a short comment when the name alone doesn't say why, like `// longer than timeout, so the timeout wins` or "main and pong must use the same number, or one of them waits forever".
+  - Not magic: sample data (values sent on a channel like `ch <- 5`, IDs like `"req-42"`, struct field values in fundamentals), counters starting at `0` or `1`, and a buffer of `1` for "room for one result" when the header says why.
 - Use `time.Duration` for any amount of time, and always write the unit (`200 * time.Millisecond`).
 
 ### Signal channels
