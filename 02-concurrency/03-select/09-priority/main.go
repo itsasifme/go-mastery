@@ -1,7 +1,7 @@
 // Priority: select has no priority, but you can build one.
 //
-// A worker gets urgent jobs and normal jobs. Both channels already have 3
-// jobs waiting.
+// A handler goroutine gets urgent jobs and normal jobs. Both channels
+// already have the same number of jobs waiting.
 //
 // Problem: handleRandom uses one plain select. When both cases are ready,
 // select picks at random (see 02-random-pick), so urgent jobs end up
@@ -36,13 +36,19 @@ func main() {
 		normal <- fmt.Sprint("normal ", i)
 	}
 
-	handleRandom(urgent, normal)
-	// handleUrgentFirst(urgent, normal) // fix: use this instead
+	done := make(chan struct{}) // handler -> main: "I'm finished"
+
+	go handleRandom(urgent, normal, done)
+	// go handleUrgentFirst(urgent, normal, done) // fix: use this instead
+
+	<-done // wait until every job is handled
 }
 
 // handleRandom takes whichever job select picks. Urgent jobs get no
 // priority.
-func handleRandom(urgent, normal <-chan string) {
+func handleRandom(urgent, normal <-chan string, done chan<- struct{}) {
+	defer close(done) // tells main we're finished
+
 	for range totalJobs {
 		select {
 		case j := <-urgent:
@@ -54,7 +60,9 @@ func handleRandom(urgent, normal <-chan string) {
 }
 
 // handleUrgentFirst always takes waiting urgent jobs before normal ones.
-func handleUrgentFirst(urgent, normal <-chan string) {
+func handleUrgentFirst(urgent, normal <-chan string, done chan<- struct{}) {
+	defer close(done) // tells main we're finished
+
 	for range totalJobs {
 		select {
 		case j := <-urgent: // 1. is an urgent job waiting? take it
