@@ -2,8 +2,9 @@
 //
 // ctx.Err() after a timeout is always "context deadline exceeded", for
 // every timeout in the program. WithTimeoutCause takes an error, and
-// context.Cause(ctx) returns it once the time runs out. So the caller
-// knows which limit was hit, and can check it with errors.Is.
+// context.Cause(ctx) returns it once the time runs out. query runs in its
+// own goroutine, and when it stops, it reports which limit was hit and
+// checks it with errors.Is.
 //
 // Note: the cancel function it returns takes no cause. If you call
 // cancel before the timeout, Cause is just context.Canceled.
@@ -32,17 +33,23 @@ func main() {
 	ctx, cancel := context.WithTimeoutCause(context.Background(), 500*time.Millisecond, errSlowDB)
 	defer cancel()
 
-	query(ctx)
+	done := make(chan struct{}) // query -> main: "I'm finished"
 
-	fmt.Println("Err:  ", ctx.Err())          // the same for every timeout
-	fmt.Println("Cause:", context.Cause(ctx)) // which timeout it was
-	fmt.Println("slow DB:", errors.Is(context.Cause(ctx), errSlowDB))
+	go query(ctx, done)
+
+	<-done // wait until query stopped
 }
 
 // query stands in for a database call that takes 2 seconds.
-func query(ctx context.Context) {
+func query(ctx context.Context, done chan<- struct{}) {
+	defer close(done) // tells main we're finished, however we return
+
 	select {
-	case <-time.After(2 * time.Second):
-	case <-ctx.Done():
+	case <-time.After(2 * time.Second): // the query finished in time
+		fmt.Println("query: done")
+	case <-ctx.Done(): // the timeout fired first
+		fmt.Println("Err:  ", ctx.Err())          // the same for every timeout
+		fmt.Println("Cause:", context.Cause(ctx)) // which timeout it was
+		fmt.Println("slow DB:", errors.Is(context.Cause(ctx), errSlowDB))
 	}
 }
