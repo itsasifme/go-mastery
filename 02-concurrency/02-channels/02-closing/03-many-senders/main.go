@@ -24,15 +24,19 @@ import (
 )
 
 func main() {
-	workerCount := 2
-	ch := make(chan int)
-	done := make(chan struct{})
+	const workerCount = 2
+
+	ch := make(chan int)                     // workers -> main: the values
+	done := make(chan struct{}, workerCount) // workers -> closeWhenDone: "I'm finished"
+	// done has room for every worker, so the send in worker's defer never
+	// blocks. Without it, a panicking worker would get stuck in its defer,
+	// and the panic would never show.
 
 	for id := range workerCount {
 		go worker(id, ch, done)
 	}
 
-	go closeWhenDone(ch, done, workerCount) // fix: one closer, after all workers are done
+	// go closeWhenDone(ch, done, workerCount) // fix: one closer, after all workers are done
 
 	for v := range ch {
 		fmt.Println("got", v)
@@ -46,7 +50,7 @@ func worker(id int, out chan<- int, done chan<- struct{}) {
 	defer func() { done <- struct{}{} }() // send, not close: others share done
 
 	out <- id
-	// close(out) // problem: every worker closes, but only one close is allowed
+	close(out) // problem: every worker closes, but only one close is allowed
 }
 
 // closeWhenDone waits for one done signal from each worker, then closes
