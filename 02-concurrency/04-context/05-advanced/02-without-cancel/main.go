@@ -35,18 +35,18 @@ type requestIDKey struct{}
 func main() {
 	base := context.WithValue(context.Background(), requestIDKey{}, "req-42")
 	ctx, cancel := context.WithCancel(base)
-	done := make(chan struct{})
+	done := make(chan struct{}) // writeAudit -> main: "I'm finished"
 
 	go writeAudit(ctx, done) // problem
 	// go writeAudit(context.WithoutCancel(ctx), done) // fix: detach from the request
 
 	cancel() // the request ends right away
-	<-done
+	<-done   // wait until writeAudit saved or lost the record
 }
 
 // writeAudit takes 200ms to save an audit record, unless ctx stops it.
 func writeAudit(ctx context.Context, done chan<- struct{}) {
-	defer close(done)
+	defer close(done) // tells main we're finished, however we return
 
 	select {
 	case <-time.After(200 * time.Millisecond):
