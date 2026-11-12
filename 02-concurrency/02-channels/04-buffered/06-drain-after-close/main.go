@@ -3,7 +3,8 @@
 // main puts 3 values in a buffered channel and closes it. Closing only
 // means "no more sends". Receivers still get every value in the buffer,
 // and only then see the channel as closed: ok becomes false and the value
-// is the zero value.
+// is the zero value. main keeps reading until ok is false, so it doesn't
+// need to know how many values are left.
 //
 // Try: uncomment "ch <- 4". Sending on a closed channel panics.
 //
@@ -24,8 +25,11 @@ func main() {
 	close(ch)
 	// ch <- 4 // panic: send on closed channel
 
-	for range cap(ch) + 1 { // one more than the values, to see ok == false
+	for {
 		v, ok := <-ch // ok is false once the channel is closed and empty
 		fmt.Println(v, ok)
+		if !ok {
+			break
+		}
 	}
 }
