@@ -20,15 +20,15 @@ func main() {
 	ch := make(chan int, 2)
 	done := make(chan struct{})
 
-	go sendThree(ch, done)
+	go worker(ch, done)
 
 	// fmt.Println(<-ch) // fix: receive one value to free a slot
 
 	<-done
 }
 
-// sendThree sends 3 values into a buffer that only has room for 2.
-func sendThree(out chan<- int, done chan<- struct{}) {
+// worker sends 3 values into a buffer that only has room for 2.
+func worker(out chan<- int, done chan<- struct{}) {
 	defer close(done) // tells main we're finished (see channels/02-closing)
 	out <- 1
 	out <- 2
