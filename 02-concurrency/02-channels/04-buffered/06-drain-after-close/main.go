@@ -18,7 +18,9 @@ package main
 import "fmt"
 
 func main() {
-	ch := make(chan int, 3)
+	const bufferSize = 3 // room for all the values below
+
+	ch := make(chan int, bufferSize)
 	ch <- 1
 	ch <- 2
 	ch <- 3
