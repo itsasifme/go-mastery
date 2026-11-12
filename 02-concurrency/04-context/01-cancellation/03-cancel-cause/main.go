@@ -34,13 +34,18 @@ var (
 	errUserCancelled = errors.New("cancelled by user")
 )
 
+const (
+	partTime = 30 * time.Millisecond  // how long export needs for one part
+	runFor   = 100 * time.Millisecond // how long main lets export run
+)
+
 func main() {
 	ctx, cancel := context.WithCancelCause(context.Background())
 	done := make(chan struct{}) // export -> main: "I'm finished"
 
 	go export(ctx, done)
 
-	time.Sleep(100 * time.Millisecond) // let export write a few parts
+	time.Sleep(runFor) // let export write a few parts
 	cancel(errShutdown)
 	// cancel(errUserCancelled) // try this instead of errShutdown to see the other cleanup
 
@@ -55,7 +60,7 @@ func export(ctx context.Context, done chan<- struct{}) {
 	parts := 0
 	for {
 		select {
-		case <-time.After(30 * time.Millisecond): // simulate writing one part
+		case <-time.After(partTime): // simulate writing one part
 			parts++
 			fmt.Println("export: wrote part", parts)
 		case <-ctx.Done():
