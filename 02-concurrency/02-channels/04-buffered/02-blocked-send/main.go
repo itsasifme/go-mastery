@@ -17,7 +17,9 @@ package main
 import "fmt"
 
 func main() {
-	ch := make(chan int, 2)
+	const bufferSize = 2 // worker sends one more value than this
+
+	ch := make(chan int, bufferSize)
 	done := make(chan struct{}) // worker -> main: "I'm finished"
 
 	go worker(ch, done)
