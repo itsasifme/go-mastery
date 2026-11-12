@@ -16,7 +16,9 @@ package main
 import "fmt"
 
 func main() {
-	ch := make(chan int, 2)
+	const bufferSize = 2
+
+	ch := make(chan int, bufferSize)
 
 	ch <- 1 // doesn't block: the buffer has room
 	ch <- 2
