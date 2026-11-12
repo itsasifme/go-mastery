@@ -28,8 +28,13 @@ import (
 	"time"
 )
 
+const (
+	jobCount   = 3 // how many jobs main starts
+	failingJob = 2 // the id of the job that panics
+)
+
 func main() {
-	for i := range 3 {
+	for i := range jobCount {
 		go job(i)
 	}
 
@@ -47,8 +52,8 @@ func job(id int) {
 		// 4. job now returns normally, and the program keeps running.
 	}()
 
-	if id == 2 {
+	if id == failingJob {
 		panic("something went wrong") // 2. job stops here and the deferred function runs
 	}
-	fmt.Println("job", id, "done") // never runs for job 2
+	fmt.Println("job", id, "done") // never runs for the failing job
 }
