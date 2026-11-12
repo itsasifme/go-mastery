@@ -18,15 +18,6 @@ import (
 	"time"
 )
 
-func sendData(ch chan int) {
-	ch <- 42
-}
-
-func readData(ch chan int) {
-	x := <-ch
-	fmt.Println("x:", x)
-}
-
 func main() {
 	ch := make(chan int) // can send and receive
 
@@ -34,4 +25,15 @@ func main() {
 	go readData(ch)
 
 	time.Sleep(time.Second) // hack: wait for the goroutines
+}
+
+// sendData sends one value on ch.
+func sendData(ch chan int) {
+	ch <- 42
+}
+
+// readData receives one value from ch and prints it.
+func readData(ch chan int) {
+	x := <-ch
+	fmt.Println("x:", x)
 }
