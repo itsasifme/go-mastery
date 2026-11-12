@@ -43,7 +43,9 @@ func (c *conn) Close() {
 }
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Millisecond)
+	const timeout = 300 * time.Millisecond // after this, the connection gets closed
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	messages := []string{"hello", "how are you?"}
