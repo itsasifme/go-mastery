@@ -4,12 +4,12 @@
 // channel. Every worker gets the same ctx. cancel closes ctx.Done() once,
 // and a closed channel wakes everyone waiting on it, so every worker stops.
 //
-//	broadcast             this example
-//	close(stop)           cancel()
-//	<-stop                case <-ctx.Done():    (in a select, so it can work while it waits)
-//	for range workers {   for range workers {   (same: one done per worker)
-//		<-done                <-done
-//	}                     }
+//	broadcast                 this example
+//	close(stop)               cancel()
+//	<-stop                    case <-ctx.Done():        (in a select, so it can work while it waits)
+//	for range workerCount {   for range workerCount {   (same: one done per worker)
+//		<-done                    <-done
+//	}                         }
 //
 // Real use:
 //   - graceful shutdown: signal.NotifyContext gives you a ctx that's
@@ -26,19 +26,19 @@ import (
 )
 
 func main() {
-	const workers = 3
+	const workerCount = 3
 
 	ctx, cancel := context.WithCancel(context.Background())
-	done := make(chan struct{})
+	done := make(chan struct{}) // workers -> main: "I'm finished"
 
-	for id := range workers {
+	for id := range workerCount {
 		go worker(ctx, id, done)
 	}
 
 	time.Sleep(250 * time.Millisecond)
 	cancel() // one call stops every worker
 
-	for range workers {
+	for range workerCount {
 		<-done // one per worker
 	}
 	fmt.Println("all workers stopped")
@@ -46,7 +46,7 @@ func main() {
 
 // worker works every 100ms until ctx is cancelled.
 func worker(ctx context.Context, id int, done chan<- struct{}) {
-	defer func() { done <- struct{}{} }() // send, not close: others share the same done
+	defer func() { done <- struct{}{} }() // send, not close: others share done
 
 	for {
 		select {
