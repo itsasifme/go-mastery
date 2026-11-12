@@ -20,8 +20,10 @@ import (
 )
 
 func main() {
+	const goroutineCount = 2 // must match the number of "go" lines below
+
 	var wg sync.WaitGroup
-	wg.Add(2)
+	wg.Add(goroutineCount)
 	go helloworld(&wg)
 	go goodbye(&wg)
 	wg.Wait()
