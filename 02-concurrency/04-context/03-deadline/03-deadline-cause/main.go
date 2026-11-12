@@ -27,8 +27,13 @@ import (
 
 var errMaintenance = errors.New("maintenance window starts")
 
+const (
+	untilMaintenance = 250 * time.Millisecond // time until the deadline
+	jobTime          = 100 * time.Millisecond // how long one job takes
+)
+
 func main() {
-	maintenanceAt := time.Now().Add(250 * time.Millisecond)
+	maintenanceAt := time.Now().Add(untilMaintenance)
 	ctx, cancel := context.WithDeadlineCause(context.Background(), maintenanceAt, errMaintenance)
 	defer cancel()
 
@@ -39,13 +44,13 @@ func main() {
 	<-done // wait until batch stopped
 }
 
-// batch runs one job every 100ms until ctx is done.
+// batch runs one job every jobTime until ctx is done.
 func batch(ctx context.Context, done chan<- struct{}) {
 	defer close(done) // tells main we're finished, however we return
 
 	for i := 1; ; i++ { // no end: only the deadline stops it
 		select {
-		case <-time.After(100 * time.Millisecond): // simulate a job
+		case <-time.After(jobTime): // simulate a job
 			fmt.Println("job", i, "done")
 		case <-ctx.Done(): // maintenance starts
 			fmt.Println("Err:  ", ctx.Err())          // the same for every deadline
