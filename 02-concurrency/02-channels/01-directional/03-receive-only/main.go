@@ -16,12 +16,6 @@ package main
 
 import "fmt"
 
-func readData(ch <-chan int) {
-	x := <-ch // ok: receive
-	// ch <- 1 // compile error: can't send to a receive-only channel
-	fmt.Println("x:", x)
-}
-
 func main() {
 	ch := make(<-chan int) // problem: receive-only, so nobody can send to it
 	go readData(ch)        // problem: gets stuck on the receive
@@ -31,4 +25,11 @@ func main() {
 	// readData(ch)            // fix: read in main, so main waits for it
 
 	fmt.Println("main done")
+}
+
+// readData can only receive from ch.
+func readData(ch <-chan int) {
+	x := <-ch // ok: receive
+	// ch <- 1 // compile error: can't send to a receive-only channel
+	fmt.Println("x:", x)
 }
