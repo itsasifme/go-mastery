@@ -10,8 +10,8 @@
 // A bigger buffer only changes when it breaks, so the bug comes back as
 // soon as there's more data.
 //
-// Fix: put the send loop in its own goroutine. Then sending and reading
-// run at the same time: when the buffer is full, the sender waits only
+// Fix: put the send loop in its own goroutine, worker. Then sending and
+// reading run at the same time: when the buffer is full, worker waits only
 // until main reads one value. Any buffer size works, even 0. Use the
 // "fix:" line instead of the line above it.
 //
@@ -47,15 +47,15 @@ func sendThenRead(ch chan int, n int) {
 
 // sendWhileReading sends from its own goroutine while the caller reads.
 func sendWhileReading(ch chan int, n int) {
-	go send(ch, n) // sender: runs at the same time as the loop below
+	go worker(ch, n) // worker sends: runs at the same time as the loop below
 
-	for v := range ch { // reader: starts right away, doesn't wait for the sender
+	for v := range ch { // reader: starts right away, doesn't wait for worker
 		fmt.Println("got", v)
 	}
 }
 
-// send sends n values, then closes the channel.
-func send(out chan<- int, n int) {
+// worker sends n values, then closes the channel.
+func worker(out chan<- int, n int) {
 	for i := range n {
 		out <- i // when the buffer is full, waits until the reader takes one
 	}
