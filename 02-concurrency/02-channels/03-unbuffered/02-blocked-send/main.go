@@ -18,13 +18,13 @@ import "fmt"
 
 func main() {
 	ch := make(chan int)
-	done := make(chan struct{})
+	done := make(chan struct{}) // worker -> main: "I'm finished"
 
 	go worker(ch, done)
 
 	// fmt.Println(<-ch) // fix: receive the value
 
-	<-done
+	<-done // stuck here: worker never finishes its send
 }
 
 // worker sends one value, then tells main it's finished.
