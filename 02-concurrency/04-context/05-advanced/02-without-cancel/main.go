@@ -32,6 +32,9 @@ import (
 // (see context/04-values/01-request-id).
 type requestIDKey struct{}
 
+// auditTime is how long saving one audit record takes.
+const auditTime = 200 * time.Millisecond
+
 func main() {
 	base := context.WithValue(context.Background(), requestIDKey{}, "req-42")
 	ctx, cancel := context.WithCancel(base)
@@ -44,12 +47,12 @@ func main() {
 	<-done   // wait until writeAudit saved or lost the record
 }
 
-// writeAudit takes 200ms to save an audit record, unless ctx stops it.
+// writeAudit takes auditTime to save an audit record, unless ctx stops it.
 func writeAudit(ctx context.Context, done chan<- struct{}) {
 	defer close(done) // tells main we're finished, however we return
 
 	select {
-	case <-time.After(200 * time.Millisecond):
+	case <-time.After(auditTime): // simulate saving the record
 		fmt.Println("audit saved for", ctx.Value(requestIDKey{}))
 	case <-ctx.Done():
 		fmt.Println("audit lost:", ctx.Err())
