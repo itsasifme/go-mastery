@@ -15,6 +15,8 @@ package main
 
 import "fmt"
 
+const valueCount = 5 // how many values produce sends before it closes ch
+
 func main() {
 	ch := make(chan int)
 
@@ -27,7 +29,7 @@ func main() {
 
 // produce sends 1 to 5, then closes the channel.
 func produce(out chan<- int) {
-	for i := range 5 {
+	for i := range valueCount {
 		out <- i + 1
 	}
 	close(out) // tells range there are no more values
