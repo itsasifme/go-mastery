@@ -30,16 +30,21 @@ import (
 )
 
 func main() {
-	const fetchCount = 2 // must match the number of "go fetch" lines below
+	const (
+		fetchCount = 2 // must match the number of "go fetch" lines below
+		timeout    = 500 * time.Millisecond
+		fastTime   = 200 * time.Millisecond // shorter than timeout: the result wins
+		slowTime   = 2 * time.Second        // longer than timeout: the timeout wins
+	)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	result := make(chan string) // fetches -> main: the data
 	done := make(chan struct{}) // fetches -> main: "I'm finished"
 
-	go fetch(ctx, "fast fetch", 200*time.Millisecond, result, done) // result wins
-	go fetch(ctx, "slow fetch", 2*time.Second, result, done)        // timeout wins
+	go fetch(ctx, "fast fetch", fastTime, result, done)
+	go fetch(ctx, "slow fetch", slowTime, result, done)
 
 	for range fetchCount { // one answer per fetch: its data, or the timeout
 		select {
