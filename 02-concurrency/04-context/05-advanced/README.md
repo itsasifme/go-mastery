@@ -25,7 +25,7 @@ See the [full API overview](../README.md#api).
 
 | Example | Run | What it shows |
 | --- | --- | --- |
-| `01-after-func` | `go run ./02-concurrency/04-context/05-advanced/01-after-func` | Close a connection when ctx is done, to unblock a call with no ctx |
+| `01-after-func` | `go run ./02-concurrency/04-context/05-advanced/01-after-func` | A read loop blocks on a call with no ctx. Closing the connection when ctx is done stops it |
 | `02-without-cancel` | `go run ./02-concurrency/04-context/05-advanced/02-without-cancel` | Background work that keeps the request's values but outlives it |
 
 ## Things to remember
