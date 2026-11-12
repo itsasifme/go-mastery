@@ -31,7 +31,11 @@ import (
 )
 
 func main() {
-	const producerCount = 2 // must match the number of "go produce" lines below
+	const (
+		producerCount = 2                      // must match the number of "go produce" lines below
+		slowDelay     = 100 * time.Millisecond // b's producer waits this long before each value
+		stopTime      = 250 * time.Millisecond // stop comes before b is done
+	)
 
 	a := make(chan int)
 	b := make(chan int)
@@ -39,9 +43,9 @@ func main() {
 	done := make(chan struct{}) // producers -> main: "I'm finished"
 
 	go produce([]int{1, 2, 3}, 0, a, stop, done)
-	go produce([]int{10, 20, 30, 40, 50}, 100*time.Millisecond, b, stop, done)
+	go produce([]int{10, 20, 30, 40, 50}, slowDelay, b, stop, done)
 
-	go stopAfter(250*time.Millisecond, stop)
+	go stopAfter(stopTime, stop)
 
 	readUntilDone(a, b, stop)
 
