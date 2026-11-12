@@ -27,10 +27,16 @@ import (
 	"time"
 )
 
-var errSlowDB = errors.New("database took longer than 500ms")
+const (
+	dbTimeout = 500 * time.Millisecond
+	rowTime   = 100 * time.Millisecond // how long one row takes to read
+	totalRows = 20                     // the whole query needs totalRows * rowTime
+)
+
+var errSlowDB = fmt.Errorf("database took longer than %v", dbTimeout)
 
 func main() {
-	ctx, cancel := context.WithTimeoutCause(context.Background(), 500*time.Millisecond, errSlowDB)
+	ctx, cancel := context.WithTimeoutCause(context.Background(), dbTimeout, errSlowDB)
 	defer cancel()
 
 	done := make(chan struct{}) // query -> main: "I'm finished"
@@ -44,12 +50,10 @@ func main() {
 func query(ctx context.Context, done chan<- struct{}) {
 	defer close(done) // tells main we're finished, however we return
 
-	const totalRows = 20 // at 100ms per row, the whole query needs 2s
-
 	rows := 0
 	for rows < totalRows {
 		select {
-		case <-time.After(100 * time.Millisecond): // simulate reading one row
+		case <-time.After(rowTime): // simulate reading one row
 			rows++
 		case <-ctx.Done(): // the timeout fired first
 			fmt.Println("query: read", rows, "of", totalRows, "rows")
