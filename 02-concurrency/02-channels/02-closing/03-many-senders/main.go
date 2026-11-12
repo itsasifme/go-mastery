@@ -24,7 +24,10 @@ import (
 )
 
 func main() {
-	const workerCount = 2
+	const (
+		workerCount = 2
+		panicWait   = 100 * time.Millisecond // time for the other worker to panic
+	)
 
 	ch := make(chan int)                     // workers -> main: the values
 	done := make(chan struct{}, workerCount) // workers -> closeWhenDone: "I'm finished"
@@ -42,7 +45,7 @@ func main() {
 		fmt.Println("got", v)
 	}
 
-	time.Sleep(100 * time.Millisecond) // hack: give the other worker time to panic before main exits
+	time.Sleep(panicWait) // hack: give the other worker time to panic before main exits
 }
 
 // worker sends one value, closes the channel, then says it's finished.
