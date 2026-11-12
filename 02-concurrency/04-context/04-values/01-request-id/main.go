@@ -34,6 +34,9 @@ import (
 // requestIDKey is the context key for the request ID.
 type requestIDKey struct{}
 
+// queryTime is how long loadUser's database call takes.
+const queryTime = 50 * time.Millisecond
+
 func main() {
 	const requestCount = 2 // must match the number of "go handleRequest" lines below
 
@@ -59,7 +62,7 @@ func handleRequest(ctx context.Context, userID int, done chan<- struct{}) {
 // loadUser stands in for a database call.
 func loadUser(ctx context.Context, userID int) {
 	logf(ctx, "loading user %d", userID)
-	time.Sleep(50 * time.Millisecond) // simulate the query, so the two requests overlap
+	time.Sleep(queryTime) // simulate the query, so the two requests overlap
 }
 
 // logf prints a formatted message with the request ID from ctx.
