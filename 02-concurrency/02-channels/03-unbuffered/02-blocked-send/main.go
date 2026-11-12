@@ -1,6 +1,6 @@
 // Blocked send: a send on an unbuffered channel waits for a receiver.
 //
-// Problem: nobody receives from ch. The goroutine is stuck on the send,
+// Problem: nobody receives from ch. worker is stuck on the send,
 // and main is stuck on <-done. Every goroutine is blocked, so Go stops
 // with "fatal error: all goroutines are asleep - deadlock!".
 //
@@ -20,15 +20,15 @@ func main() {
 	ch := make(chan int)
 	done := make(chan struct{})
 
-	go send(ch, done)
+	go worker(ch, done)
 
 	// fmt.Println(<-ch) // fix: receive the value
 
 	<-done
 }
 
-// send sends one value, then tells main it's finished.
-func send(out chan<- int, done chan<- struct{}) {
+// worker sends one value, then tells main it's finished.
+func worker(out chan<- int, done chan<- struct{}) {
 	defer close(done) // tells main we're finished (see channels/02-closing)
 	out <- 5          // blocks: no receiver
 	fmt.Println("sent")
