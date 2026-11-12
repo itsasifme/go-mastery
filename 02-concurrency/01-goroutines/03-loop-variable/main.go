@@ -28,7 +28,9 @@ import (
 )
 
 func main() {
-	for i := 0; i < 3; i++ {
+	count := 3 // goroutines per loop
+
+	for i := 0; i < count; i++ {
 		go func() {
 			fmt.Println("new:", i) // own i: copied from the last round, then i++
 		}()
@@ -38,7 +40,7 @@ func main() {
 	// Declared outside the loop: one variable, reused every round.
 	// This is how "for i := ..." worked before Go 1.22.
 	var shared int
-	for shared = 0; shared < 3; shared++ {
+	for shared = 0; shared < count; shared++ {
 		go func() {
 			fmt.Println("old:", shared) // same variable, usually 3 by the time it prints
 		}()
