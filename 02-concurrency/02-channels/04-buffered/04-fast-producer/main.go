@@ -17,9 +17,9 @@
 // slow receiver needs 5 x 200ms no matter what. A buffer doesn't make the
 // work faster. It lets the producer finish early and do something else.
 //
-// Try: change the buffer to 0, make(chan int). Now every send waits for
-// the receiver, so "sent" and "got" take turns and the producer is only
-// done at ~800ms.
+// Try: change bufferSize to 0, so the channel has no buffer. Now every
+// send waits for the receiver, so "sent" and "got" take turns and the
+// producer is only done at ~800ms.
 //
 // Real use:
 //   - absorbing bursts: a logger buffers log lines, so request handlers
@@ -38,15 +38,20 @@ import (
 // the receiver never waits for a value that's never sent.
 const count = 5
 
+const (
+	bufferSize = 3                      // produce can run this many values ahead of main
+	workTime   = 200 * time.Millisecond // main's slow work for each value
+)
+
 func main() {
-	ch := make(chan int, 3)
+	ch := make(chan int, bufferSize)
 	start := time.Now()
 
 	go produce(ch, start)
 
 	for range count {
 		v := <-ch
-		time.Sleep(200 * time.Millisecond) // slow work
+		time.Sleep(workTime) // slow work
 		fmt.Printf("%4dms got  %d\n", time.Since(start).Milliseconds(), v)
 	}
 }
