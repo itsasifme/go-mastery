@@ -20,12 +20,17 @@ import (
 	"time"
 )
 
+const (
+	fastDelay = 100 * time.Millisecond // how long the fast server takes to answer
+	slowDelay = 300 * time.Millisecond // how long the slow server takes to answer
+)
+
 func main() {
 	fast := make(chan string, 1)
 	slow := make(chan string, 1)
 
-	go lookup("fast server", 100*time.Millisecond, fast)
-	go lookup("slow server", 300*time.Millisecond, slow)
+	go lookup("fast server", fastDelay, fast)
+	go lookup("slow server", slowDelay, slow)
 
 	select { // waits until one case is ready, then runs only that one
 	case r := <-fast:
