@@ -22,8 +22,8 @@ See the [full API overview](../README.md#api).
 
 | Example | Run | What it shows |
 | --- | --- | --- |
-| `01-basic` | `go run ./02-concurrency/04-context/02-timeout/01-basic` | A slow function that stops itself when the timeout hits |
-| `02-result-or-timeout` | `go run ./02-concurrency/04-context/02-timeout/02-result-or-timeout` | Wait for a goroutine's result or the timeout, and stop the goroutine too |
+| `01-basic` | `go run ./02-concurrency/04-context/02-timeout/01-basic` | A query goroutine reads rows until the timeout hits, then stops itself |
+| `02-result-or-timeout` | `go run ./02-concurrency/04-context/02-timeout/02-result-or-timeout` | Two fetches share one timeout: the fast one sends its data, the slow one is cancelled and stops |
 | `03-timeout-cause` | `go run ./02-concurrency/04-context/02-timeout/03-timeout-cause` | Say which timeout was hit with `WithTimeoutCause` |
 
 ## Things to remember
