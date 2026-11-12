@@ -19,32 +19,39 @@ import (
 )
 
 func main() {
-	stop := make(chan struct{})
-	done := make(chan struct{})
+	const (
+		every  = 200 * time.Millisecond // time between beats
+		runFor = time.Second            // how long main lets heartbeat run
+	)
 
-	go heartbeat(200*time.Millisecond, stop, done)
+	stop := make(chan struct{}) // main -> heartbeat: "please stop"
+	done := make(chan struct{}) // heartbeat -> main: "I'm finished"
 
-	time.Sleep(time.Second)
+	go heartbeat(every, stop, done)
+
+	time.Sleep(runFor)
 	close(stop) // tell heartbeat to stop
-	<-done      // wait until it did
+	<-done      // wait until it did, so its last line gets printed
 }
 
 // heartbeat prints a beat on every tick until stop is closed.
 func heartbeat(every time.Duration, stop <-chan struct{}, done chan<- struct{}) {
-	defer close(done)
+	defer close(done) // tells main we're finished, however we return
 
+	// The ticker sends the current time on ticker.C once per "every".
+	// The first tick comes after one "every", not right away.
 	ticker := time.NewTicker(every)
-	defer ticker.Stop()
+	defer ticker.Stop() // no more ticks once heartbeat returns
 
-	beats := 0
+	beatCount := 0
 	for {
 		select {
-		case <-ticker.C: // gets a value every tick
-			beats++
-			fmt.Println("beat", beats)
-		case <-stop:
-			fmt.Println("stopped after", beats, "beats")
-			return
+		case <-ticker.C: // a tick arrived. If we're too slow, missed ticks are dropped, not queued
+			beatCount++
+			fmt.Println("beat", beatCount)
+		case <-stop: // main closed stop
+			fmt.Println("stopped after", beatCount, "beats")
+			return // not break: break would only leave the select
 		}
 	}
 }
