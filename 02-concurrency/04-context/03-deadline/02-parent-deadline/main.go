@@ -23,32 +23,42 @@ import (
 	"time"
 )
 
+const (
+	stepTime = 50 * time.Millisecond  // how long one step of work takes
+	roundTo  = 100 * time.Millisecond // round printed times to hide timer noise
+)
+
 func main() {
-	const workerCount = 3 // must match the number of "go worker" lines below
+	const (
+		workerCount = 3                      // must match the number of "go worker" lines below
+		parentLimit = time.Second            // the parent's deadline, from start
+		laterLimit  = 5 * time.Second        // later than the parent: capped
+		soonerLimit = 200 * time.Millisecond // earlier than the parent: kept
+	)
 
 	start := time.Now() // every deadline below is counted from here
 
-	parent, cancel := context.WithDeadline(context.Background(), start.Add(time.Second))
+	parent, cancel := context.WithDeadline(context.Background(), start.Add(parentLimit))
 	defer cancel()
 
-	later, cancelLater := context.WithDeadline(parent, start.Add(5*time.Second)) // later than the parent: capped
+	later, cancelLater := context.WithDeadline(parent, start.Add(laterLimit))
 	defer cancelLater()
 
-	sooner, cancelSooner := context.WithDeadline(parent, start.Add(200*time.Millisecond)) // earlier: kept
+	sooner, cancelSooner := context.WithDeadline(parent, start.Add(soonerLimit))
 	defer cancelSooner()
 
 	done := make(chan struct{}) // workers -> main: "I'm finished"
 
 	go worker(parent, "parent", start, done)
-	go worker(later, "child asked 5s", start, done)
-	go worker(sooner, "child asked 200ms", start, done)
+	go worker(later, fmt.Sprint("child asked ", laterLimit), start, done)
+	go worker(sooner, fmt.Sprint("child asked ", soonerLimit), start, done)
 
 	for range workerCount {
 		<-done // wait for every worker
 	}
 }
 
-// worker does one step every 50ms until its ctx's deadline passes, then
+// worker does one step every stepTime until its ctx's deadline passes, then
 // says when that was and how many steps it did.
 func worker(ctx context.Context, name string, start time.Time, done chan<- struct{}) {
 	defer func() { done <- struct{}{} }() // send, not close: others share done
@@ -56,10 +66,10 @@ func worker(ctx context.Context, name string, start time.Time, done chan<- struc
 	steps := 0
 	for {
 		select {
-		case <-time.After(50 * time.Millisecond): // simulate one step of work
+		case <-time.After(stepTime): // simulate one step of work
 			steps++
 		case <-ctx.Done():
-			took := time.Since(start).Round(100 * time.Millisecond)
+			took := time.Since(start).Round(roundTo)
 			fmt.Printf("%-18s stopped after %v, %d steps: %v\n", name+":", took, steps, ctx.Err())
 			return
 		}
