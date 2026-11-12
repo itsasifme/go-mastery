@@ -1,8 +1,9 @@
 // Parent and child: cancelling a parent cancels its children, not the other way.
 //
-// child1 and child2 are made from parent, and a worker watches each of the
-// three contexts. Cancelling child1 stops only child1's worker. Cancelling
-// parent stops parent's worker and every child's worker still running.
+// child1 and child2 are made from parent, and a worker does steps on each
+// of the three contexts. Cancelling child1 stops only child1's worker.
+// Cancelling parent stops parent's worker and every child's worker still
+// running. The step counts show who kept working longer.
 //
 // Real use:
 //   - a request ctx is the parent, and each database query gets a child
@@ -38,7 +39,7 @@ func main() {
 	time.Sleep(200 * time.Millisecond) // parent and child2 keep working
 	fmt.Println("main: cancel parent")
 	cancelParent()
-	<-done // parent's and child2's workers, in any order.
+	<-done // parent's and child2's workers, in any order
 	<-done // child2 stopped only because its parent was cancelled
 }
 
