@@ -21,7 +21,7 @@ See the [full API overview](../README.md#api).
 
 | Example | Run | What it shows |
 | --- | --- | --- |
-| `01-request-id` | `go run ./02-concurrency/04-context/04-values/01-request-id` | Every log line gets the request ID without an extra parameter |
+| `01-request-id` | `go run ./02-concurrency/04-context/04-values/01-request-id` | Two requests run at the same time, and every log line gets the right request ID without an extra parameter |
 
 ## Things to remember
 
