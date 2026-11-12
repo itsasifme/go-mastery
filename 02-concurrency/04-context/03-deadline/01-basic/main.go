@@ -3,9 +3,10 @@
 // WithDeadline takes a point in time. WithTimeout(d) is the same as
 // WithDeadline(time.Now().Add(d)).
 //
-// ctx.Deadline() tells you when the deadline is, so run can skip a job
-// that can't finish in time, instead of starting it and failing halfway.
-// The big job needs 500ms but only about 200ms are left, so it's skipped.
+// main starts three workers that share one ctx. ctx.Deadline() tells each
+// worker when the deadline is, so it can skip a job that can't finish in
+// time, instead of starting it and failing halfway. The big job needs more
+// time than is left, so it's skipped. The others finish.
 //
 // Real use:
 //   - a request with a 2 second budget skips an optional slow step, like
@@ -23,18 +24,28 @@ import (
 )
 
 func main() {
+	const workerCount = 3 // must match the number of "go worker" lines below
+
 	deadline := time.Now().Add(300 * time.Millisecond)
 	ctx, cancel := context.WithDeadline(context.Background(), deadline)
 	defer cancel()
 
-	run(ctx, "quick", 100*time.Millisecond)
-	run(ctx, "big", 500*time.Millisecond)
-	run(ctx, "tiny", 50*time.Millisecond)
+	done := make(chan struct{}) // workers -> main: "I'm finished"
+
+	go worker(ctx, "quick", 100*time.Millisecond, done)
+	go worker(ctx, "big", 500*time.Millisecond, done) // needs more than the deadline allows
+	go worker(ctx, "tiny", 50*time.Millisecond, done)
+
+	for range workerCount {
+		<-done // wait for every worker
+	}
 }
 
-// run does a job that needs some time, or skips it if there isn't enough left.
-func run(ctx context.Context, name string, needs time.Duration) {
-	if d, ok := ctx.Deadline(); ok && time.Until(d) < needs {
+// worker does a job that needs some time, or skips it if there isn't enough left.
+func worker(ctx context.Context, name string, needs time.Duration, done chan<- struct{}) {
+	defer func() { done <- struct{}{} }() // send, not close: others share done
+
+	if d, ok := ctx.Deadline(); ok && time.Until(d) < needs { // not enough time: don't even start
 		left := time.Until(d).Round(10 * time.Millisecond)
 		fmt.Printf("%s: skipped, needs %v but only %v left\n", name, needs, left)
 		return
@@ -43,7 +54,7 @@ func run(ctx context.Context, name string, needs time.Duration) {
 	select {
 	case <-time.After(needs): // simulate the work
 		fmt.Println(name + ": done")
-	case <-ctx.Done():
+	case <-ctx.Done(): // the deadline passed while working
 		fmt.Println(name+": stopped:", ctx.Err())
 	}
 }
