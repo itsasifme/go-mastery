@@ -34,10 +34,11 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
   go func() { ch <- 1 }()            // avoid: hides how the channel is passed
   ```
 
-  Anonymous functions are only allowed in these three cases:
+  Anonymous functions are only allowed in these four cases:
   - the closure is the lesson (like the loop variable example)
   - `defer func() { recover() }()`
   - `defer func() { done <- struct{}{} }()` when several goroutines share one `done`
+  - an API that only takes a func, like errgroup's `g.Go` or singleflight's `g.Do`. Keep it to one line that calls a named function: `g.Go(func() error { return fetch(ctx, url) })`. All the work stays in the named function.
 
 - A function name says exactly what it does. `printBoth` prints two channels. `merge` would sound like fan-in, which returns a channel. Other good names: `readUntilDone`, `stopAfter`, `handleUrgentFirst`.
 - Examples under `02-concurrency/` run their work in a goroutine, even when the lesson could be shown in `main` alone. That's what the topic is about.
