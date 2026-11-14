@@ -42,7 +42,7 @@ I'm a backend engineer, and I use this repo to learn Go step by step. It starts 
 | 04 | [Context](02-concurrency/04-context/) | ✅ |
 | 05 | [WaitGroup](02-concurrency/05-waitgroup/) | ✅ |
 | 06 | [errgroup](02-concurrency/06-errgroup/) | ✅ |
-| 07 | [Mutex](02-concurrency/07-mutex/) | 📝 |
+| 07 | [Mutex](02-concurrency/07-mutex/) | ✅ |
 | 08 | [RWMutex](02-concurrency/08-rwmutex/) | 📝 |
 | 09 | [Atomic](02-concurrency/09-atomic/) | 📝 |
 | 10 | [Once](02-concurrency/10-once/) | 📝 |
