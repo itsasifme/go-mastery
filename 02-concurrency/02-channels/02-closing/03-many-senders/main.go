@@ -13,7 +13,7 @@
 // Real use:
 //   - a worker pool where many workers send results to one channel. One
 //     extra goroutine closes it after every worker is finished. Later,
-//     sync.WaitGroup does this counting for you (see waitgroup/01-basic).
+//     sync.WaitGroup does this counting for you (see waitgroup/03-close-results).
 //
 // Run: go run ./02-concurrency/02-channels/02-closing/03-many-senders
 package main
