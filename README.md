@@ -154,7 +154,7 @@ Some examples print in a different order each run. Some crash on purpose (a dead
 
 This repo uses Go 1.23 (set in `go.mod`). Older versions may not work. When a topic uses a newer Go feature, its README says which version added it.
 
-There are no outside packages yet, so there's no `go.sum`. The errgroup, singleflight, and semaphore examples will add `golang.org/x/sync` later.
+The only outside package is `golang.org/x/sync`, for the errgroup, semaphore and singleflight examples. It's pinned to `v0.16.0`, the newest version that still works with Go 1.23.
 
 ## Notes
 
