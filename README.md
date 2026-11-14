@@ -45,7 +45,7 @@ I'm a backend engineer, and I use this repo to learn Go step by step. It starts 
 | 07 | [Mutex](02-concurrency/07-mutex/) | ✅ |
 | 08 | [RWMutex](02-concurrency/08-rwmutex/) | ✅ |
 | 09 | [Atomic](02-concurrency/09-atomic/) | ✅ |
-| 10 | [Once](02-concurrency/10-once/) | 📝 |
+| 10 | [Once](02-concurrency/10-once/) | ✅ |
 | 11 | [Semaphore](02-concurrency/11-semaphore/) | 📝 |
 | 12 | [singleflight](02-concurrency/12-singleflight/) | 📝 |
 | 13 | [Patterns](02-concurrency/13-patterns/) | 📝 |
