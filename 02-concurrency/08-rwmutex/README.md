@@ -1,15 +1,34 @@
 # RWMutex
 
-> 📝 **Planned.** No code yet. This is what I plan to add here.
-
 `sync.RWMutex` lets many goroutines read at the same time, but only one write.
 
-## Examples to add
+## Why
 
-- `01-cache`: a map that's read a lot and changed rarely
-- `02-benchmark`: compare `Mutex` and `RWMutex` with a benchmark
+**Problem:** with a plain `Mutex`, readers wait for each other, even though reading doesn't change anything. For data that's read on every request and changed rarely, that's a lot of waiting for nothing.
+
+**Solution:** `sync.RWMutex` has two kinds of lock. `RLock` can be held by many readers at once. `Lock` waits until every reader is gone, then lets one writer in alone.
+
+## API
+
+| API | Returns | Go | What it does | Example |
+| --- | --- | --- | --- | --- |
+| `var mu sync.RWMutex` | | 1.0 | Ready to use, starts unlocked | [01-cache](01-cache/) |
+| `mu.RLock()` / `mu.RUnlock()` | | 1.0 | Read lock. Many goroutines can hold it at once | [01-cache](01-cache/), [02-compare](02-compare/) |
+| `mu.Lock()` / `mu.Unlock()` | | 1.0 | Write lock. Only one, and no readers at the same time | [01-cache](01-cache/), [03-upgrade](03-upgrade/) |
+| `mu.TryRLock()` / `mu.TryLock()` | `bool` | 1.18 | Take the lock only if it's free right now | none |
+| `mu.RLocker()` | `sync.Locker` | 1.0 | A `Locker` whose `Lock`/`Unlock` call `RLock`/`RUnlock` | none |
+
+## Examples
+
+| Example | Run | What it shows |
+| --- | --- | --- |
+| `01-cache` | `go run ./02-concurrency/08-rwmutex/01-cache` | Exchange rates read by many requests and updated by one job |
+| `02-compare` | `go run ./02-concurrency/08-rwmutex/02-compare` | The same read-only work timed with a `Mutex` and an `RWMutex` |
+| `03-upgrade` | `go run ./02-concurrency/08-rwmutex/03-upgrade` | Problem: taking `Lock` while holding `RLock` gets stuck. Fix: drop it, lock, look again |
 
 ## Things to remember
 
-- **It only helps when there are many more reads than writes.** Measure it first.
-- Don't call `RLock` twice in the same goroutine. It can get stuck if a writer is waiting.
+- **It only helps when there are many more reads than writes.** Measure it first (`02`).
+- **You can't upgrade `RLock` to `Lock`.** Release the read lock, take the write lock, then check again (`03`).
+- Don't call `RLock` twice in the same goroutine. It can get stuck if a writer is waiting in between.
+- A waiting writer blocks new readers, so writers aren't starved by a steady stream of reads.
