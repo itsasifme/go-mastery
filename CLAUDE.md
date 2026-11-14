@@ -4,7 +4,7 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
 
 ## Repo layout
 
-- One Go module (`github.com/itsasifme/go-mastery`, Go 1.23) at the root. No third-party packages unless there's no other way.
+- One Go module (`github.com/itsasifme/go-mastery`, Go 1.25) at the root. No third-party packages unless there's no other way.
 - Three parts: `01-fundamentals/`, `02-concurrency/`, `03-standard-library/`.
 - Every folder starts with a 2-digit number in learning order. Numbers start at `01` in every folder and have no gaps. Planned topics already have a folder, so numbers never change.
 - Each example is its own folder with one `main.go`, run with `go run ./<path>`.
@@ -154,7 +154,7 @@ Each topic README has these sections, in this order:
 2. `## Why`: **Problem:** and **Solution:**, each in its own paragraph (with a blank line between them).
 3. `## API`: a table of the syntax or functions, with a link to the example that shows each one (`none` if no example shows it).
    - Syntax tables (channels, select) have three columns: Syntax, What it does, Example.
-   - Package function tables add `Returns` and `Go` (the version it was added in). Show newer APIs too, even ones this repo can't use yet: `wg.Go(f) | 1.25 | ... | none (this repo uses Go 1.23)`.
+   - Package function tables add `Returns` and `Go` (the version it was added in). Show newer APIs too, even ones this repo can't use yet: `x.NewThing() | 1.27 | ... | none (this repo uses Go 1.25)`.
 4. `## Examples`: a table with Example, Run, and What it shows.
 5. `## Things to remember`: short bullets. Bold the most important part of each.
 6. `## Go version notes` if something changed in a Go version.
