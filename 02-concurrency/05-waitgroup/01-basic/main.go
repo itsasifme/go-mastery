@@ -6,10 +6,12 @@
 //
 // Real use:
 //   - calling several services at once and waiting for all of them, like
-//     loading a user's profile, orders and settings in parallel.
-//   - graceful shutdown: wait for running jobs to finish before exiting.
+//     loading a user's profile, orders and settings in parallel (see
+//     02-parallel-fetch).
+//   - graceful shutdown: wait for running jobs to finish before exiting
+//     (see 04-graceful-shutdown).
 //   - closing a results channel after every worker is done (see
-//     channels/02-closing/03-many-senders).
+//     03-close-results).
 //
 // Run: go run ./02-concurrency/05-waitgroup/01-basic
 package main
