@@ -98,7 +98,9 @@ Every planned topic already has its folder, so adding code later won't change an
 ├── 04-context/
 │   ├── 01-cancellation/
 │   ├── 02-timeout/
-│   └── 03-deadline/
+│   ├── 03-deadline/
+│   ├── 04-values/
+│   └── 05-advanced/
 ├── 05-waitgroup/
 ├── 06-errgroup/
 ├── 07-mutex/
@@ -124,7 +126,11 @@ Every planned topic already has its folder, so adding code later won't change an
 ├── 08-regexp/
 ├── 09-net-http/
 └── 10-os-exec/
+docs/
+└── go-style-guide.md
 ```
+
+`docs/` has my [Go style guide](docs/go-style-guide.md): how Go code is usually written, based on the official, Google and Uber rules.
 
 ## Run an example
 
@@ -154,7 +160,7 @@ Some examples print in a different order each run. Some crash on purpose (a dead
 
 This repo uses Go 1.25 (set in `go.mod`). Older versions may not work. When a topic uses a newer Go feature, its README says which version added it.
 
-The only outside package is `golang.org/x/sync`, for the errgroup, semaphore and singleflight examples. It's pinned to `v0.16.0`, the newest version that still works with Go 1.23.
+The only outside package is `golang.org/x/sync`, for the errgroup, semaphore and singleflight examples. It's pinned to `v0.16.0`.
 
 ## Notes
 
