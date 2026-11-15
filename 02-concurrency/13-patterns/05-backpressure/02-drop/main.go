@@ -13,8 +13,8 @@
 // Real use:
 //   - metrics, traces or debug logs, where a dropped sample is better
 //     than a slow request. Count the drops, so you know it's happening.
-//   - a live video or game update stream, where only the newest data
-//     matters.
+//   - click tracking or other analytics events sent to an outside API,
+//     where losing a few events is better than a slow page.
 //
 // Run: go run ./02-concurrency/13-patterns/05-backpressure/02-drop
 package main
