@@ -1,9 +1,11 @@
-// Struct: keep the mutex inside the type, next to the data it protects.
+// Safe type: a type that does its own locking, so callers can't forget.
 //
 // A wallet has a balance that many requests change at once. The mutex
-// lives in the struct, right above the field it guards. Every method locks
-// it, so code that uses the wallet can't forget to. Withdraw checks and
-// changes the balance under one lock, so it can't go below zero.
+// lives inside the wallet, right above the field it guards, and every
+// method locks it. Code that uses the wallet just calls Deposit or
+// Withdraw. It never touches the mutex, so it can't forget to lock.
+// Withdraw checks and changes the balance under one lock, so it can't go
+// below zero.
 //
 // Methods use a pointer receiver (*wallet). A value receiver would copy
 // the mutex, and the copy wouldn't protect anything. go vet warns about it.
@@ -15,7 +17,7 @@
 //     sync.Mutex and a map, and methods like Get, Set and Delete.
 //   - a connection pool that tracks free and busy connections.
 //
-// Run: go run ./02-concurrency/07-mutex/02-struct
+// Run: go run ./02-concurrency/07-mutex/02-safe-type
 package main
 
 import (
