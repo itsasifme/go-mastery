@@ -6,7 +6,7 @@
 // lets one writer in alone. The readers keep working while the rate
 // changes, and they never see a half-written map.
 //
-// Note: with a plain Mutex (see mutex/02-struct), readers would wait for
+// Note: with a plain Mutex (see mutex/02-safe-type), readers would wait for
 // each other, even though reading doesn't change anything.
 //
 // Real use:
