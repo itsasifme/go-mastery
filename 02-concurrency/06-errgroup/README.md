@@ -39,4 +39,4 @@
 
 ## Package note
 
-`errgroup` isn't in the standard library. It comes from `golang.org/x/sync`. This repo uses `v0.16.0`, the newest version that still works with Go 1.23. Newer ones need Go 1.24.
+`errgroup` isn't in the standard library. It comes from `golang.org/x/sync`. This repo uses `v0.16.0`.
