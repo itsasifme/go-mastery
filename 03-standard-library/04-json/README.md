@@ -19,4 +19,4 @@ Turn Go values into JSON and back. Basic struct tags are already shown in [struc
 
 ## Go version notes
 
-- The `omitzero` tag needs Go 1.24, so it can't be used here yet.
+- The `omitzero` tag came in Go 1.24.
