@@ -7,7 +7,7 @@
 //
 // The two counters are separate. Each one is always right on its own, but
 // a reader might see the new requests value with the old bytes value. If
-// several values must change together, use a mutex (see mutex/02-struct).
+// several values must change together, use a mutex (see mutex/02-safe-type).
 //
 // Note: compare with mutex/01-race. The same kind of counter, without a
 // lock, lost updates.
