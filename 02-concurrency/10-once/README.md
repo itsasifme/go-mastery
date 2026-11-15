@@ -29,7 +29,7 @@
 ## Things to remember
 
 - **The first result is final, even an error.** If setup can fail for a moment, use a mutex and save the result only on success (`03`).
-- **If the function panics, `Once` still counts it as done.**
+- **If the function panics, `once.Do` still counts it as done.** Later calls do nothing. `OnceFunc`, `OnceValue` and `OnceValues` are different: they panic again with the same value on every call.
 - Calling `once.Do` inside its own function gets stuck forever.
 - Prefer `OnceValues` over a `Once` plus a package variable. The value and the "done" state can't get out of sync (`02`).
 
