@@ -179,6 +179,17 @@ When a topic gets code:
 - Don't push. The owner pushes.
 - Format: `<emoji> <Type>: <description>`. Use an imperative, lowercase verb after the colon, no period at the end, and 72 characters at most. Prefer the subject only.
 - Types: 🎉 Init, ✏️ Add, ✨ Feature, 🆙 Update, 🐛 Fix, 🔨 Refactor, 🔥 Remove, 📝 Docs, 🎨 Style, ⚡ Perf, 🧪 Test, 🔒 Security, 📦 Build, 🚀 CI, 🧹 Chore, ⏪ Revert.
+- Pick the type by what changed:
+
+  | Type | Use it when | Example |
+  | --- | --- | --- |
+  | ✏️ Add | a new example or file | a new TryLock example |
+  | 🆙 Update | an example now does, prints or teaches something different | run the work in a goroutine, change the scenario, add a note to the header |
+  | 🐛 Fix | an example was wrong: a bug, a race, or a wrong claim | a cache that could load twice |
+  | 🔨 Refactor | the code changes, but the output and the lesson stay the same | rename, magic number to a named const, move a function or folder |
+  | 🎨 Style | formatting only, nothing else changes. Rare here | gofmt, whitespace |
+  | 📝 Docs | README and other markdown files | a new README row or link |
+  | 🔥 Remove | an example or file is deleted | |
 - The subject must make sense on its own. Name the topic in words, and say what the change teaches or why.
 - **Never use folder numbers** in a commit message. The same numbers repeat in every topic.
 
