@@ -1,17 +1,20 @@
 // Acquire timeout: wait for a slot, but not forever.
 //
-// A service may use only maxConns database connections. Requests arrive
-// all at once. Each one waits for a connection, but only up to waitLimit.
-// If none frees up in time, Acquire returns the context's error, and the
-// request answers "busy, try again" (HTTP 503) instead of hanging.
+// A shipping partner's API allows only maxCalls calls at once from us.
+// Requests arrive all at once. Each one waits for a slot, but only up to
+// waitLimit. If none frees up in time, Acquire returns the context's
+// error, and the request answers "busy, try again" (HTTP 503) instead of
+// hanging.
 //
 // TryAcquire is the extreme version: it doesn't wait at all.
 //
 // Note: compare with 02-weighted. There, jobs waited as long as needed.
+// Database connections don't need this: database/sql already limits them
+// with db.SetMaxOpenConns.
 //
 // Real use:
-//   - an HTTP handler that calls sem.Acquire(r.Context(), 1), so the wait
-//     also ends if the client hangs up.
+//   - an HTTP handler that calls sem.Acquire(r.Context(), 1) before calling
+//     a partner API, so the wait also ends if the client hangs up.
 //   - protecting a slow downstream service: fail fast instead of piling
 //     up waiting requests.
 //
@@ -29,17 +32,17 @@ import (
 )
 
 const (
-	queryTime = 300 * time.Millisecond
-	waitLimit = 100 * time.Millisecond // shorter than queryTime, so late requests give up
+	callTime  = 300 * time.Millisecond // how long one partner API call takes
+	waitLimit = 100 * time.Millisecond // shorter than callTime, so late requests give up
 )
 
 func main() {
 	const (
-		maxConns     = 2
+		maxCalls     = 2 // the partner's limit
 		requestCount = 5
 	)
 
-	sem := semaphore.NewWeighted(maxConns)
+	sem := semaphore.NewWeighted(maxCalls)
 
 	var wg sync.WaitGroup
 	wg.Add(requestCount)
@@ -49,8 +52,8 @@ func main() {
 	wg.Wait()
 }
 
-// handle is one request. It waits up to waitLimit for a connection, then
-// runs its query or answers busy.
+// handle is one request. It waits up to waitLimit for a slot, then calls
+// the partner API or answers busy.
 func handle(id int, sem *semaphore.Weighted, wg *sync.WaitGroup) {
 	defer wg.Done()
 
@@ -67,6 +70,6 @@ func handle(id int, sem *semaphore.Weighted, wg *sync.WaitGroup) {
 	}
 	defer sem.Release(1)
 
-	time.Sleep(queryTime) // simulate the query
+	time.Sleep(callTime) // simulate the partner API call
 	fmt.Printf("request %d: 200 ok\n", id)
 }
