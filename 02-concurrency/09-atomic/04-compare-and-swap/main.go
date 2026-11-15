@@ -12,6 +12,8 @@
 //
 // Note: compare with mutex/03-check-then-act. There, a mutex kept the
 // check and the change together. Here, CompareAndSwap does it for one value.
+// This works inside one server. With many servers, let the database do it:
+// UPDATE coupons SET left = left - 1 WHERE id = $1 AND left > 0.
 //
 // Real use:
 //   - limited coupons, free trial slots, or "first 100 users" offers.
