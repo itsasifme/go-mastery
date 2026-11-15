@@ -31,8 +31,10 @@
 - **Callers share the error too, not just the result.**
 - **Callers also share a returned slice or map.** Don't change it, or copy it first.
 - **One caller's ctx shouldn't cancel the shared work.** Use `DoChan` and select on your own `ctx.Done()` (`03`).
+- **The `DoChan` channel is never closed.** It gets one `Result`, so read it once. Don't `range` over it.
+- If `fn` panics, every caller waiting in `Do` panics too.
 - `Forget` removes a key, so the next call runs again.
 
 ## Package note
 
-It comes from `golang.org/x/sync`, not the standard library. This repo uses `v0.16.0`, which still works with Go 1.23.
+It comes from `golang.org/x/sync`, not the standard library. This repo uses `v0.16.0`.
