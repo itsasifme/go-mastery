@@ -13,6 +13,9 @@
 // because another goroutine may have loaded the user in between. Comment
 // out the line marked "problem", then uncomment the "fix:" line.
 //
+// Note: GetOrLoad holds Lock during the database call, so every reader
+// waits for it. For slow loads, use singleflight (see singleflight/02-cache).
+//
 // Real use:
 //   - a lazy cache in front of a database: db.QueryRowContext on a miss,
 //     then save the row. The "look again after Lock" step is called
