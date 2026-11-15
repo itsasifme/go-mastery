@@ -19,4 +19,4 @@ Generics let you write one function or type that works with many types.
 ## Go version notes
 
 - Generics came in Go 1.18. The `cmp` package came in Go 1.21.
-- Generic type aliases need Go 1.24, so they can't be used here yet.
+- Generic type aliases came in Go 1.24.
