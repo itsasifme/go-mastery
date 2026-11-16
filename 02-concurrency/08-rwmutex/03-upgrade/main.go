@@ -13,6 +13,9 @@
 // because another goroutine may have loaded the user in between. Comment
 // out the line marked "problem", then uncomment the "fix:" line.
 //
+// Note: same cause as mutex/04-nested-lock. A lock doesn't know who holds
+// it, so a goroutine that locks again waits for itself.
+//
 // Note: GetOrLoad holds Lock during the database call, so every reader
 // waits for it. For slow loads, use singleflight (see singleflight/02-cache).
 //
