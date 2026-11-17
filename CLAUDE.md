@@ -42,6 +42,11 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
 
 - A function name says exactly what it does. `printBoth` prints two channels. `merge` would sound like fan-in, which returns a channel. Other good names: `readUntilDone`, `stopAfter`, `handleUrgentFirst`.
 - Examples under `02-concurrency/` run their work in a goroutine, even when the lesson could be shown in `main` alone. That's what the topic is about.
+- **Use the best tool taught so far.** Once a topic is taught, later examples use it the way production code would:
+  - after `context/`: stop goroutines with `ctx` (`context.WithCancel`), not a `stop` channel. Use `WithCancelCause` only when the example shows why it stopped.
+  - after `waitgroup/`: wait for several goroutines with `sync.WaitGroup`, not one `done` send per goroutine. Waiting for **one** goroutine with `defer close(done)` is still fine. It's standard Go, and main can `select` on it.
+
+  Keep the older way only when it's the lesson, when the example compares the two (say so in the header), or when it really fits better (like `atomic.Bool` for a flag that flips both ways, or a mutex when several fields change together). Never use a topic before its own folder.
 - A goroutine that gets stopped (by `stop`, `ctx`, a timeout) must be **doing work until then**, like real code. Don't let it just sit on `<-ctx.Done()`. Loop over small steps and watch for the stop signal in the same `select`, and show how far it got when it stops:
 
   ```go
@@ -87,7 +92,7 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
 ### Signal channels
 
 - Signal channels are `chan struct{}` and use the same names everywhere:
-  - `stop`: main tells a goroutine to stop. Close it to reach everyone.
+  - `stop`: main tells a goroutine to stop. Close it to reach everyone. Only in topics before `context/`. After that, use `ctx` (see "Use the best tool taught so far").
   - `done`: a goroutine tells main it finished.
 - Label each one with its direction where it's made:
 
