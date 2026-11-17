@@ -1,14 +1,21 @@
 // Compare and swap: take one from a limited stock, without going below zero.
 //
 // A shop gives away a few coupons, and many users try to claim one at
-// once. claim reads how many are left. If none, it gives up. If some, it
-// calls CompareAndSwap(n, n-1): "set it to n-1, but only if it's still n".
-// If another user claimed in between, the swap fails and claim tries again
-// with the new value.
+// once. claimUnsafe checks that coupons are left, saves the coupon to the
+// user's account, then takes one from the stock with Add(-1). Each step is
+// atomic, but they're separate steps.
 //
-// A plain left.Add(-1) followed by a check isn't enough. Several users can
-// subtract at once, and left goes below zero even though they get turned
-// away.
+// Problem: while the first users are saving, the others pass the same
+// check. More users get a coupon than there are coupons, and left goes
+// below zero. "go run -race" finds nothing, because every access is
+// atomic. With nothing slow between the check and the take, the gap is
+// tiny and the bug hides, until real work goes there.
+//
+// Fix: takeOne reads left. If it's zero, it gives up. If not, it calls
+// CompareAndSwap(n, n-1): "set it to n-1, but only if it's still n". If
+// another user took one in between, the swap fails and takeOne tries again
+// with the new value. claimSafe takes the coupon first, then saves it.
+// Use the "fix:" line instead of the line above it.
 //
 // Note: compare with mutex/03-check-then-act. There, a mutex kept the
 // check and the change together. Here, CompareAndSwap does it for one value.
@@ -27,7 +34,11 @@ import (
 	"fmt"
 	"sync"
 	"sync/atomic"
+	"time"
 )
+
+// saveTime is how long saving a coupon to a user's account takes.
+const saveTime = 10 * time.Millisecond
 
 func main() {
 	const (
@@ -42,7 +53,8 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(userCount)
 	for id := range userCount {
-		go tryClaim(id+1, &left, &claimed, &wg)
+		go claimUnsafe(id+1, &left, &claimed, &wg) // problem: check and take are separate steps
+		// go claimSafe(id+1, &left, &claimed, &wg) // fix: take first with CompareAndSwap, then save
 	}
 	wg.Wait()
 
@@ -50,18 +62,37 @@ func main() {
 	fmt.Println("left:   ", left.Load())
 }
 
-// tryClaim tries to claim one coupon for a user and prints who got one.
-func tryClaim(user int, left, claimed *atomic.Int64, wg *sync.WaitGroup) {
+// claimUnsafe checks for a coupon, saves it to the user's account, then
+// takes it from the stock. Other users can pass the same check while the
+// coupon is being saved.
+func claimUnsafe(user int, left, claimed *atomic.Int64, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	if claim(left) {
-		claimed.Add(1)
-		fmt.Println("user", user, "got a coupon")
+	if left.Load() == 0 {
+		return
 	}
+	time.Sleep(saveTime) // save the coupon to the user's account
+	left.Add(-1)
+	claimed.Add(1)
+	fmt.Println("user", user, "got a coupon")
 }
 
-// claim takes one from left if it's above zero. It reports whether it got one.
-func claim(left *atomic.Int64) bool {
+// claimSafe takes a coupon from the stock first, then saves it to the
+// user's account.
+func claimSafe(user int, left, claimed *atomic.Int64, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	if !takeOne(left) {
+		return
+	}
+	time.Sleep(saveTime) // save the coupon to the user's account
+	claimed.Add(1)
+	fmt.Println("user", user, "got a coupon")
+}
+
+// takeOne takes one from left if it's above zero. It reports whether it
+// got one.
+func takeOne(left *atomic.Int64) bool {
 	for {
 		n := left.Load()
 		if n == 0 {
