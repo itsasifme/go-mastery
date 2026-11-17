@@ -20,6 +20,7 @@
 //     return the old data right away.
 //
 // Run: go run ./02-concurrency/07-mutex/05-try-lock
+// Race check: go run -race ./02-concurrency/07-mutex/05-try-lock
 package main
 
 import (

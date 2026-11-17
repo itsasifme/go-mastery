@@ -19,6 +19,7 @@
 //   - run your tests with "go test -race" in CI to catch this early.
 //
 // Run: go run ./02-concurrency/07-mutex/01-race
+// Race check: go run -race ./02-concurrency/07-mutex/01-race
 package main
 
 import (

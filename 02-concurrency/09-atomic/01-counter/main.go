@@ -17,6 +17,7 @@
 //   - counting jobs done by a worker pool to show progress.
 //
 // Run: go run ./02-concurrency/09-atomic/01-counter
+// Race check: go run -race ./02-concurrency/09-atomic/01-counter
 package main
 
 import (

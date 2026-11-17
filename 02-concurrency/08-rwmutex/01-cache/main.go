@@ -15,6 +15,7 @@
 //   - a DNS or service discovery cache: lookups use RLock, refreshes use Lock.
 //
 // Run: go run ./02-concurrency/08-rwmutex/01-cache
+// Race check: go run -race ./02-concurrency/08-rwmutex/01-cache
 package main
 
 import (

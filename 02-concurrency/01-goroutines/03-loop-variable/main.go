@@ -20,6 +20,7 @@
 //     you'll see that style a lot.
 //
 // Run: go run ./02-concurrency/01-goroutines/03-loop-variable
+// Race check: go run -race ./02-concurrency/01-goroutines/03-loop-variable
 package main
 
 import (

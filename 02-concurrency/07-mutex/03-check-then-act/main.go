@@ -20,6 +20,7 @@
 //     a single call like sync.Map's LoadOrStore.
 //
 // Run: go run ./02-concurrency/07-mutex/03-check-then-act
+// Race check: go run -race ./02-concurrency/07-mutex/03-check-then-act
 package main
 
 import (

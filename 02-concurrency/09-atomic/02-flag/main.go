@@ -15,6 +15,7 @@
 //     sets once caches are warm.
 //
 // Run: go run ./02-concurrency/09-atomic/02-flag
+// Race check: go run -race ./02-concurrency/09-atomic/02-flag
 package main
 
 import (

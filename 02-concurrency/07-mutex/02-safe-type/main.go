@@ -18,6 +18,7 @@
 //   - a connection pool that tracks free and busy connections.
 //
 // Run: go run ./02-concurrency/07-mutex/02-safe-type
+// Race check: go run -race ./02-concurrency/07-mutex/02-safe-type
 package main
 
 import (

@@ -17,6 +17,7 @@
 //     reads. Only switch if the numbers show it helps.
 //
 // Run: go run ./02-concurrency/08-rwmutex/02-compare
+// Race check: go run -race ./02-concurrency/08-rwmutex/02-compare
 package main
 
 import (

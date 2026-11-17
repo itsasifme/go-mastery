@@ -20,6 +20,7 @@
 //     common naming habit in Go code, including the standard library.
 //
 // Run: go run ./02-concurrency/07-mutex/04-nested-lock
+// Race check: go run -race ./02-concurrency/07-mutex/04-nested-lock
 package main
 
 import (

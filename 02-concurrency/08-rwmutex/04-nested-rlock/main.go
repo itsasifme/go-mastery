@@ -25,6 +25,7 @@
 //     values and calls other public methods that also lock.
 //
 // Run: go run ./02-concurrency/08-rwmutex/04-nested-rlock
+// Race check: go run -race ./02-concurrency/08-rwmutex/04-nested-rlock
 package main
 
 import (

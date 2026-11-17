@@ -20,6 +20,7 @@
 //   - a simple rate limiter or connection counter with a maximum.
 //
 // Run: go run ./02-concurrency/09-atomic/04-compare-and-swap
+// Race check: go run -race ./02-concurrency/09-atomic/04-compare-and-swap
 package main
 
 import (

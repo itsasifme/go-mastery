@@ -14,6 +14,7 @@
 //     being served (tls.Config's GetCertificate often does this).
 //
 // Run: go run ./02-concurrency/09-atomic/03-pointer
+// Race check: go run -race ./02-concurrency/09-atomic/03-pointer
 package main
 
 import (

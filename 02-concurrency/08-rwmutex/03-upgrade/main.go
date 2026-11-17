@@ -25,6 +25,7 @@
 //     double-checked locking.
 //
 // Run: go run ./02-concurrency/08-rwmutex/03-upgrade
+// Race check: go run -race ./02-concurrency/08-rwmutex/03-upgrade
 package main
 
 import (
