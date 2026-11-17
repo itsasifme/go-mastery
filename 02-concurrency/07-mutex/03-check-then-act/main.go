@@ -13,6 +13,11 @@
 // the card after the ticket is reserved. Comment out the line marked
 // "problem", then uncomment the "fix:" line.
 //
+// Note: when the stock is just one number, atomic can do the check and the
+// take in one step with CompareAndSwap, without a lock (see
+// atomic/04-compare-and-swap). A mutex is still needed when more than one
+// value must change together.
+//
 // Real use:
 //   - selling the last item in stock, booking the last seat, or using a
 //     coupon that has a limit.
