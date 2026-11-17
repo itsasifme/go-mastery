@@ -1,6 +1,6 @@
 // Graceful shutdown: let running jobs finish before the program exits.
 //
-// Workers keep processing jobs one after another. When main closes stop,
+// Workers keep processing jobs one after another. When ctx times out,
 // each worker finishes the job it's on, then returns. It never cuts a job
 // in half. main calls wg.Wait, so it doesn't exit while a job is still
 // running.
@@ -8,8 +8,10 @@
 // Try: comment out wg.Wait(). main exits right away, and the workers never
 // print "stopping".
 //
-// Note: in a real program, stop comes from Ctrl+C with
-// signal.NotifyContext(ctx, os.Interrupt) (see context/01-cancellation/02-stop-workers).
+// Note: here a timeout stands in for Ctrl+C. In a real program, ctx comes
+// from signal.NotifyContext(context.Background(), os.Interrupt) (see
+// context/01-cancellation/02-stop-workers). WithTimeoutCause works like in
+// context/02-timeout/03-timeout-cause: context.Cause says why it stopped.
 //
 // Real use:
 //   - a queue consumer that finishes the current message, acks it, then
@@ -21,6 +23,8 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"sync"
 	"time"
@@ -29,39 +33,43 @@ import (
 // jobTime is how long one fake job takes.
 const jobTime = 150 * time.Millisecond
 
+// errShutdown is why ctx ends. context.Cause returns it.
+var errShutdown = errors.New("shutdown requested")
+
 func main() {
 	const (
 		workerCount = 3
-		runTime     = 400 * time.Millisecond // not a multiple of jobTime, so stop lands mid-job
+		runTime     = 400 * time.Millisecond // not a multiple of jobTime, so the timeout lands mid-job
 		roundTo     = 10 * time.Millisecond
 	)
 
-	stop := make(chan struct{}) // main -> workers: "please stop"
+	// After runTime, ctx ends and every worker sees it.
+	ctx, cancel := context.WithTimeoutCause(context.Background(), runTime, errShutdown)
+	defer cancel() // frees the timer if main returns early
 
 	var wg sync.WaitGroup
 	wg.Add(workerCount)
 	for id := range workerCount {
-		go worker(id+1, stop, &wg)
+		go worker(ctx, id+1, &wg)
 	}
 
-	time.Sleep(runTime) // the program runs for a while
-	fmt.Println("main: shutting down, waiting for jobs in progress")
-	close(stop)
+	<-ctx.Done() // the program runs until the timeout
+	fmt.Println("main:", context.Cause(ctx), "- waiting for jobs in progress")
 
 	shutdownStart := time.Now()
 	wg.Wait()
 	fmt.Println("main: all workers stopped after", time.Since(shutdownStart).Round(roundTo))
 }
 
-// worker processes jobs until stop is closed. It checks stop only between
+// worker processes jobs until ctx is canceled. It checks ctx only between
 // jobs, so a job that started always finishes.
-func worker(id int, stop <-chan struct{}, wg *sync.WaitGroup) {
+func worker(ctx context.Context, id int, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	jobs := 0
 	for {
 		select {
-		case <-stop:
+		case <-ctx.Done():
 			fmt.Printf("worker %d: stopping after %d jobs\n", id, jobs)
 			return
 		default:
