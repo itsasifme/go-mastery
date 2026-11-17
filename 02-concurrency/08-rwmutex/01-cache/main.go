@@ -19,6 +19,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"time"
@@ -57,23 +58,23 @@ func main() {
 	)
 
 	cache := &rateCache{rates: map[string]float64{pair: 121.0}}
-	stop := make(chan struct{}) // main -> readers and updater: "please stop"
+	ctx, cancel := context.WithCancel(context.Background()) // cancel tells the readers and the updater to stop
 
 	var wg sync.WaitGroup
 	wg.Add(readerCount + 1) // +1 for the updater
 	for id := range readerCount {
-		go readRates(id+1, cache, stop, &wg)
+		go readRates(ctx, id+1, cache, &wg)
 	}
-	go updateRates(cache, stop, &wg)
+	go updateRates(ctx, cache, &wg)
 
 	time.Sleep(runTime)
-	close(stop)
+	cancel()
 	wg.Wait()
 }
 
 // readRates looks up the rate again and again, like requests coming in,
-// until stop is closed.
-func readRates(id int, c *rateCache, stop <-chan struct{}, wg *sync.WaitGroup) {
+// until ctx is canceled.
+func readRates(ctx context.Context, id int, c *rateCache, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	lookups := 0
@@ -83,7 +84,7 @@ func readRates(id int, c *rateCache, stop <-chan struct{}, wg *sync.WaitGroup) {
 		case <-time.After(readTime):
 			last = c.Get(pair)
 			lookups++
-		case <-stop:
+		case <-ctx.Done():
 			fmt.Printf("reader %d: %d lookups, last %s = %.1f\n", id, lookups, pair, last)
 			return
 		}
@@ -91,8 +92,8 @@ func readRates(id int, c *rateCache, stop <-chan struct{}, wg *sync.WaitGroup) {
 }
 
 // updateRates sets a new rate every updateTime, like a job that pulls
-// rates from a bank, until stop is closed.
-func updateRates(c *rateCache, stop <-chan struct{}, wg *sync.WaitGroup) {
+// rates from a bank, until ctx is canceled.
+func updateRates(ctx context.Context, c *rateCache, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	newRates := []float64{121.5, 122.0, 122.5, 123.0} // sample rates from the "bank"
@@ -102,7 +103,7 @@ func updateRates(c *rateCache, stop <-chan struct{}, wg *sync.WaitGroup) {
 		case <-time.After(updateTime):
 			c.Set(pair, newRates[updates%len(newRates)])
 			updates++
-		case <-stop:
+		case <-ctx.Done():
 			fmt.Println("updater:", updates, "updates")
 			return
 		}
