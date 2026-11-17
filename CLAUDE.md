@@ -161,8 +161,10 @@ Each topic README has these sections, in this order:
 1. Title and one or two lines on what it is. A sub-topic README adds `See the [full API overview](../README.md#api).` under it.
 2. `## Why`: **Problem:** and **Solution:**, each in its own paragraph (with a blank line between them).
 3. `## API`: a table of the syntax or functions, with a link to the example that shows each one (`none` if no example shows it).
-   - Syntax tables (channels, select) have three columns: Syntax, What it does, Example.
-   - Package function tables add `Returns` and `Go` (the version it was added in). Show newer APIs too, even ones this repo can't use yet: `x.NewThing() | 1.27 | ... | none (this repo uses Go 1.25)`.
+   - Every row says what kind of thing it is. Either add a `Kind` column, or, when there are several of each kind, use one table per kind (like context/README.md: Type, Method, Variable, Function).
+   - Syntax tables (fundamentals, channels, select) have four columns: Syntax, Kind, What it does, Example. Kinds: `keyword` (`go`, `default:`), `statement` (`select`, `for range`), `operator` (`&x`, `ch <- v`, `v.(T)`), `built-in` (`make`, `close`, `len`, `new`), `type` (`*T`, `chan<- T`, `any`), `declaration` (`type T struct`, `func (r T) M()`), `literal` (`T{a, b}`), `field`, `tag`, `value` (`nil`), `function`, `method`, and `rule` for a behaviour rather than code you write ("several cases ready", "`ch <- v` when full"). Join two with `+` when a row mixes them.
+   - Pattern tables (patterns/) name the first column `Idiom` instead of adding a Kind column. Every row is an idiom.
+   - Package function tables add `Kind`, `Returns` and `Go` (the version it was added in). `Kind` goes right after the API column and says what each row is: `type` (including `var x T`), `function` (called on the package, like `sync.OnceFunc`), `method` (called on a value, like `once.Do`), or `variable` (like `context.DeadlineExceeded`). Use `built-in` or `syntax` for rows like `make(chan T, n)`. Show newer APIs too, even ones this repo can't use yet: `x.NewThing() | 1.27 | ... | none (this repo uses Go 1.25)`.
 4. `## Examples`: a table with Example, Run, and What it shows.
 5. `## Things to remember`: short bullets. Bold the most important part of each.
 6. `## Go version notes` if something changed in a Go version.
