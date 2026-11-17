@@ -6,22 +6,34 @@
 
 **Problem:** a mutex is more than you need for one counter or one flag. Every reader and writer has to lock and unlock, and they wait for each other.
 
-**Solution:** atomic types. Methods like `Add`, `Load`, `Store` and `CompareAndSwap` change one value in a single step that no other goroutine can split. Nobody waits.
+**Solution:** atomic types. `count++` is really three steps: read the number, add 1, write it back. Two goroutines can mix up those steps and lose an update. An atomic method like `count.Add(1)` does all three as one step, so no other goroutine can get in between. There is no lock, so nobody waits.
 
 ## API
 
-| API | Returns | Go | What it does | Example |
-| --- | --- | --- | --- | --- |
-| `atomic.Int32`, `Int64`, `Uint32`, `Uint64`, `Uintptr` | | 1.19 | An integer you can update safely | [01-counter](01-counter/) |
-| `atomic.Bool` | | 1.19 | A true/false value | [02-flag](02-flag/) |
-| `atomic.Pointer[T]` | | 1.19 | A pointer to `T`, swapped as a whole | [03-pointer](03-pointer/) |
-| `atomic.Value` | | 1.4 | Older, untyped version of `Pointer[T]` | none |
-| `x.Load()` | value | 1.19 | Read the current value | [01-counter](01-counter/), [02-flag](02-flag/) |
-| `x.Store(v)` | | 1.19 | Set a new value | [02-flag](02-flag/), [03-pointer](03-pointer/) |
-| `x.Add(delta)` | new value | 1.19 | Add to an integer (use a negative number to subtract) | [01-counter](01-counter/) |
-| `x.Swap(v)` | old value | 1.19 | Set a new value and get the old one | none |
-| `x.CompareAndSwap(old, new)` | `bool` | 1.19 | Set `new` only if the value is still `old` | [04-compare-and-swap](04-compare-and-swap/) |
-| `x.And(mask)`, `x.Or(mask)` | old value | 1.23 | Bit operations on integers | none |
+### Types
+
+Pick the type that matches your value.
+
+| Type | Go | What it holds | Example |
+| --- | --- | --- | --- |
+| `atomic.Int32`, `atomic.Int64` | 1.19 | A whole number, like a counter | [01-counter](01-counter/), [04-compare-and-swap](04-compare-and-swap/) |
+| `atomic.Uint32`, `atomic.Uint64`, `atomic.Uintptr` | 1.19 | A whole number that can't go below zero | none |
+| `atomic.Bool` | 1.19 | `true` or `false`, like an on/off switch | [02-flag](02-flag/) |
+| `atomic.Pointer[T]` | 1.19 | A pointer to a `T`, like `*Config`, swapped as a whole | [03-pointer](03-pointer/) |
+| `atomic.Value` | 1.4 | Any value. Older and untyped, so use `Pointer[T]` instead | none |
+
+### Methods
+
+Call these on a variable of one of the types above, like `count.Add(1)`.
+
+| Method | Returns | Go | Works on | What it does | Example |
+| --- | --- | --- | --- | --- | --- |
+| `Load()` | the value | 1.19 | every type | Read the current value | [01-counter](01-counter/), [02-flag](02-flag/), [03-pointer](03-pointer/) |
+| `Store(v)` | | 1.19 | every type | Set a new value | [02-flag](02-flag/), [03-pointer](03-pointer/) |
+| `Swap(v)` | the old value | 1.19 | every type | Set a new value and get the old one back | none |
+| `CompareAndSwap(old, new)` | `bool` | 1.19 | every type | Set `new` only if the value is still `old`. Returns `false` if someone changed it first | [04-compare-and-swap](04-compare-and-swap/) |
+| `Add(delta)` | the new value | 1.19 | numbers | Add to the number. On `Int` types, use a negative number to subtract | [01-counter](01-counter/) |
+| `And(mask)`, `Or(mask)` | the old value | 1.23 | numbers | Bit operations. Rarely needed | none |
 
 ## Examples
 
