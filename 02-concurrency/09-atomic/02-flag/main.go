@@ -4,9 +4,10 @@
 // Load. main turns maintenance mode on and off with Store. Workers don't
 // stop. They just skip jobs while paused, and pick up again right after.
 //
-// stop is still a channel, because it's a one-time event that every
-// worker must notice. paused flips back and forth, and workers only need
-// to read its current value. That's what atomic.Bool is good at.
+// Stopping uses ctx, because it's a one-time event that every worker must
+// notice. paused flips back and forth, and workers only need to read its
+// current value. That's what atomic.Bool is good at. A ctx can't do it:
+// once canceled, it stays canceled.
 //
 // Real use:
 //   - a "maintenance mode" or "read-only mode" switch that an admin
@@ -19,6 +20,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"sync/atomic"
@@ -34,13 +36,13 @@ func main() {
 		phaseTime   = 200 * time.Millisecond // how long each phase (on, paused, on) lasts
 	)
 
-	var paused atomic.Bool      // main -> workers: "skip jobs for now"
-	stop := make(chan struct{}) // main -> workers: "please stop"
+	var paused atomic.Bool                                  // main -> workers: "skip jobs for now"
+	ctx, cancel := context.WithCancel(context.Background()) // cancel tells every worker to stop
 
 	var wg sync.WaitGroup
 	wg.Add(workerCount)
 	for id := range workerCount {
-		go worker(id+1, &paused, stop, &wg)
+		go worker(ctx, id+1, &paused, &wg)
 	}
 
 	time.Sleep(phaseTime)
@@ -52,13 +54,13 @@ func main() {
 	paused.Store(false)
 
 	time.Sleep(phaseTime)
-	close(stop)
+	cancel()
 	wg.Wait()
 }
 
 // worker processes a job every jobTime, or skips it while paused is true,
-// until stop is closed.
-func worker(id int, paused *atomic.Bool, stop <-chan struct{}, wg *sync.WaitGroup) {
+// until ctx is canceled.
+func worker(ctx context.Context, id int, paused *atomic.Bool, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	processed, skipped := 0, 0
@@ -70,7 +72,7 @@ func worker(id int, paused *atomic.Bool, stop <-chan struct{}, wg *sync.WaitGrou
 				continue
 			}
 			processed++ // simulate one job
-		case <-stop:
+		case <-ctx.Done():
 			fmt.Printf("worker %d: %d processed, %d skipped\n", id, processed, skipped)
 			return
 		}
