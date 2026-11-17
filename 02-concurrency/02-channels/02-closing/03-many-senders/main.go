@@ -4,7 +4,8 @@
 //
 // Problem: the first worker to finish closes ch while the other one may
 // still use it. The program panics with "close of closed channel" or
-// "send on closed channel", depending on timing.
+// "send on closed channel", depending on timing. "go run -race" also
+// reports the data race between the close and the send.
 //
 // Fix: workers only send, then tell a done channel they're finished. One
 // separate goroutine reads one done signal per worker, then closes ch once.
@@ -16,6 +17,7 @@
 //     sync.WaitGroup does this counting for you (see waitgroup/03-close-results).
 //
 // Run: go run ./02-concurrency/02-channels/02-closing/03-many-senders
+// Race check: go run -race ./02-concurrency/02-channels/02-closing/03-many-senders
 package main
 
 import (
