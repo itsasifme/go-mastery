@@ -18,6 +18,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"sync/atomic"
@@ -44,12 +45,12 @@ func main() {
 	var current atomic.Pointer[config]
 	current.Store(&config{version: 1, rateLimit: 60, banner: "Welcome!"})
 
-	stop := make(chan struct{}) // main -> handlers: "please stop"
+	ctx, cancel := context.WithCancel(context.Background()) // cancel tells every handler to stop
 
 	var wg sync.WaitGroup
 	wg.Add(handlerCount)
 	for id := range handlerCount {
-		go handle(id+1, &current, stop, &wg)
+		go handle(ctx, id+1, &current, &wg)
 	}
 
 	time.Sleep(reloadAfter)
@@ -57,13 +58,13 @@ func main() {
 	current.Store(&config{version: 2, rateLimit: 120, banner: "Big sale today!"})
 
 	time.Sleep(runTime - reloadAfter)
-	close(stop)
+	cancel()
 	wg.Wait()
 }
 
-// handle serves requests until stop is closed. It counts how many requests
+// handle serves requests until ctx is canceled. It counts how many requests
 // used each config version.
-func handle(id int, current *atomic.Pointer[config], stop <-chan struct{}, wg *sync.WaitGroup) {
+func handle(ctx context.Context, id int, current *atomic.Pointer[config], wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	perVersion := map[int]int{} // config version -> requests served with it
@@ -73,7 +74,7 @@ func handle(id int, current *atomic.Pointer[config], stop <-chan struct{}, wg *s
 		case <-time.After(requestTime):
 			last = current.Load() // one Load per request: a request sees one config from start to end
 			perVersion[last.version]++
-		case <-stop:
+		case <-ctx.Done():
 			fmt.Printf("handler %d: requests per config version %v, banner now %q\n", id, perVersion, last.banner)
 			return
 		}
