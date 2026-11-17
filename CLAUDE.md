@@ -140,8 +140,11 @@ Every `main.go` starts with this comment. `Real use` and `Run` are always there.
 //   - <where this shows up in real programs>
 //
 // Run: go run ./<path>
+// Race check: go run -race ./<path>   (race examples only, see below)
 package main
 ```
+
+- Add a `Race check:` line right after `Run:` in every example about avoiding races (`mutex`, `rwmutex`, `atomic`), and in any other example where `go run -race` reports a race (like goroutines/03-loop-variable). Problem examples that show a race should say in the header that `-race` reports it. Fixed and safe examples should run clean.
 
 - Problem examples ship **showing the problem**. The fix stays commented out with a `// fix:` marker on the line. If lines must be removed, mark them `// problem`.
 - **Real use** gives concrete production cases that name real APIs: `r.Context()`, `db.QueryContext`, `signal.NotifyContext`, `json.Unmarshal(data, &user)`. Don't write vague bullets like "useful in servers".
@@ -174,6 +177,7 @@ When a topic gets code:
 
 - `gofmt -l .` prints nothing, and `go vet ./...` and `go build ./...` pass.
 - Run every example you touched. Problem examples should fail the way the header says (panic, deadlock, leak).
+- For examples with a `Race check:` line, run that command too. Only examples that show a race on purpose may report one.
 - Try the `fix:` and `Try:` lines on a copy and check they do what the comment says.
 - Check that the README links work.
 
