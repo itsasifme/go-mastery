@@ -42,7 +42,8 @@ Call these on a variable of one of the types above, like `count.Add(1)`.
 | `01-counter` | `go run ./02-concurrency/09-atomic/01-counter` | Request and byte counters updated by many handlers, with no lost updates |
 | `02-flag` | `go run ./02-concurrency/09-atomic/02-flag` | A maintenance mode switch that workers check before each job |
 | `03-pointer` | `go run ./02-concurrency/09-atomic/03-pointer` | Hot reload: swap a whole config while handlers keep reading it |
-| `04-compare-and-swap` | `go run ./02-concurrency/09-atomic/04-compare-and-swap` | Many users claim a few coupons, and the stock never goes below zero |
+| `04-compare-and-swap` | `go run ./02-concurrency/09-atomic/04-compare-and-swap` | Problem: check then take hands out more coupons than exist, with no race reported. CompareAndSwap fixes it |
+| `05-late-read` | `go run ./02-concurrency/09-atomic/05-late-read` | Jobs read a shared atomic ID too late and get the same one. No race, still wrong |
 
 ## Things to remember
 
@@ -50,7 +51,8 @@ Call these on a variable of one of the types above, like `count.Add(1)`.
 - **Don't mix atomic and normal reads or writes on the same variable.** The typed atomics make that hard to do by mistake.
 - **Never change a value after you `Store` its pointer.** Build a new one and `Store` that (`03`).
 - A check followed by a separate change isn't safe. Use a `CompareAndSwap` loop (`04`).
-- For a one-time signal that many goroutines must notice, a closed channel is still the clearer choice. `atomic.Bool` is for a value that flips back and forth (`02`).
+- **Atomic stops the race, not wrong logic.** A goroutine that needs the value from its round must get a copy before `go`, not read the shared value later (`05`).
+- For a one-time "stop" that many goroutines must notice, use `ctx`. `atomic.Bool` is for a value that flips back and forth (`02`).
 
 ## Go version notes
 
