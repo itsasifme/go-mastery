@@ -14,6 +14,9 @@
 // Fix: pass the value in as an argument, so each goroutine gets a copy.
 // Use the "fix:" line instead of the goroutine above it.
 //
+// Note: making shared an atomic.Int64 quiets "go run -race", but the
+// goroutines still print the wrong numbers (see atomic/05-late-read).
+//
 // Real use:
 //   - starting one goroutine per item in a slice (URLs, files, user IDs).
 //     Older code passes the item as an argument because of this bug, so
