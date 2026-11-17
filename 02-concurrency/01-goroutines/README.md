@@ -10,12 +10,12 @@ A goroutine is a function that runs at the same time as the rest of the program.
 
 ## API
 
-| Syntax | What it does | Example |
-| --- | --- | --- |
-| `go f(x)` | Run `f` in a new goroutine | [01-basic](01-basic/), [02-many](02-many/) |
-| `go func() { ... }()` | Run an anonymous function in a new goroutine | [03-loop-variable](03-loop-variable/) |
-| `runtime.NumGoroutine()` | How many goroutines exist right now | [02-many](02-many/) |
-| `defer` + `recover()` | Stop a panic, only in the same goroutine | [04-panic](04-panic/), [05-recover](05-recover/) |
+| Syntax | Kind | What it does | Example |
+| --- | --- | --- | --- |
+| `go f(x)` | keyword | Run `f` in a new goroutine | [01-basic](01-basic/), [02-many](02-many/) |
+| `go func() { ... }()` | keyword | Run an anonymous function in a new goroutine | [03-loop-variable](03-loop-variable/) |
+| `runtime.NumGoroutine()` | function | How many goroutines exist right now | [02-many](02-many/) |
+| `defer` + `recover()` | keyword + built-in | Stop a panic, only in the same goroutine | [04-panic](04-panic/), [05-recover](05-recover/) |
 
 ## Examples
 

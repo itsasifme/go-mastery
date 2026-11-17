@@ -16,10 +16,10 @@ See the [full API overview](../README.md#api).
 
 ## API
 
-| API | Returns | Go | What it does | Example |
-| --- | --- | --- | --- | --- |
-| `AfterFunc(ctx, f)` | `stop func() bool` | 1.21 | Run `f` in a new goroutine when ctx is done | [01-after-func](01-after-func/) |
-| `WithoutCancel(parent)` | `ctx` | 1.21 | Keep the values, drop the cancel and deadline | [02-without-cancel](02-without-cancel/) |
+| API | Kind | Returns | Go | What it does | Example |
+| --- | --- | --- | --- | --- | --- |
+| `AfterFunc(ctx, f)` | function | `stop func() bool` | 1.21 | Run `f` in a new goroutine when ctx is done | [01-after-func](01-after-func/) |
+| `WithoutCancel(parent)` | function | `ctx` | 1.21 | Keep the values, drop the cancel and deadline | [02-without-cancel](02-without-cancel/) |
 
 ## Examples
 

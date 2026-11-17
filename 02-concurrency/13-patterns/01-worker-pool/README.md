@@ -10,7 +10,7 @@ A fixed number of workers take jobs from one channel and send results to another
 
 ## API
 
-| Syntax | What it does | Example |
+| Idiom | What it does | Example |
 | --- | --- | --- |
 | `for job := range jobs` | A worker takes jobs until the channel is closed | [01-basic](01-basic/) |
 | `close(jobs)` | The sender says "no more jobs", so workers stop | [01-basic](01-basic/) |

@@ -10,7 +10,7 @@ Ways to stop a fast producer from flooding a slow consumer.
 
 ## API
 
-| Syntax | What it does | Example |
+| Idiom | What it does | Example |
 | --- | --- | --- |
 | `make(chan T, n)` + `ch <- v` | Wait when the buffer is full | [01-blocking](01-blocking/) |
 | `select { case ch <- v: default: }` | Drop the value when the buffer is full | [02-drop](02-drop/) |

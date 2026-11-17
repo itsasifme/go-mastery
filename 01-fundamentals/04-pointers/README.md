@@ -10,13 +10,13 @@ A pointer holds the memory address of a value. You can use it to read or change 
 
 ## API
 
-| Syntax | What it does | Example |
-| --- | --- | --- |
-| `&x` | The address of `x` | [01-basic](01-basic/) |
-| `*T` | The type "pointer to a `T`" | [01-basic](01-basic/) |
-| `*p` | Read or change the value `p` points to | [01-basic](01-basic/) |
-| `new(T)` | Make a zero `T` and return a `*T` | none |
-| `nil` | A pointer to nothing. `*p` on it panics | none |
+| Syntax | Kind | What it does | Example |
+| --- | --- | --- | --- |
+| `&x` | operator | The address of `x` | [01-basic](01-basic/) |
+| `*T` | type | The type "pointer to a `T`" | [01-basic](01-basic/) |
+| `*p` | operator | Read or change the value `p` points to | [01-basic](01-basic/) |
+| `new(T)` | built-in | Make a zero `T` and return a `*T` | none |
+| `nil` | value | A pointer to nothing. `*p` on it panics | none |
 
 ## Examples
 

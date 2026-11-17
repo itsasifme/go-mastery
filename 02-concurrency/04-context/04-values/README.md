@@ -12,10 +12,10 @@ See the [full API overview](../README.md#api).
 
 ## API
 
-| API | Returns | Go | What it does | Example |
-| --- | --- | --- | --- | --- |
-| `WithValue(parent, key, val)` | `ctx` | 1.7 | Attach one key and value | [01-request-id](01-request-id/) |
-| `ctx.Value(key)` | `any` | 1.7 | Find the value, searching up the parents | [01-request-id](01-request-id/) |
+| API | Kind | Returns | Go | What it does | Example |
+| --- | --- | --- | --- | --- | --- |
+| `WithValue(parent, key, val)` | function | `ctx` | 1.7 | Attach one key and value | [01-request-id](01-request-id/) |
+| `ctx.Value(key)` | method | `any` | 1.7 | Find the value, searching up the parents | [01-request-id](01-request-id/) |
 
 ## Examples
 

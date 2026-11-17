@@ -12,11 +12,11 @@ See the [full API overview](../README.md#api).
 
 ## API
 
-| API | Returns | Go | What it does | Example |
-| --- | --- | --- | --- | --- |
-| `WithTimeout(parent, d)` | `ctx, CancelFunc` | 1.7 | Cancel after `d` | [01-basic](01-basic/), [02-result-or-timeout](02-result-or-timeout/) |
-| `WithTimeoutCause(parent, d, cause)` | `ctx, CancelFunc` | 1.21 | Same, with a reason for `Cause` | [03-timeout-cause](03-timeout-cause/) |
-| `context.DeadlineExceeded` | `error` | 1.7 | `ctx.Err()` after the timeout | [01-basic](01-basic/) |
+| API | Kind | Returns | Go | What it does | Example |
+| --- | --- | --- | --- | --- | --- |
+| `WithTimeout(parent, d)` | function | `ctx, CancelFunc` | 1.7 | Cancel after `d` | [01-basic](01-basic/), [02-result-or-timeout](02-result-or-timeout/) |
+| `WithTimeoutCause(parent, d, cause)` | function | `ctx, CancelFunc` | 1.21 | Same, with a reason for `Cause` | [03-timeout-cause](03-timeout-cause/) |
+| `context.DeadlineExceeded` | variable | `error` | 1.7 | `ctx.Err()` after the timeout | [01-basic](01-basic/) |
 
 ## Examples
 

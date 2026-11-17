@@ -10,7 +10,7 @@ A chain of steps connected by channels. Each step takes values, changes them, an
 
 ## API
 
-| Syntax | What it does | Example |
+| Idiom | What it does | Example |
 | --- | --- | --- |
 | `func step(in <-chan A, out chan<- B)` | One step: read from `in`, write to `out` | [01-basic](01-basic/) |
 | `defer close(out)` + `for v := range in` | A step ends when its input closes, then closes its output | [01-basic](01-basic/) |

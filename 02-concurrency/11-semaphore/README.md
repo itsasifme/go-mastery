@@ -10,14 +10,14 @@ A semaphore limits how many goroutines can do something at the same time.
 
 ## API
 
-| API | Returns | What it does | Example |
-| --- | --- | --- | --- |
-| `make(chan struct{}, n)` | | A channel semaphore with `n` slots | [01-channel](01-channel/) |
-| `sem <- struct{}{}` / `<-sem` | | Take a slot / give it back | [01-channel](01-channel/) |
-| `semaphore.NewWeighted(n)` | `*Weighted` | A semaphore with `n` units in total | [02-weighted](02-weighted/) |
-| `s.Acquire(ctx, n)` | `error` | Wait for `n` units, or return `ctx.Err()` | [02-weighted](02-weighted/), [03-acquire-timeout](03-acquire-timeout/) |
-| `s.Release(n)` | | Give `n` units back | [02-weighted](02-weighted/) |
-| `s.TryAcquire(n)` | `bool` | Take `n` units only if they're free right now | none |
+| API | Kind | Returns | What it does | Example |
+| --- | --- | --- | --- | --- |
+| `make(chan struct{}, n)` | built-in | | A channel semaphore with `n` slots | [01-channel](01-channel/) |
+| `sem <- struct{}{}` / `<-sem` | syntax | | Take a slot / give it back | [01-channel](01-channel/) |
+| `semaphore.NewWeighted(n)` | function | `*Weighted` | A semaphore with `n` units in total | [02-weighted](02-weighted/) |
+| `s.Acquire(ctx, n)` | method | `error` | Wait for `n` units, or return `ctx.Err()` | [02-weighted](02-weighted/), [03-acquire-timeout](03-acquire-timeout/) |
+| `s.Release(n)` | method | | Give `n` units back | [02-weighted](02-weighted/) |
+| `s.TryAcquire(n)` | method | `bool` | Take `n` units only if they're free right now | none |
 
 ## Examples
 

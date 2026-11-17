@@ -10,16 +10,16 @@
 
 ## API
 
-| Syntax | What it does | Example |
-| --- | --- | --- |
-| `select { case ...: }` | Wait on several channels | [01-basic](01-basic/) |
-| several cases ready | One is picked at random | [02-random-pick](02-random-pick/) |
-| `default:` | Don't wait if nothing is ready | [03-default](03-default/) |
-| `time.After(d)` | A channel that gets a value once, after `d` | [04-timeout](04-timeout/) |
-| `for { select { ... } }` | A long-running loop | [05-for-select](05-for-select/) |
-| `ch = nil` | Turn off a case | [06-nil-channel](06-nil-channel/), [07-nil-or-stop](07-nil-or-stop/) |
-| `time.NewTicker(d)`, `ticker.C`, `ticker.Stop()` | A channel that gets a value every `d` | [08-ticker](08-ticker/) |
-| `select` + `default`, then `select` | Check one case first: priority | [09-priority](09-priority/) |
+| Syntax | Kind | What it does | Example |
+| --- | --- | --- | --- |
+| `select { case ...: }` | statement | Wait on several channels | [01-basic](01-basic/) |
+| several cases ready | rule | One is picked at random | [02-random-pick](02-random-pick/) |
+| `default:` | keyword | Don't wait if nothing is ready | [03-default](03-default/) |
+| `time.After(d)` | function | A channel that gets a value once, after `d` | [04-timeout](04-timeout/) |
+| `for { select { ... } }` | statement | A long-running loop | [05-for-select](05-for-select/) |
+| `ch = nil` | rule | Turn off a case | [06-nil-channel](06-nil-channel/), [07-nil-or-stop](07-nil-or-stop/) |
+| `time.NewTicker(d)`, `ticker.C`, `ticker.Stop()` | function + field + method | A channel that gets a value every `d` | [08-ticker](08-ticker/) |
+| `select` + `default`, then `select` | rule | Check one case first: priority | [09-priority](09-priority/) |
 
 ## Examples
 

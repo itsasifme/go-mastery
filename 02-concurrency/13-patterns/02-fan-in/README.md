@@ -10,7 +10,7 @@ Merge many channels into one.
 
 ## API
 
-| Syntax | What it does | Example |
+| Idiom | What it does | Example |
 | --- | --- | --- |
 | `func merge(inputs ...<-chan T) <-chan T` | Takes any number of inputs, returns one output | [01-merge](01-merge/) |
 | `go forward(in, out, &wg)` | One goroutine per input copies values to `out` | [01-merge](01-merge/) |

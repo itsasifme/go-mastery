@@ -12,11 +12,11 @@ See the [full API overview](../README.md#api).
 
 ## API
 
-| API | Returns | Go | What it does | Example |
-| --- | --- | --- | --- | --- |
-| `WithDeadline(parent, t)` | `ctx, CancelFunc` | 1.7 | Cancel at time `t` | [01-basic](01-basic/), [02-parent-deadline](02-parent-deadline/) |
-| `WithDeadlineCause(parent, t, cause)` | `ctx, CancelFunc` | 1.21 | Same, with a reason for `Cause` | [03-deadline-cause](03-deadline-cause/) |
-| `ctx.Deadline()` | `time.Time, bool` | 1.7 | When it ends. `false` = no deadline | [01-basic](01-basic/) |
+| API | Kind | Returns | Go | What it does | Example |
+| --- | --- | --- | --- | --- | --- |
+| `WithDeadline(parent, t)` | function | `ctx, CancelFunc` | 1.7 | Cancel at time `t` | [01-basic](01-basic/), [02-parent-deadline](02-parent-deadline/) |
+| `WithDeadlineCause(parent, t, cause)` | function | `ctx, CancelFunc` | 1.21 | Same, with a reason for `Cause` | [03-deadline-cause](03-deadline-cause/) |
+| `ctx.Deadline()` | method | `time.Time, bool` | 1.7 | When it ends. `false` = no deadline | [01-basic](01-basic/) |
 
 ## Examples
 

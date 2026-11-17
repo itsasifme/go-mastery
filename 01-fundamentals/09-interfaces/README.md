@@ -10,15 +10,15 @@ An interface is a list of methods. Any type that has those methods fits the inte
 
 ## API
 
-| Syntax | What it does | Example |
-| --- | --- | --- |
-| `type I interface { M() }` | Define a set of methods | [01-shapes](01-shapes/) |
-| (no keyword) | A type fits just by having the methods | [01-shapes](01-shapes/) |
-| `var i I = v` | Store any value that fits | [02-separate-contracts](02-separate-contracts/) |
-| several small interfaces | One type fits all of them | [02-separate-contracts](02-separate-contracts/) |
-| one interface, many methods | A type must have all of them | [03-combined-contract](03-combined-contract/) |
-| `v.(T)` | Type assertion: get the concrete type back | none |
-| `any` | The empty interface: holds any value | none |
+| Syntax | Kind | What it does | Example |
+| --- | --- | --- | --- |
+| `type I interface { M() }` | declaration | Define a set of methods | [01-shapes](01-shapes/) |
+| (no keyword) | rule | A type fits just by having the methods | [01-shapes](01-shapes/) |
+| `var i I = v` | declaration | Store any value that fits | [02-separate-contracts](02-separate-contracts/) |
+| several small interfaces | rule | One type fits all of them | [02-separate-contracts](02-separate-contracts/) |
+| one interface, many methods | rule | A type must have all of them | [03-combined-contract](03-combined-contract/) |
+| `v.(T)` | operator | Type assertion: get the concrete type back | none |
+| `any` | type | The empty interface: holds any value | none |
 
 ## Examples
 

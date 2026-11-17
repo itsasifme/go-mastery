@@ -10,13 +10,13 @@
 
 ## API
 
-| API | Returns | Go | What it does | Example |
-| --- | --- | --- | --- | --- |
-| `var mu sync.RWMutex` | | 1.0 | Ready to use, starts unlocked | [01-cache](01-cache/) |
-| `mu.RLock()` / `mu.RUnlock()` | | 1.0 | Read lock. Many goroutines can hold it at once | [01-cache](01-cache/), [02-compare](02-compare/) |
-| `mu.Lock()` / `mu.Unlock()` | | 1.0 | Write lock. Only one, and no readers at the same time | [01-cache](01-cache/), [03-upgrade](03-upgrade/), [04-nested-rlock](04-nested-rlock/) |
-| `mu.TryRLock()` / `mu.TryLock()` | `bool` | 1.18 | Take the lock only if it's free right now. The `sync` docs say correct uses of `TryRLock` are rare | `TryLock` works like Mutex's (see [mutex/05-try-lock](../07-mutex/05-try-lock/)) |
-| `mu.RLocker()` | `sync.Locker` | 1.0 | A `Locker` whose `Lock`/`Unlock` call `RLock`/`RUnlock` | none |
+| API | Kind | Returns | Go | What it does | Example |
+| --- | --- | --- | --- | --- | --- |
+| `var mu sync.RWMutex` | type | | 1.0 | Ready to use, starts unlocked | [01-cache](01-cache/) |
+| `mu.RLock()` / `mu.RUnlock()` | method | | 1.0 | Read lock. Many goroutines can hold it at once | [01-cache](01-cache/), [02-compare](02-compare/) |
+| `mu.Lock()` / `mu.Unlock()` | method | | 1.0 | Write lock. Only one, and no readers at the same time | [01-cache](01-cache/), [03-upgrade](03-upgrade/), [04-nested-rlock](04-nested-rlock/) |
+| `mu.TryRLock()` / `mu.TryLock()` | method | `bool` | 1.18 | Take the lock only if it's free right now. The `sync` docs say correct uses of `TryRLock` are rare | `TryLock` works like Mutex's (see [mutex/05-try-lock](../07-mutex/05-try-lock/)) |
+| `mu.RLocker()` | method | `sync.Locker` | 1.0 | A `Locker` whose `Lock`/`Unlock` call `RLock`/`RUnlock` | none |
 
 ## Examples
 

@@ -10,12 +10,12 @@
 
 ## API
 
-| API | Returns | Go | What it does | Example |
-| --- | --- | --- | --- | --- |
-| `var mu sync.Mutex` | | 1.0 | Ready to use, starts unlocked | [01-race](01-race/) |
-| `mu.Lock()` | | 1.0 | Wait until the lock is free, then take it | [01-race](01-race/), [02-safe-type](02-safe-type/) |
-| `mu.Unlock()` | | 1.0 | Give the lock back | [02-safe-type](02-safe-type/) |
-| `mu.TryLock()` | `bool` | 1.18 | Take the lock only if it's free right now. Rarely the right tool | [05-try-lock](05-try-lock/) |
+| API | Kind | Returns | Go | What it does | Example |
+| --- | --- | --- | --- | --- | --- |
+| `var mu sync.Mutex` | type | | 1.0 | Ready to use, starts unlocked | [01-race](01-race/) |
+| `mu.Lock()` | method | | 1.0 | Wait until the lock is free, then take it | [01-race](01-race/), [02-safe-type](02-safe-type/) |
+| `mu.Unlock()` | method | | 1.0 | Give the lock back | [02-safe-type](02-safe-type/) |
+| `mu.TryLock()` | method | `bool` | 1.18 | Take the lock only if it's free right now. Rarely the right tool | [05-try-lock](05-try-lock/) |
 
 ## Examples
 

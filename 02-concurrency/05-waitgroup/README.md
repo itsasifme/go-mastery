@@ -10,13 +10,13 @@
 
 ## API
 
-| API | Go | What it does | Example |
-| --- | --- | --- | --- |
-| `var wg sync.WaitGroup` | 1.0 | Ready to use, no setup | [01-basic](01-basic/) |
-| `wg.Add(n)` | 1.0 | Expect `n` more goroutines | [01-basic](01-basic/), [05-add-too-late](05-add-too-late/) |
-| `wg.Done()` | 1.0 | One goroutine finished | [01-basic](01-basic/) |
-| `wg.Wait()` | 1.0 | Block until the count is 0 | [01-basic](01-basic/), [03-close-results](03-close-results/) |
-| `wg.Go(f)` | 1.25 | `Add(1)`, `go f()` and `Done()` in one call | [06-wg-go](06-wg-go/) |
+| API | Kind | Go | What it does | Example |
+| --- | --- | --- | --- | --- |
+| `var wg sync.WaitGroup` | type | 1.0 | Ready to use, no setup | [01-basic](01-basic/) |
+| `wg.Add(n)` | method | 1.0 | Expect `n` more goroutines | [01-basic](01-basic/), [05-add-too-late](05-add-too-late/) |
+| `wg.Done()` | method | 1.0 | One goroutine finished | [01-basic](01-basic/) |
+| `wg.Wait()` | method | 1.0 | Block until the count is 0 | [01-basic](01-basic/), [03-close-results](03-close-results/) |
+| `wg.Go(f)` | method | 1.25 | `Add(1)`, `go f()` and `Done()` in one call | [06-wg-go](06-wg-go/) |
 
 ## Examples
 

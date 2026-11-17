@@ -12,14 +12,14 @@ See the [full API overview](../README.md#api).
 
 ## API
 
-| Syntax | What it does | Example |
-| --- | --- | --- |
-| `make(chan T, n)` | A channel with room for `n` values | [01-basic](01-basic/) |
-| `len(ch)` | How many values are waiting | [01-basic](01-basic/) |
-| `cap(ch)` | The buffer size | [01-basic](01-basic/) |
-| `ch <- v` when full | Waits for a free slot | [02-blocked-send](02-blocked-send/) |
-| `<-ch` when empty | Waits for a value | [03-blocked-receive](03-blocked-receive/) |
-| `close(ch)` | Values already in the buffer can still be read | [06-drain-after-close](06-drain-after-close/) |
+| Syntax | Kind | What it does | Example |
+| --- | --- | --- | --- |
+| `make(chan T, n)` | built-in | A channel with room for `n` values | [01-basic](01-basic/) |
+| `len(ch)` | built-in | How many values are waiting | [01-basic](01-basic/) |
+| `cap(ch)` | built-in | The buffer size | [01-basic](01-basic/) |
+| `ch <- v` when full | rule | Waits for a free slot | [02-blocked-send](02-blocked-send/) |
+| `<-ch` when empty | rule | Waits for a value | [03-blocked-receive](03-blocked-receive/) |
+| `close(ch)` | built-in | Values already in the buffer can still be read | [06-drain-after-close](06-drain-after-close/) |
 
 ## Examples
 

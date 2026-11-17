@@ -10,14 +10,14 @@
 
 ## API
 
-| API | Returns | What it does | Example |
-| --- | --- | --- | --- |
-| `var g errgroup.Group` | | Ready to use, no setup | [01-basic](01-basic/) |
-| `g.Go(f)` | | Run `f func() error` in a new goroutine | [01-basic](01-basic/) |
-| `g.Wait()` | `error` | Wait for all jobs, return the first error | [01-basic](01-basic/) |
-| `g.SetLimit(n)` | | At most `n` jobs at once. `g.Go` waits for a free slot | [02-limit](02-limit/) |
-| `g.TryGo(f)` | `bool` | Like `Go`, but returns `false` instead of waiting when the limit is full | none |
-| `errgroup.WithContext(ctx)` | `*Group, ctx` | `ctx` is cancelled when a job fails (or when `Wait` returns) | [03-with-context](03-with-context/), [04-collect-results](04-collect-results/) |
+| API | Kind | Returns | What it does | Example |
+| --- | --- | --- | --- | --- |
+| `var g errgroup.Group` | type | | Ready to use, no setup | [01-basic](01-basic/) |
+| `g.Go(f)` | method | | Run `f func() error` in a new goroutine | [01-basic](01-basic/) |
+| `g.Wait()` | method | `error` | Wait for all jobs, return the first error | [01-basic](01-basic/) |
+| `g.SetLimit(n)` | method | | At most `n` jobs at once. `g.Go` waits for a free slot | [02-limit](02-limit/) |
+| `g.TryGo(f)` | method | `bool` | Like `Go`, but returns `false` instead of waiting when the limit is full | none |
+| `errgroup.WithContext(ctx)` | function | `*Group, ctx` | `ctx` is cancelled when a job fails (or when `Wait` returns) | [03-with-context](03-with-context/), [04-collect-results](04-collect-results/) |
 
 ## Examples
 

@@ -10,13 +10,13 @@
 
 ## API
 
-| API | Returns | Go | What it does | Example |
-| --- | --- | --- | --- | --- |
-| `var once sync.Once` | | 1.0 | Ready to use | [01-lazy-init](01-lazy-init/) |
-| `once.Do(f)` | | 1.0 | Run `f` the first time only. Others wait for it | [01-lazy-init](01-lazy-init/) |
-| `sync.OnceFunc(f)` | `func()` | 1.21 | A function that runs `f` only once | [02-once-value](02-once-value/) |
-| `sync.OnceValue(f)` | `func() T` | 1.21 | Runs `f` once and returns its result every time | none |
-| `sync.OnceValues(f)` | `func() (T, error)` | 1.21 | Same, for a value and an error | [02-once-value](02-once-value/), [03-no-retry](03-no-retry/) |
+| API | Kind | Returns | Go | What it does | Example |
+| --- | --- | --- | --- | --- | --- |
+| `var once sync.Once` | type | | 1.0 | Ready to use | [01-lazy-init](01-lazy-init/) |
+| `once.Do(f)` | method | | 1.0 | Run `f` the first time only. Others wait for it | [01-lazy-init](01-lazy-init/) |
+| `sync.OnceFunc(f)` | function | `func()` | 1.21 | A function that runs `f` only once | [02-once-value](02-once-value/) |
+| `sync.OnceValue(f)` | function | `func() T` | 1.21 | Runs `f` once and returns its result every time | none |
+| `sync.OnceValues(f)` | function | `func() (T, error)` | 1.21 | Same, for a value and an error | [02-once-value](02-once-value/), [03-no-retry](03-no-retry/) |
 
 ## Examples
 

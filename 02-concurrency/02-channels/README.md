@@ -17,17 +17,17 @@ Directional channels and closing come first, because every example after them pa
 
 ## API
 
-| Syntax | What it does | Example |
-| --- | --- | --- |
-| `make(chan T)` | Unbuffered channel | [03-unbuffered](03-unbuffered/) |
-| `make(chan T, n)` | Buffered channel | [04-buffered](04-buffered/) |
-| `ch <- v` | Send | [03-unbuffered/01-basic](03-unbuffered/01-basic/) |
-| `v := <-ch` | Receive | [03-unbuffered/01-basic](03-unbuffered/01-basic/) |
-| `v, ok := <-ch` | Receive. `ok == false` once closed and empty | [04-buffered/06-drain-after-close](04-buffered/06-drain-after-close/) |
-| `close(ch)` | No more values | [02-closing/01-range](02-closing/01-range/) |
-| `for v := range ch` | Read until closed | [02-closing/01-range](02-closing/01-range/) |
-| `chan<- T`, `<-chan T` | Send-only, receive-only | [01-directional](01-directional/) |
-| `len(ch)`, `cap(ch)` | Values waiting, buffer size | [04-buffered/01-basic](04-buffered/01-basic/) |
+| Syntax | Kind | What it does | Example |
+| --- | --- | --- | --- |
+| `make(chan T)` | built-in | Unbuffered channel | [03-unbuffered](03-unbuffered/) |
+| `make(chan T, n)` | built-in | Buffered channel | [04-buffered](04-buffered/) |
+| `ch <- v` | operator | Send | [03-unbuffered/01-basic](03-unbuffered/01-basic/) |
+| `v := <-ch` | operator | Receive | [03-unbuffered/01-basic](03-unbuffered/01-basic/) |
+| `v, ok := <-ch` | operator | Receive. `ok == false` once closed and empty | [04-buffered/06-drain-after-close](04-buffered/06-drain-after-close/) |
+| `close(ch)` | built-in | No more values | [02-closing/01-range](02-closing/01-range/) |
+| `for v := range ch` | statement | Read until closed | [02-closing/01-range](02-closing/01-range/) |
+| `chan<- T`, `<-chan T` | type | Send-only, receive-only | [01-directional](01-directional/) |
+| `len(ch)`, `cap(ch)` | built-in | Values waiting, buffer size | [04-buffered/01-basic](04-buffered/01-basic/) |
 
 ## Things to remember
 

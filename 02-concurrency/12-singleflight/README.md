@@ -10,12 +10,12 @@
 
 ## API
 
-| API | Returns | What it does | Example |
-| --- | --- | --- | --- |
-| `var g singleflight.Group` | | Ready to use | [01-basic](01-basic/) |
-| `g.Do(key, fn)` | `v any, err error, shared bool` | Run `fn` once for all callers of `key` at the same time | [01-basic](01-basic/), [02-cache](02-cache/) |
-| `g.DoChan(key, fn)` | `<-chan Result` | Like `Do`, but returns a channel so you can stop waiting | [03-dochan-timeout](03-dochan-timeout/) |
-| `g.Forget(key)` | | Let the next call for `key` start a new run, even if one is still going | none |
+| API | Kind | Returns | What it does | Example |
+| --- | --- | --- | --- | --- |
+| `var g singleflight.Group` | type | | Ready to use | [01-basic](01-basic/) |
+| `g.Do(key, fn)` | method | `v any, err error, shared bool` | Run `fn` once for all callers of `key` at the same time | [01-basic](01-basic/), [02-cache](02-cache/) |
+| `g.DoChan(key, fn)` | method | `<-chan Result` | Like `Do`, but returns a channel so you can stop waiting | [03-dochan-timeout](03-dochan-timeout/) |
+| `g.Forget(key)` | method | | Let the next call for `key` start a new run, even if one is still going | none |
 
 ## Examples
 

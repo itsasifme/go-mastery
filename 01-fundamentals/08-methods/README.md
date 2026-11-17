@@ -10,11 +10,11 @@ A method is a function that belongs to a type.
 
 ## API
 
-| Syntax | What it does | Example |
-| --- | --- | --- |
-| `func (r T) M()` | Value receiver: works on a copy | [01-value-receiver](01-value-receiver/) |
-| `func (r *T) M()` | Pointer receiver: changes the original | [02-pointer-receiver](02-pointer-receiver/) |
-| `v.M()` with a pointer receiver | Go takes `&v` for you | [02-pointer-receiver](02-pointer-receiver/) |
+| Syntax | Kind | What it does | Example |
+| --- | --- | --- | --- |
+| `func (r T) M()` | declaration | Value receiver: works on a copy | [01-value-receiver](01-value-receiver/) |
+| `func (r *T) M()` | declaration | Pointer receiver: changes the original | [02-pointer-receiver](02-pointer-receiver/) |
+| `v.M()` with a pointer receiver | rule | Go takes `&v` for you | [02-pointer-receiver](02-pointer-receiver/) |
 
 ## Examples
 

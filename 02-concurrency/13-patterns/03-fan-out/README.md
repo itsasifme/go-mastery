@@ -10,7 +10,7 @@ Many goroutines read from the same channel to share the work.
 
 ## API
 
-| Syntax | What it does | Example |
+| Idiom | What it does | Example |
 | --- | --- | --- |
 | `for range n { go worker(ch, ...) }` | Several readers on one channel | [01-basic](01-basic/) |
 | `for v := range ch` | Each reader takes values until the channel is closed | [01-basic](01-basic/) |

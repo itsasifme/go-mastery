@@ -12,13 +12,13 @@ See the [full API overview](../README.md#api).
 
 ## API
 
-| API | Returns | Go | What it does | Example |
-| --- | --- | --- | --- | --- |
-| `WithCancel(parent)` | `ctx, CancelFunc` | 1.7 | Cancel by hand | [01-basic](01-basic/), [02-stop-workers](02-stop-workers/), [04-parent-child](04-parent-child/) |
-| `WithCancelCause(parent)` | `ctx, CancelCauseFunc` | 1.20 | Cancel with a reason | [03-cancel-cause](03-cancel-cause/) |
-| `Cause(ctx)` | `error` | 1.20 | Read the reason | [03-cancel-cause](03-cancel-cause/) |
-| `ctx.Done()` | `<-chan struct{}` | 1.7 | Closed on cancel | [01-basic](01-basic/) |
-| `ctx.Err()` | `error` | 1.7 | `context.Canceled` after cancel | [01-basic](01-basic/) |
+| API | Kind | Returns | Go | What it does | Example |
+| --- | --- | --- | --- | --- | --- |
+| `WithCancel(parent)` | function | `ctx, CancelFunc` | 1.7 | Cancel by hand | [01-basic](01-basic/), [02-stop-workers](02-stop-workers/), [04-parent-child](04-parent-child/) |
+| `WithCancelCause(parent)` | function | `ctx, CancelCauseFunc` | 1.20 | Cancel with a reason | [03-cancel-cause](03-cancel-cause/) |
+| `Cause(ctx)` | function | `error` | 1.20 | Read the reason | [03-cancel-cause](03-cancel-cause/) |
+| `ctx.Done()` | method | `<-chan struct{}` | 1.7 | Closed on cancel | [01-basic](01-basic/) |
+| `ctx.Err()` | method | `error` | 1.7 | `context.Canceled` after cancel | [01-basic](01-basic/) |
 
 ## Examples
 

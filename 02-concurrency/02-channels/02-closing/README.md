@@ -12,13 +12,13 @@ See the [full API overview](../README.md#api).
 
 ## API
 
-| Syntax | What it does | Example |
-| --- | --- | --- |
-| `close(ch)` | Say "no more values" | [01-range](01-range/) |
-| `for v := range ch` | Read until closed and empty | [01-range](01-range/) |
-| `<-ch` on a closed channel | Returns right away, for everyone | [02-broadcast](02-broadcast/) |
-| `v, ok := <-ch` | `ok == false` once closed and empty | [04-buffered/06-drain-after-close](../04-buffered/06-drain-after-close/) |
-| one closer, after all workers are done | Avoids "close of closed channel" | [03-many-senders](03-many-senders/) |
+| Syntax | Kind | What it does | Example |
+| --- | --- | --- | --- |
+| `close(ch)` | built-in | Say "no more values" | [01-range](01-range/) |
+| `for v := range ch` | statement | Read until closed and empty | [01-range](01-range/) |
+| `<-ch` on a closed channel | rule | Returns right away, for everyone | [02-broadcast](02-broadcast/) |
+| `v, ok := <-ch` | operator | `ok == false` once closed and empty | [04-buffered/06-drain-after-close](../04-buffered/06-drain-after-close/) |
+| one closer, after all workers are done | rule | Avoids "close of closed channel" | [03-many-senders](03-many-senders/) |
 
 ## Examples
 

@@ -12,12 +12,12 @@ See the [full API overview](../README.md#api).
 
 ## API
 
-| Type | Can do | Example |
-| --- | --- | --- |
-| `chan T` | Send and receive | [01-bidirectional](01-bidirectional/) |
-| `chan<- T` | Send only (and `close`) | [02-send-only](02-send-only/) |
-| `<-chan T` | Receive only. Can't `close` | [03-receive-only](03-receive-only/) |
-| `chan T` → `chan<- T` / `<-chan T` | Converts automatically when passed | [04-conversion](04-conversion/) |
+| Syntax | Kind | Can do | Example |
+| --- | --- | --- | --- |
+| `chan T` | type | Send and receive | [01-bidirectional](01-bidirectional/) |
+| `chan<- T` | type | Send only (and `close`) | [02-send-only](02-send-only/) |
+| `<-chan T` | type | Receive only. Can't `close` | [03-receive-only](03-receive-only/) |
+| `chan T` → `chan<- T` / `<-chan T` | rule | Converts automatically when passed | [04-conversion](04-conversion/) |
 
 ## Examples
 

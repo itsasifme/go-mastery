@@ -12,13 +12,13 @@ See the [full API overview](../README.md#api).
 
 ## API
 
-| Syntax | What it does | Example |
-| --- | --- | --- |
-| `make(chan T)` | A channel with no buffer | [01-basic](01-basic/) |
-| `ch <- v` | Waits until someone receives | [02-blocked-send](02-blocked-send/) |
-| `<-ch` | Waits until someone sends | [01-basic](01-basic/), [03-blocked-receive](03-blocked-receive/) |
-| send and receive meet | Strict turns between two goroutines | [04-ping-pong](04-ping-pong/) |
-| `runtime.NumGoroutine()` | Count goroutines stuck on a channel | [05-leak](05-leak/) |
+| Syntax | Kind | What it does | Example |
+| --- | --- | --- | --- |
+| `make(chan T)` | built-in | A channel with no buffer | [01-basic](01-basic/) |
+| `ch <- v` | operator | Waits until someone receives | [02-blocked-send](02-blocked-send/) |
+| `<-ch` | operator | Waits until someone sends | [01-basic](01-basic/), [03-blocked-receive](03-blocked-receive/) |
+| send and receive meet | rule | Strict turns between two goroutines | [04-ping-pong](04-ping-pong/) |
+| `runtime.NumGoroutine()` | function | Count goroutines stuck on a channel | [05-leak](05-leak/) |
 
 ## Examples
 
