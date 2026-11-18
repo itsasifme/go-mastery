@@ -29,6 +29,7 @@ A fixed number of workers take jobs from one channel and send results to another
 ## Things to remember
 
 - Close the jobs channel after the last job, so the workers can stop.
+- **Each job goes to the next free worker.** Nobody assigns the work, so it balances itself. Many readers on one channel is called fan-out.
 - **Close the results channel only after all workers are done.** Use a WaitGroup for that.
 - **Send jobs from their own goroutine** when main also reads results. Otherwise main blocks on a send while workers block on results.
 - **Both the sender and the workers must watch `ctx.Done()`** if the pool can be stopped early (`02`).

@@ -112,7 +112,6 @@ Every planned topic already has its folder, so adding code later won't change an
 └── 13-patterns/
     ├── 01-worker-pool/
     ├── 02-fan-in/
-    ├── 03-fan-out/
     ├── 04-pipeline/
     └── 05-backpressure/
 03-standard-library/

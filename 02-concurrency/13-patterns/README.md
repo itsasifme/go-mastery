@@ -2,6 +2,8 @@
 
 Common ways to build things with goroutines and channels.
 
+The topics before this one each teach one tool. This one puts them together.
+
 ## Why
 
 **Problem:** goroutines and channels are simple on their own. But real programs ask the same questions again and again: how many goroutines to start, who closes which channel, how results come back, and what happens when one side is slower than the other.
@@ -14,7 +16,7 @@ Common ways to build things with goroutines and channels.
 | --- | --- |
 | [Worker pool](01-worker-pool/) | You have many jobs and want a fixed limit on how many run at once |
 | [Fan-in](02-fan-in/) | Values come from several channels and you want to read them in one loop |
-| [Fan-out](03-fan-out/) | One stream of work is too slow for one goroutine |
+| Fan-out | One stream of work is too slow for one goroutine. Several goroutines read from one channel: a [worker pool](01-worker-pool/) does this, and so does [pipeline/03-parallel-step](04-pipeline/03-parallel-step/) |
 | [Pipeline](04-pipeline/) | The work has several steps, and each step can work on a different item at the same time |
 | [Backpressure](05-backpressure/) | A fast producer meets a slow consumer, and you must choose: wait, drop, or reject |
 
