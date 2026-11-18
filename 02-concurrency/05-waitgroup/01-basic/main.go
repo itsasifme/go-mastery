@@ -26,16 +26,18 @@ func main() {
 
 	var wg sync.WaitGroup
 	wg.Add(goroutineCount)
-	go helloworld(&wg)
+	go helloWorld(&wg)
 	go goodbye(&wg)
 	wg.Wait()
 }
 
-func helloworld(wg *sync.WaitGroup) {
+// helloWorld prints a greeting, then tells wg it's done.
+func helloWorld(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("Hello World!")
 }
 
+// goodbye prints a goodbye, then tells wg it's done.
 func goodbye(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("Good Bye!")
