@@ -7,7 +7,9 @@
 // hanging or losing its upload without knowing.
 //
 // Note: this sits between 01-blocking (wait forever) and 02-drop (don't
-// wait at all, and don't tell anyone).
+// wait at all, and don't tell anyone). semaphore/03-acquire-timeout answers
+// 503 the same way, but it limits calls running at once. This one limits
+// the queue.
 //
 // Real use:
 //   - an HTTP handler that returns 503 or 429 with a Retry-After header

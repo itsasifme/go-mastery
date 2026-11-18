@@ -9,6 +9,9 @@
 // The "waited" column shows it: zero while the buffer fills, then about
 // shipTime for each line.
 //
+// Note: how a full buffer blocks is in channels/04-buffered/04-fast-producer.
+// Here the point is the choice: wait (this one), drop (02) or reject (03).
+//
 // Try: set bufferSize to logCount. The app never waits, but it needs room
 // for every line in memory. With no limit at all, a slow shipper would
 // let the buffer grow until the program runs out of memory.
