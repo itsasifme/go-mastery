@@ -6,8 +6,8 @@
 // one of the updates is lost.
 //
 // Problem: the final count is lower than expected, and it changes between
-// runs. Run with "go run -race ./02-concurrency/07-mutex/01-race" and Go
-// prints "WARNING: DATA RACE" with the lines involved.
+// runs. "go run -race" prints "WARNING: DATA RACE" with the lines
+// involved.
 //
 // Fix: lock a mutex around views++, so only one goroutine changes it at a
 // time. Uncomment the two "fix:" lines.
