@@ -22,7 +22,8 @@
 //   - selling the last item in stock, booking the last seat, or using a
 //     coupon that has a limit.
 //   - "if not in cache, then add": check and add under one lock, or use
-//     a single call like sync.Map's LoadOrStore.
+//     a single call like sync.Map's LoadOrStore (see
+//     sync-map/02-load-or-store).
 //
 // Run: go run ./02-concurrency/07-mutex/03-check-then-act
 // Race check: go run -race ./02-concurrency/07-mutex/03-check-then-act
