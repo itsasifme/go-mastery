@@ -21,7 +21,7 @@ func main() {
 	go readData(ch)        // problem: gets stuck on the receive
 
 	// ch := make(chan int)    // fix: normal channel
-	// go func() { ch <- 5 }() // fix: send from a goroutine
+	// go sendData(ch)         // fix: send from a goroutine
 	// readData(ch)            // fix: read in main, so main waits for it
 
 	fmt.Println("main done")
@@ -32,4 +32,9 @@ func readData(ch <-chan int) {
 	x := <-ch // ok: receive
 	// ch <- 1 // compile error: can't send to a receive-only channel
 	fmt.Println("x:", x)
+}
+
+// sendData sends one value on ch. Only the fix uses it.
+func sendData(ch chan<- int) {
+	ch <- 5
 }
