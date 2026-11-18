@@ -42,6 +42,8 @@ func main() {
 	fmt.Println("main still running")
 }
 
+// job does one job. It recovers its own panic, so a failing job doesn't
+// stop the others.
 func job(id int) {
 	// 1. Register the "catch". It runs when job ends, panic or not.
 	defer func() {

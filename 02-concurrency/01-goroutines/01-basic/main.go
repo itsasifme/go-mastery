@@ -28,10 +28,12 @@ func main() {
 	goodbye()
 }
 
+// helloWorld prints a greeting. main starts it as a goroutine.
 func helloWorld() {
 	fmt.Println("Hello World!")
 }
 
+// goodbye prints a goodbye. main calls it directly.
 func goodbye() {
 	fmt.Println("Good Bye!")
 }
