@@ -48,7 +48,7 @@ I'm a backend engineer, and I use this repo to learn Go step by step. It starts 
 | 10 | [Once](02-concurrency/10-once/) | ✅ |
 | 11 | [Semaphore](02-concurrency/11-semaphore/) | ✅ |
 | 12 | [singleflight](02-concurrency/12-singleflight/) | ✅ |
-| 13 | [Patterns](02-concurrency/13-patterns/) | ✅ |
+| 15 | [Patterns](02-concurrency/15-patterns/) | ✅ |
 
 ### 03 · Standard library
 
@@ -109,11 +109,11 @@ Every planned topic already has its folder, so adding code later won't change an
 ├── 10-once/
 ├── 11-semaphore/
 ├── 12-singleflight/
-└── 13-patterns/
+└── 15-patterns/
     ├── 01-worker-pool/
     ├── 02-fan-in/
-    ├── 04-pipeline/
-    └── 05-backpressure/
+    ├── 03-pipeline/
+    └── 04-backpressure/
 03-standard-library/
 ├── 01-strings/
 ├── 02-strconv/

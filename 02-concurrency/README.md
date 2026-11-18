@@ -14,4 +14,4 @@ Running code at the same time with goroutines, and keeping it safe with channels
 10. [Once](10-once/)
 11. [Semaphore](11-semaphore/)
 12. [singleflight](12-singleflight/)
-13. [Patterns](13-patterns/)
+15. [Patterns](15-patterns/)
