@@ -25,12 +25,13 @@ import (
 	"time"
 )
 
-var errMaintenance = errors.New("maintenance window starts")
-
 const (
 	untilMaintenance = 250 * time.Millisecond // time until the deadline
 	jobTime          = 100 * time.Millisecond // how long one job takes
 )
+
+// errMaintenance is why the deadline stops batch. context.Cause returns it.
+var errMaintenance = errors.New("maintenance window starts")
 
 func main() {
 	maintenanceAt := time.Now().Add(untilMaintenance)

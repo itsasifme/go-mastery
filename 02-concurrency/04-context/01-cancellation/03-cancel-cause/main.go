@@ -29,14 +29,15 @@ import (
 	"time"
 )
 
-var (
-	errShutdown      = errors.New("server shutting down")
-	errUserCancelled = errors.New("cancelled by user")
-)
-
 const (
 	partTime = 30 * time.Millisecond  // how long export needs for one part
 	runFor   = 100 * time.Millisecond // how long main lets export run
+)
+
+// The two reasons export can be stopped. Each needs different cleanup.
+var (
+	errShutdown      = errors.New("server shutting down")
+	errUserCancelled = errors.New("cancelled by user")
 )
 
 func main() {

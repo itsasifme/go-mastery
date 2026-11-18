@@ -33,6 +33,7 @@ const (
 	totalRows = 20                     // the whole query needs totalRows * rowTime
 )
 
+// errSlowDB is why the timeout stops query. context.Cause returns it.
 var errSlowDB = fmt.Errorf("database took longer than %v", dbTimeout)
 
 func main() {
