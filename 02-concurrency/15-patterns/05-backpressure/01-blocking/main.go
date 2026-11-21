@@ -21,7 +21,7 @@
 //     slow the app down a little.
 //   - a bounded job queue between an HTTP handler and background workers.
 //
-// Run: go run ./02-concurrency/15-patterns/04-backpressure/01-blocking
+// Run: go run ./02-concurrency/15-patterns/05-backpressure/01-blocking
 package main
 
 import (

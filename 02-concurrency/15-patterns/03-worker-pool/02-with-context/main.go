@@ -16,7 +16,7 @@
 //     signal.NotifyContext(ctx, os.Interrupt).
 //   - a pool started per request that must stop when r.Context() is done.
 //
-// Run: go run ./02-concurrency/15-patterns/01-worker-pool/02-with-context
+// Run: go run ./02-concurrency/15-patterns/03-worker-pool/02-with-context
 package main
 
 import (

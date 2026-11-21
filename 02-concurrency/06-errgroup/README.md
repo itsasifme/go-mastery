@@ -35,7 +35,7 @@
 - **Don't use that `ctx` after `Wait` returns.** It's always cancelled by then.
 - `g.Go` takes a `func() error`. Keep the closure to one line that calls a named function.
 - Each goroutine can write to its own slice index without a lock. Read the slice only after `Wait` (`04`).
-- If you want every job to run even when some fail, use a worker pool that collects errors instead (see [patterns/01-worker-pool/03-errors](../15-patterns/01-worker-pool/03-errors/)).
+- If you want every job to run even when some fail, use a worker pool that collects errors instead (see [patterns/03-worker-pool/03-errors](../15-patterns/03-worker-pool/03-errors/)).
 
 ## Package note
 

@@ -20,9 +20,9 @@ Ways to stop a fast producer from flooding a slow consumer.
 
 | Example | Run | What it shows |
 | --- | --- | --- |
-| `01-blocking` | `go run ./02-concurrency/15-patterns/04-backpressure/01-blocking` | A full log buffer slows the app down to the shipper's speed |
-| `02-drop` | `go run ./02-concurrency/15-patterns/04-backpressure/02-drop` | Metric samples are dropped and counted when the exporter can't keep up |
-| `03-reject` | `go run ./02-concurrency/15-patterns/04-backpressure/03-reject` | Uploads wait a little for room in the queue, then get a 503 |
+| `01-blocking` | `go run ./02-concurrency/15-patterns/05-backpressure/01-blocking` | A full log buffer slows the app down to the shipper's speed |
+| `02-drop` | `go run ./02-concurrency/15-patterns/05-backpressure/02-drop` | Metric samples are dropped and counted when the exporter can't keep up |
+| `03-reject` | `go run ./02-concurrency/15-patterns/05-backpressure/03-reject` | Uploads wait a little for room in the queue, then get a 503 |
 
 ## Things to remember
 

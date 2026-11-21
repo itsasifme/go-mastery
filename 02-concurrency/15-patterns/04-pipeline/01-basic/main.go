@@ -17,7 +17,7 @@
 //     them somewhere else.
 //   - image processing: decode -> resize -> watermark -> upload.
 //
-// Run: go run ./02-concurrency/15-patterns/03-pipeline/01-basic
+// Run: go run ./02-concurrency/15-patterns/04-pipeline/01-basic
 package main
 
 import "fmt"

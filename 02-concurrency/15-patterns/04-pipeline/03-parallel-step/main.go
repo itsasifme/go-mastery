@@ -21,7 +21,7 @@
 //   - a pipeline where one step calls a slow API or does heavy CPU work,
 //     like geocoding, image resizing or hashing.
 //
-// Run: go run ./02-concurrency/15-patterns/03-pipeline/03-parallel-step
+// Run: go run ./02-concurrency/15-patterns/04-pipeline/03-parallel-step
 package main
 
 import (

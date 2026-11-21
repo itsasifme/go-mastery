@@ -22,10 +22,10 @@ A chain of steps connected by channels. Each step takes values, changes them, an
 
 | Example | Run | What it shows |
 | --- | --- | --- |
-| `01-basic` | `go run ./02-concurrency/15-patterns/03-pipeline/01-basic` | An order report: generate → add tax → format → print |
-| `02-cancel` | `go run ./02-concurrency/15-patterns/03-pipeline/02-cancel` | Search an endless log, stop after three errors, and every step shuts down |
-| `03-parallel-step` | `go run ./02-concurrency/15-patterns/03-pipeline/03-parallel-step` | A slow geocoding step gets three workers |
-| `04-errors` | `go run ./02-concurrency/15-patterns/03-pipeline/04-errors` | A CSV import hits a bad row: every step stops, and the import rolls back |
+| `01-basic` | `go run ./02-concurrency/15-patterns/04-pipeline/01-basic` | An order report: generate → add tax → format → print |
+| `02-cancel` | `go run ./02-concurrency/15-patterns/04-pipeline/02-cancel` | Search an endless log, stop after three errors, and every step shuts down |
+| `03-parallel-step` | `go run ./02-concurrency/15-patterns/04-pipeline/03-parallel-step` | A slow geocoding step gets three workers |
+| `04-errors` | `go run ./02-concurrency/15-patterns/04-pipeline/04-errors` | A CSV import hits a bad row: every step stops, and the import rolls back |
 
 ## Things to remember
 

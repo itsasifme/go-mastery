@@ -9,7 +9,7 @@
 // Real use:
 //   - a full job queue makes the HTTP handler wait. That's backpressure:
 //     sometimes what you want, sometimes a hidden slowdown (see
-//     patterns/04-backpressure).
+//     patterns/05-backpressure).
 //
 // Run: go run ./02-concurrency/02-channels/04-buffered/02-blocked-send
 package main

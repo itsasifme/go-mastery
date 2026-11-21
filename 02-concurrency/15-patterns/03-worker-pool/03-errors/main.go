@@ -14,7 +14,7 @@
 //     each item can fail on its own.
 //   - a report at the end: "98 sent, 2 failed: [id-4 id-9]".
 //
-// Run: go run ./02-concurrency/15-patterns/01-worker-pool/03-errors
+// Run: go run ./02-concurrency/15-patterns/03-worker-pool/03-errors
 package main
 
 import (

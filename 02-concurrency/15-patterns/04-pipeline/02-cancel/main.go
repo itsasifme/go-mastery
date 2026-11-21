@@ -21,7 +21,7 @@
 //   - a pipeline started for one HTTP request. When r.Context() is done
 //     (the client left), every step stops.
 //
-// Run: go run ./02-concurrency/15-patterns/03-pipeline/02-cancel
+// Run: go run ./02-concurrency/15-patterns/04-pipeline/02-cancel
 package main
 
 import (

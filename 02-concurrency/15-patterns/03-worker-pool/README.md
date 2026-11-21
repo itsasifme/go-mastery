@@ -22,9 +22,9 @@ A fixed number of workers take jobs from one channel and send results to another
 
 | Example | Run | What it shows |
 | --- | --- | --- |
-| `01-basic` | `go run ./02-concurrency/15-patterns/01-worker-pool/01-basic` | Three workers make thumbnails from a queue of uploads |
-| `02-with-context` | `go run ./02-concurrency/15-patterns/01-worker-pool/02-with-context` | A newsletter send with a time budget: the whole pool stops when it runs out |
-| `03-errors` | `go run ./02-concurrency/15-patterns/01-worker-pool/03-errors` | Charge invoices, keep going when cards are declined, list the failures at the end |
+| `01-basic` | `go run ./02-concurrency/15-patterns/03-worker-pool/01-basic` | Three workers make thumbnails from a queue of uploads |
+| `02-with-context` | `go run ./02-concurrency/15-patterns/03-worker-pool/02-with-context` | A newsletter send with a time budget: the whole pool stops when it runs out |
+| `03-errors` | `go run ./02-concurrency/15-patterns/03-worker-pool/03-errors` | Charge invoices, keep going when cards are declined, list the failures at the end |
 
 ## Things to remember
 

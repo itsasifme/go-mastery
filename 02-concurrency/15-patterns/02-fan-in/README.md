@@ -26,4 +26,4 @@ Merge many channels into one.
 
 - Use one goroutine per input channel. **Close the output when all of them are done.**
 - Values from different inputs can come out in any order. Values from one input keep their order.
-- **If the reader can stop early, pass a `ctx` to merge,** and send with a `select` that also watches `ctx.Done()`. Otherwise the forward goroutines block forever. [pipeline/02-cancel](../03-pipeline/02-cancel/) shows how.
+- **If the reader can stop early, pass a `ctx` to merge,** and send with a `select` that also watches `ctx.Done()`. Otherwise the forward goroutines block forever. [pipeline/02-cancel](../04-pipeline/02-cancel/) shows how.

@@ -25,7 +25,7 @@
 //   - a report built from several steps, where one failed step makes the
 //     whole report wrong.
 //
-// Run: go run ./02-concurrency/15-patterns/03-pipeline/04-errors
+// Run: go run ./02-concurrency/15-patterns/04-pipeline/04-errors
 package main
 
 import (

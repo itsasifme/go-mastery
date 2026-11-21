@@ -16,7 +16,7 @@
 //   - click tracking or other analytics events sent to an outside API,
 //     where losing a few events is better than a slow page.
 //
-// Run: go run ./02-concurrency/15-patterns/04-backpressure/02-drop
+// Run: go run ./02-concurrency/15-patterns/05-backpressure/02-drop
 package main
 
 import (

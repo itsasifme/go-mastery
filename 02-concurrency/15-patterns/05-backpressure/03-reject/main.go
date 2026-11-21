@@ -16,7 +16,7 @@
 //     when the job queue is full.
 //   - a load shedder in front of a slow database or service.
 //
-// Run: go run ./02-concurrency/15-patterns/04-backpressure/03-reject
+// Run: go run ./02-concurrency/15-patterns/05-backpressure/03-reject
 package main
 
 import (

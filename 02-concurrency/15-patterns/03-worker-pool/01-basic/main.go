@@ -25,7 +25,7 @@
 //   - a queue consumer (SQS, RabbitMQ, Kafka) with N workers reading from
 //     one channel of messages.
 //
-// Run: go run ./02-concurrency/15-patterns/01-worker-pool/01-basic
+// Run: go run ./02-concurrency/15-patterns/03-worker-pool/01-basic
 package main
 
 import (
