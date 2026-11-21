@@ -114,6 +114,7 @@ Every planned topic already has its folder, so adding code later won't change an
 ├── 13-sync-map/
 ├── 14-pool/
 └── 15-patterns/
+    ├── 01-fan-out/
     ├── 02-fan-in/
     ├── 03-worker-pool/
     ├── 04-pipeline/
