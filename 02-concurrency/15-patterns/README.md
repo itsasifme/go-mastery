@@ -14,9 +14,9 @@ The topics before this one each teach one tool. This one puts them together.
 
 | Pattern | Use it when |
 | --- | --- |
-| [Worker pool](03-worker-pool/) | You have many jobs and want a fixed limit on how many run at once |
+| [Fan-out](01-fan-out/) | One stream of work is too slow for one goroutine, so several goroutines share it |
 | [Fan-in](02-fan-in/) | Values come from several channels and you want to read them in one loop |
-| Fan-out | One stream of work is too slow for one goroutine. Several goroutines read from one channel: a [worker pool](03-worker-pool/) does this, and so does [pipeline/03-parallel-step](04-pipeline/03-parallel-step/) |
+| [Worker pool](03-worker-pool/) | You have many jobs and want a fixed limit on how many run at once. It's fan-out plus fan-in |
 | [Pipeline](04-pipeline/) | The work has several steps, and each step can work on a different item at the same time |
 | [Backpressure](05-backpressure/) | A fast producer meets a slow consumer, and you must choose: wait, drop, or reject |
 
