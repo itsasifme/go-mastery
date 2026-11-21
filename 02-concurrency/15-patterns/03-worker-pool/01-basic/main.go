@@ -11,9 +11,10 @@
 //   - closeWhenDone closes results after every worker has returned, so
 //     main's range loop ends (see waitgroup/03-close-results).
 //
-// Each job goes to whichever worker is free first. Nobody assigns the
-// work, so a faster worker just comes back for more. Many goroutines
-// reading one channel like this is called fan-out.
+// Workers sharing one jobs channel is fan-out (see fan-out/01-basic), and
+// every result going to one results channel is fan-in (see
+// fan-in/01-merge). A worker pool puts them together with a fixed number
+// of workers.
 //
 // Try: set workerCount to 1. One worker does every job, and it takes
 // longer.
