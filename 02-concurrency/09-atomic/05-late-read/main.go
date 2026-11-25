@@ -1,15 +1,15 @@
 // Late read: atomic stops the race, but not a goroutine reading too late.
 //
-// This is goroutines/03-loop-variable again, with shared as an
-// atomic.Int64 instead of a plain int. The loop reuses one shared variable
-// for every round. Each goroutine reads it when it runs, not when the loop
-// started it. By then the loop has usually finished, so every job gets the
-// same ID: the value that ended the loop.
+// This is goroutines/03-loop-variable again, but shared is an
+// atomic.Int64 instead of a plain int. The loop uses the same variable in
+// every round. Each goroutine reads it when the goroutine runs, not when
+// the loop starts it. By then the loop has usually finished. So every job
+// gets the same ID: the value that ended the loop.
 //
 // Problem: in loop-variable, "go run -race" reports this. Here it finds
 // nothing, because every read and write is atomic. The IDs are still
-// wrong. Atomic fixed the race, not the bug: each job needs its own copy
-// of the value from its round.
+// wrong. Atomic fixed the race, but not the bug. Each job needs its own
+// copy of the value from its own round.
 //
 // Fix: read shared before "go" and pass that copy in. Use the "fix:" line
 // instead of the goroutine above it.
@@ -32,8 +32,9 @@ import (
 const jobCount = 3
 
 func main() {
-	// Declared outside the loop: one variable, reused every round, like
-	// shared in goroutines/03-loop-variable. The C-style loop is the lesson.
+	// Declared outside the loop, so it's one variable used in every round,
+	// like shared in goroutines/03-loop-variable. The C-style loop is the
+	// lesson here.
 	var shared atomic.Int64
 
 	var wg sync.WaitGroup
