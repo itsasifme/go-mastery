@@ -3,7 +3,7 @@
 // Three services each send log lines on their own channel, at their own
 // speed. merge starts one forward goroutine per input. Each one copies
 // lines from its input to the shared output. When every input is closed
-// and every forward has returned, closeWhenDone closes the output, so
+// and every forward has returned, closeWhenDone closes the output. Then
 // main's range loop ends.
 //
 // Lines from different services mix together in the order they arrive.
