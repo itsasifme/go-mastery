@@ -4,7 +4,7 @@
 
 ## Why
 
-**Problem:** when a popular cache entry expires, hundreds of requests miss at the same moment, and each one asks the database for the same row. This is a cache stampede, and it can take the database down.
+**Problem:** when a popular cache entry expires, hundreds of requests miss it at the same moment. Each one asks the database for the same row. This is a cache stampede, and it can take the database down.
 
 **Solution:** `singleflight.Group`. The first call for a key does the work. Calls for the same key that arrive while it's running wait and share its result. When it's finished, the key is free again.
 
