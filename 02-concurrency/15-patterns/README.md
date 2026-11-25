@@ -6,9 +6,9 @@ The topics before this one each teach one tool. This one puts them together.
 
 ## Why
 
-**Problem:** goroutines and channels are simple on their own. But real programs ask the same questions again and again: how many goroutines to start, who closes which channel, how results come back, and what happens when one side is slower than the other.
+**Problem:** goroutines and channels are simple on their own. But real programs ask the same questions again and again. How many goroutines should you start? Who closes which channel? How do results come back? What happens when one side is slower than the other?
 
-**Solution:** a few well-known patterns. Each one answers one of those questions, and they fit together: a worker pool is fan-out plus fan-in, and a pipeline step can have its own workers.
+**Solution:** a few well-known patterns. Each one answers one of those questions. They also fit together. A worker pool is fan-out plus fan-in, and a pipeline step can have its own workers.
 
 ## Patterns
 
