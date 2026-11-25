@@ -7,7 +7,7 @@ A channel lets goroutines send values to each other. It also makes them wait for
 3. [Unbuffered channels](03-unbuffered/): a send waits for a receiver
 4. [Buffered channels](04-buffered/): a send only waits when the buffer is full
 
-Directional channels and closing come first, because every example after them passes channels as `chan<- int` / `<-chan int` and uses `close`.
+Directional channels and closing come first. Every example after them passes channels as `chan<- int` or `<-chan int`, and uses `close`.
 
 ## Why
 
@@ -33,4 +33,4 @@ Directional channels and closing come first, because every example after them pa
 
 - **Signal channels have the same names in every example:** `stop` tells a goroutine to stop (`main` → goroutine), and `done` says a goroutine finished (goroutine → `main`).
 - Both are `chan struct{}`. **A signal carries no data**, and `struct{}` takes no memory.
-- Close `stop` to reach every goroutine at once ([02-closing/02-broadcast](02-closing/02-broadcast/)). Close `done` when one goroutine reports, or send `done <- struct{}{}` once per goroutine when several report on the same channel.
+- Close `stop` to reach every goroutine at once ([02-closing/02-broadcast](02-closing/02-broadcast/)). When one goroutine reports, close `done`. When several report on the same channel, each one sends `done <- struct{}{}` once.
