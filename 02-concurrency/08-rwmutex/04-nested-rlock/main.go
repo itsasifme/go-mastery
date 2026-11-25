@@ -2,10 +2,11 @@
 // RLock again.
 //
 // A shop keeps feature flags in memory. CheckoutPage holds RLock while it
-// builds the page, and calls IsEnabled, which takes RLock again. Readers
-// share the lock, so this usually works. But a refresh job calls Lock in
-// between. A waiting writer blocks new readers, so the second RLock waits
-// for the writer, and the writer waits for our first RLock.
+// builds the page. Then it calls IsEnabled, which takes RLock again.
+// Readers share the lock, so this usually works. But here a refresh job
+// calls Lock in between. A writer that's waiting blocks new readers. So
+// the second RLock waits for the writer, and the writer waits for our
+// first RLock.
 //
 // Problem: the page and the refresh wait for each other forever. Nothing
 // else is running, so Go stops with "fatal error: all goroutines are
@@ -17,7 +18,7 @@
 //
 // Try: set refreshDelay to 150ms, so the refresh comes after the page is
 // built. The problem line works fine. That's why tests rarely catch this
-// bug: it only happens when a write lands in the small gap between the
+// bug. It only happens when a write lands in the small gap between the
 // two RLocks.
 //
 // Real use:
