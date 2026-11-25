@@ -1,7 +1,7 @@
 // Timeout: stop waiting after a fixed time with time.After.
 //
 // fetch takes 2 seconds, but main only waits 500ms. time.After returns a
-// channel that gets a value once the time is up, so select can wait on
+// channel that gets a value once the time is up. So select can wait on
 // "the result" and "the deadline" at the same time.
 //
 // The result channel has a buffer of 1. When main gives up, fetch can
