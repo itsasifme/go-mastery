@@ -11,8 +11,8 @@
 //   - closeWhenDone closes results after every worker has returned, so
 //     main's range loop ends (see waitgroup/03-close-results).
 //
-// Workers sharing one jobs channel is fan-out (see fan-out/01-basic), and
-// every result going to one results channel is fan-in (see
+// Workers sharing one jobs channel is fan-out (see fan-out/01-basic).
+// Every result going to one results channel is fan-in (see
 // fan-in/01-merge). A worker pool puts them together with a fixed number
 // of workers.
 //
