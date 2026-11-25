@@ -7,8 +7,8 @@
 //
 // With singleflight, the first miss loads the row and fills the cache.
 // The other misses join that load. The database sees one query. Inside
-// the shared call, Get looks in the cache once more: a request that
-// missed just as a load finished would otherwise start a second load.
+// the shared call, Get looks in the cache once more. Without that, a
+// request that missed just as a load finished would start a second load.
 //
 // The program runs the same burst of requests twice, once with each kind
 // of store, and prints how many queries reached the database.
@@ -57,7 +57,7 @@ func (s *productStore) Get(id string) string {
 }
 
 // cachedOrLoad runs inside the shared call. It looks in the cache again,
-// because a load that just finished may have filled it, then loads on a miss.
+// because a load that just finished may have filled it. On a miss, it loads.
 func (s *productStore) cachedOrLoad(id string) string {
 	if name, ok := s.cached(id); ok {
 		return name
