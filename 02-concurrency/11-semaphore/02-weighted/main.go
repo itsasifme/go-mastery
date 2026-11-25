@@ -5,14 +5,15 @@
 // each job take as many units as it needs. Acquire blocks until there's
 // enough room. Release gives the units back.
 //
-// Weighted is fair: jobs get in, in the order they asked. A big job that's
-// waiting isn't passed by small jobs behind it, so it never waits forever.
+// Weighted is fair: jobs get their units in the order they asked. A big
+// job that's waiting isn't passed by small jobs behind it, so it never
+// waits forever.
 //
 // Note: compare with 01-channel. There, every job took exactly one slot.
 //
 // Real use:
-//   - limiting total memory used by image or video processing, where each
-//     job's size is known up front.
+//   - limiting total memory used by image or video processing, when you
+//     know each job's size before it starts.
 //   - limiting total bytes being uploaded at once, not just the number of
 //     uploads.
 //
