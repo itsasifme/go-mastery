@@ -2,12 +2,13 @@
 //
 // A server keeps two numbers for its metrics page: how many requests it
 // handled and how many bytes it sent. Every handler adds to them. With
-// atomic.Int64, Add does read, add and write back as one step that no
-// other goroutine can split. No mutex, and no lost updates.
+// atomic.Int64, Add does read, add and write back as one step. No other
+// goroutine can get in between. No mutex, and no lost updates.
 //
-// The two counters are separate. Each one is always right on its own, but
-// a reader might see the new requests value with the old bytes value. If
-// several values must change together, use a mutex (see mutex/02-safe-type).
+// The two counters are separate. Each one is always right on its own. But
+// a reader might see the new requests value next to the old bytes value.
+// If several values must change together, use a mutex (see
+// mutex/02-safe-type).
 //
 // Note: compare with mutex/01-race. The same kind of counter, without a
 // lock, lost updates.
