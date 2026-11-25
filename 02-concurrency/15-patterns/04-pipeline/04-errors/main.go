@@ -4,12 +4,12 @@
 //
 //	readRows -> parse -> save
 //
-// Each step runs with errgroup's g.Go. One row has a bad price, so parse
+// Each step runs with errgroup's g.Go. One row has a bad price. So parse
 // returns an error, and errgroup cancels ctx. readRows sees ctx.Done() and
 // stops sending. save stops when parse closes its output. g.Wait returns
 // the parse error.
 //
-// The import is all or nothing. save writes into a transaction, and main
+// The import is all or nothing. save writes into a transaction. main
 // commits only when g.Wait returns nil. Otherwise it rolls back, so half
 // an import never reaches the database.
 //
