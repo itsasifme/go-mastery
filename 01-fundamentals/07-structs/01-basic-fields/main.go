@@ -19,15 +19,15 @@ func main() {
 		breadth int
 	}
 
-	// Declare instance rect1 and defining the struct
+	// Make a Rectangle. The values go in field order: length, then breadth.
 	rect := Rectangle{22, 12}
 
-	// Access the length of the struct
+	// Read the length field
 	fmt.Println("Length:", rect.length)
 
 	rect.breadth = 15
 
-	// Access the breadth of the struct
+	// Read the breadth field
 	fmt.Println("Breadth:", rect.breadth)
 
 	area := rect.length * rect.breadth
