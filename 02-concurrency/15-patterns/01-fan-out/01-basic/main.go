@@ -10,9 +10,9 @@
 //
 // Real use:
 //   - several consumers on one queue, like workers reading the same SQS
-//     queue or Kafka consumer group: each message is handled once.
-//   - spreading CPU-heavy work (hashing, compressing) over runtime.NumCPU()
-//     goroutines.
+//     queue, or a Kafka consumer group. Each message is handled once.
+//   - spreading CPU-heavy work, like hashing or compressing, over
+//     runtime.NumCPU() goroutines.
 //
 // Run: go run ./02-concurrency/15-patterns/01-fan-out/01-basic
 package main
