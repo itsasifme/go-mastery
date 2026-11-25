@@ -14,5 +14,5 @@ Go's basic types: numbers, booleans, and strings.
 
 - `int` is 32 or 64 bits, depending on the machine.
 - **Go never converts number types for you.** Even `int` to `int64` needs a cast.
-- **Integer overflow wraps around without any error.**
+- **When an integer goes past its biggest value, it jumps to the smallest one, with no error.**
 - A string is a list of bytes. `s[i]` gives a byte, but `for range s` gives runes (characters).
