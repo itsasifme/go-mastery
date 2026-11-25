@@ -75,7 +75,7 @@ func worker(ctx context.Context, id int, wg *sync.WaitGroup) {
 		default:
 		}
 
-		time.Sleep(jobTime) // simulate one job; it isn't stopped halfway
+		time.Sleep(jobTime) // simulate one job. It isn't stopped halfway
 		jobs++
 	}
 }
