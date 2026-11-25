@@ -14,13 +14,13 @@ package main
 
 import "fmt"
 
-// Interface
+// Author needs both details() and articles().
 type Author interface {
 	details()
 	articles()
 }
 
-// Structure
+// author has both methods, so it fits Author.
 type author struct {
 	name              string
 	branch            string
@@ -31,7 +31,7 @@ type author struct {
 	totalArticles     int
 }
 
-// Implementing details() method of the interface
+// details prints the author's info.
 func (a author) details() {
 
 	fmt.Printf("Author Name: %s", a.name)
@@ -42,7 +42,7 @@ func (a author) details() {
 
 }
 
-// Implementing articles() method of the interface
+// articles prints how many articles are still pending.
 func (a author) articles() {
 
 	pendingArticles := a.totalArticles - a.publishedArticles
@@ -51,7 +51,7 @@ func (a author) articles() {
 
 func main() {
 
-	// Assigning values to the structure
+	// Fill in an author by field name
 	author := author{
 		name:              "Mickey",
 		branch:            "Computer science",
@@ -62,7 +62,7 @@ func main() {
 		totalArticles:     309,
 	}
 
-	// Accessing the methods of the interface
+	// One Author variable can call both methods
 	var i Author = author
 	i.details()
 	i.articles()
