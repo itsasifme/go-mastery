@@ -4,9 +4,9 @@ Merge many channels into one.
 
 ## Why
 
-**Problem:** values come from several sources, each on its own channel. One loop can't `range` over several channels, and a `select` needs one case per channel, written out by hand.
+**Problem:** values come from several sources, each on its own channel. One loop can't `range` over several channels. A `select` needs one case per channel, written out by hand.
 
-**Solution:** a `merge` function. It starts one goroutine per input that copies values into a shared output channel, and closes the output after every input is done. The caller reads one channel.
+**Solution:** a `merge` function. It starts one goroutine per input. Each one copies values into a shared output channel. When every input is done, `merge` closes the output. The caller reads one channel.
 
 ## API
 
