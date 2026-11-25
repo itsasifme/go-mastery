@@ -6,7 +6,7 @@ A chain of steps connected by channels. Each step takes values, changes them, an
 
 **Problem:** one big loop that reads, changes and saves each item does one thing at a time. While it waits on a slow save, nothing else moves.
 
-**Solution:** split the work into steps, each in its own goroutine, connected by channels. Every step works on a different item at the same moment. A slow step can get more workers without changing the others.
+**Solution:** split the work into steps. Each step runs in its own goroutine, and channels connect them. Every step works on a different item at the same time. A slow step can get more workers without changing the others.
 
 ## API
 
