@@ -1,12 +1,12 @@
 // Limit: run only a few jobs at a time with SetLimit.
 //
-// Six photos need resizing, but resizing uses a lot of memory, so only
-// maxParallel can run at once. After g.SetLimit, g.Go waits until a slot
-// is free before it starts the next job. The start times show the photos
+// Six photos need resizing. Resizing uses a lot of memory, so only
+// maxParallel can run at once. After g.SetLimit, g.Go waits for a free
+// slot before it starts the next job. The start times show the photos
 // going in groups.
 //
-// Note: this is a semaphore with error handling built in (see
-// semaphore/01-channel).
+// Note: this works like a semaphore (a limit on how many run at once),
+// with error handling built in (see semaphore/01-channel).
 //
 // Try: set maxParallel to len(photos). Every photo starts at 0s.
 //
