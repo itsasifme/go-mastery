@@ -5,9 +5,9 @@
 // for 200ms and gets it, because that's earlier. The earliest deadline
 // always wins.
 //
-// A worker does steps on each context and prints when it stopped and how
-// many steps it did, so you can see the real stop times, not just the
-// numbers that were asked for.
+// A worker does steps on each context. It prints when it stopped and how
+// many steps it did. So you see the real stop times, not just the numbers
+// that were asked for.
 //
 // Real use:
 //   - a server gives each request 2 seconds. A database call inside asks
