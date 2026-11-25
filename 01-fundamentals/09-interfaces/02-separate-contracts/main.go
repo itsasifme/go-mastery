@@ -15,17 +15,17 @@ package main
 
 import "fmt"
 
-// Interface 1
+// AuthorDetails is any type that can print author details.
 type AuthorDetails interface {
 	details()
 }
 
-// Interface 2
+// AuthorArticles is any type that can print pending articles.
 type AuthorArticles interface {
 	articles()
 }
 
-// Structure
+// author has both methods, so it fits both interfaces.
 type author struct {
 	name              string
 	branch            string
@@ -36,7 +36,7 @@ type author struct {
 	totalArticles     int
 }
 
-// Implementing method of the interface 1
+// details prints the author's info. AuthorDetails asks for this method.
 func (a author) details() {
 
 	fmt.Printf("Author Name: %s", a.name)
@@ -47,7 +47,8 @@ func (a author) details() {
 
 }
 
-// Implementing method of the interface 2
+// articles prints how many articles are still pending. AuthorArticles
+// asks for this method.
 func (a author) articles() {
 
 	pendingArticles := a.totalArticles - a.publishedArticles
@@ -56,7 +57,7 @@ func (a author) articles() {
 
 func main() {
 
-	// Assigning values to the structure
+	// Fill in an author by field name
 	author := author{
 		name:              "Mickey",
 		branch:            "Computer science",
@@ -67,11 +68,11 @@ func main() {
 		totalArticles:     309,
 	}
 
-	// Accessing the method of the interface 1
+	// i1 only sees details()
 	var i1 AuthorDetails = author
 	i1.details()
 
-	// Accessing the method of the interface 2
+	// i2 only sees articles()
 	var i2 AuthorArticles = author
 	i2.articles()
 
