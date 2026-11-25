@@ -8,23 +8,23 @@
 // worker can finish "created" after a fast one already applied "paid".
 // The store counts every event that arrived out of order.
 //
-// Fix: give each worker its own channel, and send every event of an order
-// to the same worker: order % workerCount picks it. One worker handles an
+// Fix: give each worker its own channel. Send every event of an order to
+// the same worker, and let order % workerCount pick it. One worker handles an
 // order's events one by one, so they stay in order. Different orders still
 // run in parallel on different workers. Use the "fix:" line instead of the
 // line above it.
 //
-// Note: for string keys like user IDs, hash the key first (hash/fnv) and
-// take that modulo workerCount. One very busy key can keep its worker busy
-// while the others sit idle.
+// Note: for string keys like user IDs, hash the key first with hash/fnv.
+// Then take that modulo workerCount. One very busy key can keep its
+// worker busy while the others sit idle.
 //
 // Real use:
-//   - Kafka sends every message with the same key to the same partition,
-//     and one consumer reads each partition, so one user's or one
-//     account's events are handled in order.
+//   - Kafka sends every message with the same key to the same partition.
+//     One consumer reads each partition. So one user's or one account's
+//     events are handled in order.
 //   - a bank account's transactions, a chat room's messages, or an
-//     order's status changes, handled in parallel across keys but in order
-//     within each key.
+//     order's status changes. Different keys run in parallel, but each
+//     key's items stay in order.
 //
 // Run: go run ./02-concurrency/15-patterns/01-fan-out/02-by-key
 package main
@@ -50,7 +50,7 @@ type store struct {
 }
 
 // Apply records e. An event older than the order's current status arrived
-// out of order: it's counted and ignored.
+// out of order. It's counted and ignored.
 func (s *store) Apply(e event) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -124,8 +124,8 @@ func fanOutByKey(s *store) {
 	wg.Wait()
 }
 
-// sendEvents sends created, paid and shipped for every order, in that
-// order and right after each other, like webhooks for one order arriving
+// sendEvents sends created, paid and shipped for every order. They go in
+// that order, right after each other, like webhooks for one order arriving
 // close together. The order number picks the queue, so one order's events
 // always go to the same queue.
 func sendEvents(queues []chan event) {
