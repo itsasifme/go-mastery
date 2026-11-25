@@ -1,7 +1,7 @@
 // Broadcast: closing a channel wakes every goroutine waiting on it.
 //
 // Every worker waits on <-stop. main closes stop once, and they all wake up
-// and finish. A receive from a closed channel never blocks, so every waiting
+// and finish. A receive from a closed channel never waits, so every waiting
 // receiver gets through.
 //
 // This is why the later examples use close(done) to say "I'm finished".
@@ -16,8 +16,8 @@
 // Real use:
 //   - graceful shutdown: on SIGTERM, close one stop channel and every
 //     worker stops.
-//   - context cancellation works this way: ctx.Done() is a channel that
-//     gets closed.
+//   - context cancellation works the same way. ctx.Done() is a channel
+//     that gets closed.
 //
 // Run: go run ./02-concurrency/02-channels/02-closing/02-broadcast
 package main
