@@ -13,7 +13,7 @@ package main
 
 import "fmt"
 
-// Taking a struct
+// Rectangle has a length and a breadth.
 type Rectangle struct {
 	length, breadth int
 }
