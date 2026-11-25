@@ -12,9 +12,9 @@
 // call, with no way out.
 //
 // Real use:
-//   - an HTTP handler that joins a shared upstream call but stops at
-//     r.Context().Done(), so a client that hangs up doesn't keep a
-//     goroutine waiting.
+//   - an HTTP handler that joins a shared call to another service, but
+//     stops waiting at r.Context().Done(). Then a client that hangs up
+//     doesn't keep a goroutine waiting.
 //   - a cache refresh where callers with a short deadline fall back to
 //     old data while the refresh finishes.
 //
