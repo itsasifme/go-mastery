@@ -7,7 +7,7 @@
 //
 // Note: here every goroutine only reads, which is the best case for
 // RWMutex. With many writes, or with very short lookups, RWMutex can be
-// slower than a Mutex, because it does more bookkeeping. Measure your own
+// slower than a Mutex. It has more bookkeeping to do. Measure your own
 // case with a benchmark (go test -bench) before you switch.
 //
 // Try: set holdTime to 0. Both take almost no time, and the gap is gone.
