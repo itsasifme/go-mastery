@@ -8,7 +8,7 @@
 //
 // Real use:
 //   - a producer streams rows from a database or lines from a file, then
-//     closes the channel. The consumer just ranges until the end.
+//     closes the channel. The consumer just reads with for range until the end.
 //
 // Run: go run ./02-concurrency/02-channels/02-closing/01-range
 package main
