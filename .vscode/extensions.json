@@ -1,0 +1,7 @@
+{
+  // VS Code suggests these when someone opens this repo.
+  "recommendations": [
+    "golang.go",
+    "fabiospampinato.vscode-highlight"
+  ]
+}

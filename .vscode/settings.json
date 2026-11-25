@@ -1,0 +1,28 @@
+{
+  // Colors for this repo's comment markers, with the Highlight extension
+  // (fabiospampinato.vscode-highlight). Label rules use "gi", so case doesn't
+  // matter: Fix:, fix: and FIX: all match. Colors follow GitHub's alert colors.
+  //
+  // In a multi-root workspace, VS Code ignores this file for Highlight. Put the
+  // same "highlight.regexes" in the .code-workspace file's "settings" instead.
+  "highlight.regexes": {
+    // title on line 1: "g" without "m", so ^ matches only the start of the file
+    "^(// )([^:\\r\\n]{2,60})(:)": {"regexFlags": "g", "filterFileRegex": ".*\\.go$", "decorations": [{}, {"color": "#F0883E", "fontWeight": "bold"}, {"color": "#F0883E"}]},
+    // red: Problem: and // problem
+    "(//[ \\t]*)(problem)([^\\r\\n]*)": {"regexFlags": "gi", "filterFileRegex": ".*\\.go$", "decorations": [{}, {"color": "#F85149", "fontWeight": "bold"}, {"color": "#F85149"}]},
+    // green: Fix: and // fix:
+    "(//[ \\t]*)(fix:)([^\\r\\n]*)": {"regexFlags": "gi", "filterFileRegex": ".*\\.go$", "decorations": [{}, {"color": "#3FB950", "fontWeight": "bold"}, {"color": "#3FB950"}]},
+    // pink: Try:
+    "(//[ \\t]*)(try:)([^\\r\\n]*)": {"regexFlags": "gi", "filterFileRegex": ".*\\.go$", "decorations": [{}, {"color": "#DB61A2"}, {"color": "#DB61A2"}]},
+    // blue: Note:
+    "(//[ \\t]*)(note:)([^\\r\\n]*)": {"regexFlags": "gi", "filterFileRegex": ".*\\.go$", "decorations": [{}, {"color": "#4493F8"}, {"color": "#4493F8"}]},
+    // purple: Real use:
+    "(//[ \\t]*)(real use:)([^\\r\\n]*)": {"regexFlags": "gi", "filterFileRegex": ".*\\.go$", "decorations": [{}, {"color": "#AB7DF8"}, {"color": "#AB7DF8"}]},
+    // cyan: Run:
+    "(//[ \\t]*)(run:)([^\\r\\n]*)": {"regexFlags": "gi", "filterFileRegex": ".*\\.go$", "decorations": [{}, {"color": "#39C5CF"}, {"color": "#39C5CF"}]},
+    // amber: Race check:
+    "(//[ \\t]*)(race check:)([^\\r\\n]*)": {"regexFlags": "gi", "filterFileRegex": ".*\\.go$", "decorations": [{}, {"color": "#D29922"}, {"color": "#D29922"}]},
+    // Highlight's own FIXME rule, made case-sensitive so it doesn't catch "Fix:"
+    "((?:<!-- *)?(?:#|// @|//|./\\*+|<!--|--|\\* @|{!|{{!--|{{!) *(?:FIXME|FIX|BUG|UGLY|DEBUG|HACK)(?:[\\t\\f\\v ]*\\([^\\r\\n)]+\\))?:?)((?!\\w)(?: *-->| *\\*/| *!}| *--}}| *}}|(?= *(?:[^\\r\\n:]//|/\\*+|<!--|@|--|{!|{{!--|{{!))|(?: +[^\\r\\n@]*?)(?= *(?:[^\\r\\n:]//|/\\*+|<!--|@|--(?!>)|{!|{{!--|{{!))|(?: +[^\\r\\n@]+)?))": {"regexFlags": "g", "filterFileRegex": ".*(?<!CHANGELOG.md)$", "decorations": [{"overviewRulerColor": "#cc0000", "backgroundColor": "#cc0000", "color": "#1f1f1f", "fontWeight": "bold"}, {"backgroundColor": "#cc0000", "color": "#1f1f1f"}]}
+  }
+}
