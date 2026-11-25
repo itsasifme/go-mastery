@@ -8,19 +8,31 @@
 // Problem: while the first users are saving, the others pass the same
 // check. More users get a coupon than there are coupons, and left goes
 // below zero. "go run -race" finds nothing, because every access is
-// atomic. With nothing slow between the check and the take, the gap is
-// tiny and the bug hides, until real work goes there.
+// atomic. If nothing slow sits between the check and the take, the gap is
+// tiny. Then the bug hides, until real work goes there.
 //
 // Fix: takeOne reads left. If it's zero, it gives up. If not, it calls
 // CompareAndSwap(n, n-1): "set it to n-1, but only if it's still n". If
-// another user took one in between, the swap fails and takeOne tries again
-// with the new value. claimSafe takes the coupon first, then saves it.
-// Use the "fix:" line instead of the line above it.
+// another user took one in between, the swap fails. Then takeOne tries
+// again with the new value. claimSafe takes the coupon first, then saves
+// it. Use the "fix:" line instead of the line above it.
+//
+// A swap only fails when another user just got a coupon, so the loop
+// always ends. But one unlucky user can lose many times in a row, and
+// nobody should wait forever. So takeOne gives up after maxTries and
+// returns errBusy. The user sees "try again" instead of waiting with no
+// answer.
 //
 // Note: compare with mutex/03-check-then-act. There, a mutex kept the
-// check and the change together. Here, CompareAndSwap does it for one value.
-// This works inside one server. With many servers, let the database do it:
+// check and the change together. Here, CompareAndSwap does the same for
+// one value. This works inside one server. With many servers, let the
+// database do it:
 // UPDATE coupons SET left = left - 1 WHERE id = $1 AND left > 0.
+//
+// Note: CompareAndSwap promises that one user wins each round. It doesn't
+// promise that you do. If every user must get a fair turn, use a mutex.
+// When a goroutine waits too long for Go's mutex, the mutex switches to
+// first come, first served.
 //
 // Real use:
 //   - limited coupons, free trial slots, or "first 100 users" offers.
@@ -31,14 +43,22 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"sync"
 	"sync/atomic"
 	"time"
 )
 
-// saveTime is how long saving a coupon to a user's account takes.
-const saveTime = 10 * time.Millisecond
+const (
+	saveTime = 10 * time.Millisecond // how long saving a coupon to a user's account takes
+	maxTries = 100                   // swaps a user may lose in a row before giving up
+)
+
+var (
+	errSoldOut = errors.New("sold out")
+	errBusy    = errors.New("too busy, try again") // lost maxTries swaps in a row
+)
 
 func main() {
 	const (
@@ -82,25 +102,29 @@ func claimUnsafe(user int, left, claimed *atomic.Int64, wg *sync.WaitGroup) {
 func claimSafe(user int, left, claimed *atomic.Int64, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	if !takeOne(left) {
-		return
+	if err := takeOne(left); err != nil {
+		if errors.Is(err, errBusy) {
+			fmt.Println("user", user, err) // in a handler: answer 503 and let the user retry
+		}
+		return // sold out is normal, nothing to print
 	}
 	time.Sleep(saveTime) // save the coupon to the user's account
 	claimed.Add(1)
 	fmt.Println("user", user, "got a coupon")
 }
 
-// takeOne takes one from left if it's above zero. It reports whether it
-// got one.
-func takeOne(left *atomic.Int64) bool {
-	for {
+// takeOne takes one from left if it's above zero. It returns errSoldOut
+// when none are left, and errBusy after losing maxTries swaps in a row.
+func takeOne(left *atomic.Int64) error {
+	for range maxTries {
 		n := left.Load()
 		if n == 0 {
-			return false
+			return errSoldOut
 		}
 		if left.CompareAndSwap(n, n-1) {
-			return true
+			return nil
 		}
 		// someone else changed left after our Load, so try again
 	}
+	return errBusy
 }
