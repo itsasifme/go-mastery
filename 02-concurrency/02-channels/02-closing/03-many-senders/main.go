@@ -7,7 +7,7 @@
 // "send on closed channel", depending on timing. "go run -race" also
 // reports the data race between the close and the send.
 //
-// Fix: workers only send, then tell a done channel they're finished. One
+// Fix: workers only send, then send on done to say they're finished. One
 // separate goroutine reads one done signal per worker, then closes ch once.
 // Comment out the line marked "problem", then uncomment the "fix:" line.
 //
