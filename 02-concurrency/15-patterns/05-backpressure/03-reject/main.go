@@ -2,9 +2,9 @@
 //
 // An API puts each upload into a queue for a background worker. When the
 // queue is full, enqueue waits up to enqueueLimit for room. If none frees
-// up, it returns errBusy, and the handler answers 503 so the client can
-// retry later. The client hears about the overload right away, instead of
-// hanging or losing its upload without knowing.
+// up, it returns errBusy. Then the handler answers 503, so the client can
+// retry later. The client hears about the overload right away. It doesn't
+// hang, and it doesn't lose its upload without knowing.
 //
 // Note: this sits between 01-blocking (wait forever) and 02-drop (don't
 // wait at all, and don't tell anyone). semaphore/03-acquire-timeout answers
@@ -14,7 +14,8 @@
 // Real use:
 //   - an HTTP handler that returns 503 or 429 with a Retry-After header
 //     when the job queue is full.
-//   - a load shedder in front of a slow database or service.
+//   - turning away extra requests in front of a slow database or service
+//     (load shedding).
 //
 // Run: go run ./02-concurrency/15-patterns/05-backpressure/03-reject
 package main
