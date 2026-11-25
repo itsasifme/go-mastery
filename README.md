@@ -1,6 +1,6 @@
 # Go Mastery
 
-> A hands-on journey from Go fundamentals to advanced concepts through practical examples, experiments, and coding exercises.
+> Learn Go from the basics to advanced topics, with small examples, experiments, and coding exercises.
 
 I'm a backend engineer, and I use this repo to learn Go step by step. It starts with the basics, then moves to concurrency and the standard library. Every example is small, runs on its own, and shows one idea.
 
@@ -162,7 +162,7 @@ Some examples print in a different order each run. Some crash on purpose (a dead
 
 ## Go version
 
-This repo uses Go 1.25 (set in `go.mod`). Older versions may not work. When a topic uses a newer Go feature, its README says which version added it.
+This repo uses Go 1.26 (set in `go.mod`). Older versions may not work. When a topic uses a newer Go feature, its README says which version added it.
 
 The only outside package is `golang.org/x/sync`, for the errgroup, semaphore and singleflight examples. It's pinned to `v0.16.0`.
 
