@@ -3,7 +3,7 @@
 // errgroup.WithContext gives a ctx that is cancelled as soon as any job
 // returns an error. Three regions download their part of a report in
 // chunks. The "eu" download fails early, so ctx is cancelled and the other
-// downloads stop, instead of wasting time on a report that can't be built.
+// downloads stop. They don't waste time on a report that can't be built.
 //
 // Wait returns the first error (from eu), not the context.Canceled that
 // the other jobs return after it.
