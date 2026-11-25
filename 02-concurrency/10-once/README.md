@@ -18,6 +18,32 @@
 | `sync.OnceValue(f)` | function | `func() T` | 1.21 | Runs `f` once and returns its result every time | none |
 | `sync.OnceValues(f)` | function | `func() (T, error)` | 1.21 | Same, for a value and an error | [02-once-value](02-once-value/), [03-no-retry](03-no-retry/) |
 
+### `once.Do` or `OnceFunc`?
+
+Both run the function once, and other callers wait for it. `OnceFunc` uses a `sync.Once` inside. The difference is where the `Once` lives, and what happens after a panic.
+
+| | `once.Do(f)` | `sync.OnceFunc(f)` |
+| --- | --- | --- |
+| What you keep | a `sync.Once` variable, plus your own variable for the result | one function. Use `OnceValue` or `OnceValues` when you need a result |
+| Best for | once per struct value: a `sync.Once` field works with no setup | once for the whole program, as a package variable |
+| If `f` panics | the first call panics. Later calls do nothing, so the code goes on as if setup worked | every call panics again with the same value, so a broken setup can't go unnoticed |
+
+```go
+// once per struct value
+type Client struct {
+	initOnce sync.Once
+	conn     *conn
+}
+
+func (c *Client) get() *conn {
+	c.initOnce.Do(c.connect)
+	return c.conn
+}
+
+// once for the whole program
+var loadConfig = sync.OnceValues(readConfig)
+```
+
 ## Examples
 
 | Example | Run | What it shows |
@@ -29,9 +55,10 @@
 ## Things to remember
 
 - **The first result is final, even an error.** If setup can fail for a moment, use a mutex and save the result only on success (`03`).
-- **If the function panics, `once.Do` still counts it as done.** Later calls do nothing. `OnceFunc`, `OnceValue` and `OnceValues` are different: they panic again with the same value on every call.
+- **If the function panics, `once.Do` still counts it as done.** Later calls do nothing, and the code goes on without the setup. `OnceFunc`, `OnceValue` and `OnceValues` panic again on every call, so you keep seeing the problem.
+- **Pick by where the `Once` lives.** Use `once.Do` for a `Once` field inside a struct. Use `OnceFunc`, `OnceValue` or `OnceValues` for a package variable.
 - Calling `once.Do` inside its own function gets stuck forever.
-- Prefer `OnceValues` over a `Once` plus a package variable. The value and the "done" state can't get out of sync (`02`).
+- Use `OnceValues` instead of a `Once` plus a package variable. Then the value and the "done" state can't get out of sync (`02`).
 
 ## Go version notes
 
