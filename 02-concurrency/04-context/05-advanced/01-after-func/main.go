@@ -2,8 +2,8 @@
 //
 // Some blocking calls don't take a ctx, like reading from an old-style
 // connection. readMessages reads from conn in a loop in its own goroutine.
-// It handles the messages that are already there, then conn.Read waits,
-// because no more come. context.AfterFunc runs c.Close in its own
+// It handles the messages that are already there. Then conn.Read waits,
+// because no more messages come. context.AfterFunc runs c.Close in its own
 // goroutine once ctx times out. Closing the connection unblocks Read, so
 // the loop stops on time anyway.
 //
