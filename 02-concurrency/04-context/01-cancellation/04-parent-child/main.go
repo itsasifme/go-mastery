@@ -2,8 +2,8 @@
 //
 // child1 and child2 are made from parent, and a worker does steps on each
 // of the three contexts. Cancelling child1 stops only child1's worker.
-// Cancelling parent stops parent's worker and every child's worker still
-// running. The step counts show who kept working longer.
+// Cancelling parent stops parent's worker. It also stops every child's
+// worker that's still running. The step counts show who kept working longer.
 //
 // Real use:
 //   - a request ctx is the parent, and each database query gets a child
