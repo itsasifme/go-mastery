@@ -1,7 +1,7 @@
 // wg.Go: Add, go and Done in one call (Go 1.25+).
 //
 // wg.Go(f) calls Add(1), starts f in a new goroutine, and calls Done when
-// f returns. You can't forget Done, and you can't call Add too late (see
+// f returns. You can't forget Done. You also can't call Add too late (see
 // 05-add-too-late), because Go does the Add before the goroutine starts.
 //
 // The worker no longer needs the WaitGroup at all. It just does its job.
