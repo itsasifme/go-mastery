@@ -32,4 +32,4 @@
 - **It only helps when there are many more reads than writes.** Measure it first (`02`).
 - **You can't upgrade `RLock` to `Lock`.** Release the read lock, take the write lock, then check again (`03`).
 - **Don't call `RLock` twice in the same goroutine.** It works in tests, then gets stuck when a writer calls `Lock` in between. Use a `...Locked` helper (`04`).
-- A waiting writer blocks new readers, so writers aren't starved by a steady stream of reads.
+- A writer that's waiting blocks new readers. So a steady stream of reads can't keep a writer waiting forever.
