@@ -6,7 +6,7 @@ See the [full API overview](../README.md#api).
 
 ## Why
 
-**Problem:** a receiver can't tell "no more values" from "not yet". And to stop many goroutines, you'd need one send per goroutine, and know how many there are.
+**Problem:** a receiver can't tell "no more values" from "not yet". And to stop many goroutines, you'd need one send per goroutine. You'd also need to know how many there are.
 
 **Solution:** `close`. A `for range` loop ends, and every waiting receiver wakes up at once.
 
@@ -28,7 +28,7 @@ See the [full API overview](../README.md#api).
 | `02-broadcast` | `go run ./02-concurrency/02-channels/02-closing/02-broadcast` | One `close` wakes every waiting goroutine. A send wakes only one |
 | `03-many-senders` | `go run ./02-concurrency/02-channels/02-closing/03-many-senders` | Many workers send on one channel, and one separate goroutine closes it once |
 
-What happens to values still in a buffer after `close` is shown in [`04-buffered/06-drain-after-close`](../04-buffered/06-drain-after-close/).
+[`04-buffered/06-drain-after-close`](../04-buffered/06-drain-after-close/) shows what happens to values still in a buffer after `close`.
 
 ## Cheat sheet
 
@@ -41,7 +41,7 @@ What happens to values still in a buffer after `close` is shown in [`04-buffered
 ## Things to remember
 
 - **Only the sender should close a channel, and only once.**
-- With many workers sending, none of them closes it. Each one sends a `done` signal, and one separate goroutine waits for all of them, then closes (`03`).
+- With many workers sending, none of them closes it. Each one sends a `done` signal. One separate goroutine waits for all of them, then closes it (`03`).
 - Use `v, ok := <-ch` to tell a real zero from a closed channel: `ok` is `false` once it's closed and empty.
 - **`close` is a broadcast to every receiver.** That's why `close(done)` is the usual way to say "I'm finished" (`02`).
 - You don't have to close every channel. Close it only when a receiver needs to know there's nothing more, like a `for range` loop.
