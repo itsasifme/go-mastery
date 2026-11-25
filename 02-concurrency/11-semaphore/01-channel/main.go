@@ -41,7 +41,7 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(len(files))
 	for _, file := range files {
-		sem <- struct{}{} // take a slot; blocks while all slots are taken
+		sem <- struct{}{} // take a slot. This blocks while all slots are taken
 		go download(file, start, sem, &wg)
 	}
 	wg.Wait()
