@@ -7,8 +7,8 @@
 // a WaitGroup (see waitgroup/01-basic).
 //
 // Real use:
-//   - inside the one function that creates a channel and wires producers
-//     and consumers together. Everywhere else, pass a directional type.
+//   - inside the one function that makes a channel and connects producers
+//     and consumers. Everywhere else, pass a directional type.
 //
 // Run: go run ./02-concurrency/02-channels/01-directional/01-bidirectional
 package main
