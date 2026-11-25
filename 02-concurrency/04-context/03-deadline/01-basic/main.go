@@ -4,9 +4,9 @@
 // WithDeadline(time.Now().Add(d)).
 //
 // main starts three workers that share one ctx. ctx.Deadline() tells each
-// worker when the deadline is, so it can skip a job that can't finish in
-// time, instead of starting it and failing halfway. The big job needs more
-// time than is left, so it's skipped. The others finish.
+// worker when the deadline is. So a worker can skip a job that can't finish
+// in time, instead of starting it and failing halfway. The big job needs
+// more time than is left, so it's skipped. The others finish.
 //
 // Real use:
 //   - a request with a 2 second budget skips an optional slow step, like
