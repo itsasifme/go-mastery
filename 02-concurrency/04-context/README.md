@@ -10,9 +10,9 @@ A `context.Context` tells goroutines when to stop. It can carry a cancel signal,
 
 ## Why
 
-**Problem:** a server starts goroutines for every request: database queries, calls to other services. When the client disconnects or the request takes too long, they should stop. There was no standard way to tell them. Every library made its own stop channel or timeout parameter (like the `stop` channels in [select](../03-select/)), and they didn't work together. Goroutines kept working for nobody, or leaked. Request data, like a request ID, had to be passed by hand through every function.
+**Problem:** a server starts goroutines for every request: database queries, calls to other services. When the client disconnects or the request takes too long, they should stop. There was no standard way to tell them. Every library made its own stop channel or timeout parameter, like the `stop` channels in [select](../03-select/). They didn't work together. Goroutines kept working for nobody, or leaked. Request data, like a request ID, had to be passed by hand through every function.
 
-**Solution:** one standard type for all of it. Google published it as `golang.org/x/net/context` in 2014, and it joined the standard library in Go 1.7 (2016). You pass `ctx` as the first parameter through the whole call chain, and it carries the cancel signal, the deadline, and request values. The standard library uses it everywhere: `r.Context()` in net/http, `db.QueryContext`, `exec.CommandContext`.
+**Solution:** one standard type for all of it. Google published it as `golang.org/x/net/context` in 2014, and it joined the standard library in Go 1.7 (2016). You pass `ctx` as the first parameter through the whole call chain. It carries the cancel signal, the deadline, and request values. The standard library uses it everywhere: `r.Context()` in net/http, `db.QueryContext`, `exec.CommandContext`.
 
 ## API
 
@@ -63,7 +63,7 @@ There's no `Cancel()` method. Code that gets a ctx can only watch it. Only its c
 
 ### How it works
 
-Each `With...` function wraps its parent, so contexts form a chain:
+Each `With...` function makes a child of the context you pass in. So contexts form a chain:
 
 ```text
 Background()                 never cancelled
@@ -74,7 +74,7 @@ Background()                 never cancelled
 
 - A cancel context keeps a list of its children and cancels them too. Nothing points back up, so a child never cancels its parent ([04-parent-child](01-cancellation/04-parent-child/)).
 - `Value` checks its own key, then asks its parent, up to the root. Deep chains make lookups slower.
-- `Background()` is empty: no deadline, no values, and `Done()` returns a `nil` channel, which is never ready ([select/06-nil-channel](../03-select/06-nil-channel/)). It's the root of the chain.
+- `Background()` is empty: no deadline and no values. Its `Done()` returns a `nil` channel, which is never ready ([select/06-nil-channel](../03-select/06-nil-channel/)). It's the root of the chain.
 - `TODO()` is the same as `Background()`. Use it as a placeholder where a real ctx isn't passed in yet.
 
 ## Things to remember
