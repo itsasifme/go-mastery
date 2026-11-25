@@ -20,7 +20,7 @@ I'm a backend engineer, and I use this repo to learn Go step by step. It starts 
 | # | Topic | Status |
 | --- | --- | --- |
 | 01 | [Variables](01-fundamentals/01-variables/) | ✅ |
-| 02 | [Data types](01-fundamentals/02-data-types/) | 📝 |
+| 02 | [Data types](01-fundamentals/02-data-types/) | ✅ |
 | 03 | [Functions](01-fundamentals/03-functions/) | 📝 |
 | 04 | [Pointers](01-fundamentals/04-pointers/) | ✅ |
 | 05 | [Arrays and slices](01-fundamentals/05-arrays-slices/) | 📝 |
