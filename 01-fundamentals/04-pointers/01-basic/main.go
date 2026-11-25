@@ -1,8 +1,8 @@
 // Pointers: a pointer holds the address of a value, not the value itself.
 //
 // ptr := &value stores the address of value. *ptr reads or changes the
-// value at that address. Changing *ptr changes value too, while the
-// address stays the same. Pointers to structs work the same way.
+// value at that address. Changing *ptr changes value too. The address
+// stays the same. Pointers to structs work the same way.
 //
 // Real use:
 //   - functions that must change their argument, like
@@ -24,7 +24,7 @@ func main() {
 	value := 10
 	fmt.Println(value)
 
-	// Create a integer type pointer that stores the address of value
+	// Make a pointer to an int that holds the address of value
 	// var ptr *int
 	// ptr = &value
 	// OR
@@ -32,7 +32,7 @@ func main() {
 	fmt.Println(ptr)
 	fmt.Printf("Memory address of ptr: %v: %v\n", ptr, *ptr)
 
-	// Change the pointed-to value; the pointer's address stays unchanged
+	// Change the value through the pointer. The address stays the same.
 	*ptr = 20
 	fmt.Printf("Memory address of ptr: %v: %v\n", ptr, *ptr)
 	// ------------------------------------------------
@@ -43,19 +43,19 @@ func main() {
 		age  int
 	}
 
-	// Instance of the struct Person
+	// A Person value
 	person := Person{"John", 25}
 	fmt.Println(person)
 
-	// Create a struct type pointer that stores the address of person
+	// A pointer to a Person that holds the address of person
 	var ptr2 *Person
 	ptr2 = &person
 	fmt.Println(ptr2)
 
-	// Print pointer address and dereference the pointer value
+	// Print the address, and the value it points to (*ptr2)
 	fmt.Printf("Memory address of ptr2: %p: %v\n", ptr2, *ptr2)
 
-	// Change the pointed-to value; the pointer's address stays unchanged
+	// Change the value through the pointer. The address stays the same.
 	*ptr2 = Person{"Asif", 30}
 	fmt.Printf("Memory address of ptr2: %p: %v\n", ptr2, *ptr2)
 
