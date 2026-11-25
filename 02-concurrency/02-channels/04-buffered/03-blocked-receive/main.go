@@ -7,8 +7,8 @@
 // Fix: send one more value from main. Uncomment the "fix:" line.
 //
 // Real use:
-//   - idle workers waiting on an empty job queue. This one is normal: they
-//     sleep, using no CPU, until work arrives.
+//   - idle workers waiting on an empty job queue. This one is fine. They
+//     sleep without using CPU until work arrives.
 //
 // Run: go run ./02-concurrency/02-channels/04-buffered/03-blocked-receive
 package main
