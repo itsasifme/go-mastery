@@ -31,6 +31,6 @@ A fixed number of workers take jobs from one channel and send results to another
 - Close the jobs channel after the last job, so the workers can stop.
 - **A worker pool is fan-out plus fan-in** with a fixed number of workers (see [fan-out](../01-fan-out/) and [fan-in](../02-fan-in/)).
 - **Close the results channel only after all workers are done.** Use a WaitGroup for that.
-- **Send jobs from their own goroutine** when main also reads results. Otherwise main blocks on a send while workers block on results.
+- **Send jobs from their own goroutine** when main also reads results. Otherwise main blocks on a send, and the workers block on results.
 - **Both the sender and the workers must watch `ctx.Done()`** if the pool can be stopped early (`02`).
-- Decide up front: stop on the first error (errgroup) or keep going and collect errors (`03`).
+- Decide before you start: stop on the first error (errgroup) or keep going and collect errors (`03`).
