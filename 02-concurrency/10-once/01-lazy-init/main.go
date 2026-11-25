@@ -1,12 +1,19 @@
 // Lazy init: set something up on first use, only once.
 //
-// Opening a database pool is slow, so the app does it the first time a
-// request needs it, not at startup. Several requests arrive at once and
-// all call getDB. once.Do runs connect only for the first caller. The
-// others wait until connect is finished, then all of them get the same pool.
+// Opening a database pool and checking it with Ping is slow, so the app
+// does it the first time a request needs it, not at startup. Several
+// requests arrive at once and all call getDB. once.Do runs openPool only
+// for the first caller. The others wait until openPool is finished, then
+// all of them get the same pool.
 //
 // Without Once, each request would check "pool == nil" at the same time,
 // and several of them would open their own pool.
+//
+// Note: the server shares one pool, not one connection. A real pool like
+// *sql.DB holds many connections. It lends one to each query, then takes
+// it back for the next query. "pool 1" in the output is the pool's ID, so
+// every request got the same pool. The fake pool here has no connections
+// inside, because this lesson is about Once.
 //
 // Real use:
 //   - opening a sql.DB, a Redis client or an S3 client on first use.
@@ -27,12 +34,12 @@ type dbPool struct {
 	id int
 }
 
-// connectTime is how long opening the fake pool takes.
-const connectTime = 100 * time.Millisecond
+// openTime is how long opening the fake pool and checking it takes.
+const openTime = 100 * time.Millisecond
 
 var (
 	dbOnce sync.Once
-	pool   *dbPool // set by connect, only once
+	pool   *dbPool // set by openPool, only once
 )
 
 func main() {
@@ -55,13 +62,15 @@ func handle(id int, wg *sync.WaitGroup) {
 
 // getDB returns the shared pool, opening it on the first call.
 func getDB() *dbPool {
-	dbOnce.Do(connect)
+	dbOnce.Do(openPool)
 	return pool
 }
 
-// connect pretends to open a connection pool.
-func connect() {
-	fmt.Println("connecting to the database...")
-	time.Sleep(connectTime)
+// openPool pretends to open a connection pool and check it with Ping.
+// With a real database, db, err := sql.Open(...) is fast and doesn't
+// connect. db.PingContext(ctx) makes the first real connection.
+func openPool() {
+	fmt.Println("opening the database pool and checking it with Ping...")
+	time.Sleep(openTime)
 	pool = &dbPool{id: 1}
 }
