@@ -1,10 +1,10 @@
 # Select
 
-`select` waits on several channel operations at once and runs the first one that's ready. It's how a goroutine listens to many things at the same time: results, timeouts, and stop signals.
+`select` waits on several channel operations at once and runs the first one that's ready. With it, a goroutine can listen to many things at the same time: results, timeouts and stop signals.
 
 ## Why
 
-**Problem:** `<-ch` waits on one channel only. A goroutine that must react to a result, a timeout and a stop signal can't wait on all three.
+**Problem:** `<-ch` waits on one channel only. A goroutine can't wait on a result, a timeout and a stop signal all at once.
 
 **Solution:** `select` waits on several channel operations at once and runs whichever is ready first.
 
@@ -42,12 +42,12 @@
 - `select {}` with no cases waits forever.
 - Inside `select`, **`break` only leaves the `select`, not the surrounding `for` loop**. Use `return` or a labeled `break` (`05`).
 - **A closed channel is always ready.** Set it to `nil` to stop `select` from picking it (`06`).
-- A `nil` channel is never ready, so its case is simply skipped.
-- One channel until closed: `for range`. Several until all closed: `nil`. Stop on a signal: `return`. Both: `07`.
+- A `nil` channel is never ready, so its case is skipped.
+- To read one channel until it closes, use `for range`. To read several until all close, set each to `nil` once it closes. To stop on a signal, `return`. `07` does both.
 - Always `Stop` a ticker when you're done with it (`08`).
 - If one case must win, check it first with its own `select` + `default` (`09`).
-- `09`, and the Try lines in `06` and `07`, show a problem on purpose. Each has a fix or a note to try.
+- `09` shows a problem on purpose. So do the Try lines in `06` and `07`. Each has a fix or a note to try.
 
 ## Go version notes
 
-- Since Go 1.23, a timer from `time.After` that's no longer needed is cleaned up even before it fires. Before that, calling `time.After` in a busy loop could pile up timers. For timeouts in real code, `context.WithTimeout` is usually the better choice (see [context](../04-context/)).
+- Since Go 1.23, Go cleans up a `time.After` timer you no longer need, even before it fires. Before that, calling `time.After` in a busy loop could pile up timers. For timeouts in real code, `context.WithTimeout` is usually the better choice (see [context](../04-context/)).
