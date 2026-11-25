@@ -17,52 +17,51 @@ package main
 
 import "fmt"
 
-// Interface
+// Shape is any type that has an area() method.
 type Shape interface {
 	area() float32
 }
 
-// Rectangle struct implements the interface
+// Rectangle fits Shape because it has area().
 type Rectangle struct {
 	length, breadth float32
 }
 
-// Rectangle provides implementation for area()
+// area returns length times breadth.
 func (r Rectangle) area() float32 {
 	return r.length * r.breadth
 }
 
-// Triangle struct implements the interface
+// Triangle fits Shape too.
 type Triangle struct {
 	base, height float32
 }
 
-// Triangle provides implementation for area()
+// area returns half of base times height.
 func (t Triangle) area() float32 {
 	return 0.5 * t.base * t.height
 }
 
-// Main function
 func main() {
 
-	// Assigns value to struct members
+	// Make one of each shape
 	r := Rectangle{7, 4}
 	t := Triangle{8, 12}
 
 	fmt.Println("Area of Rectangle (Access via Rectangle):", r.area())
 
-	// Call calculate() with struct variable r
+	// Pass r to calculate, which only sees a Shape
 	rectangleArea := calculate(r)
 	fmt.Println("Area of Rectangle (Access via Shape):", rectangleArea)
 
 	fmt.Println("Area of Triangle (Access via Triangle):", t.area())
 
-	// Call calculate() with struct variable t
+	// The same function works with t
 	triangleArea := calculate(t)
 	fmt.Println("Area of Triangle (Access via Shape):", triangleArea)
 }
 
-// Access method of the interface
+// calculate returns the area of any Shape.
 func calculate(s Shape) float32 {
 	return s.area()
 }
