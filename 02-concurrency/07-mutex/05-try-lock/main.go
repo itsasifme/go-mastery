@@ -31,7 +31,7 @@ import (
 
 // syncer runs the product sync, one at a time.
 type syncer struct {
-	mu   sync.Mutex // held while a sync is running; also guards runs
+	mu   sync.Mutex // held while a sync is running, and guards runs
 	runs int
 }
 
