@@ -8,8 +8,8 @@
 // win, see 09-priority.
 //
 // Real use:
-//   - fairness: under load, one busy channel can't starve the others,
-//     because every ready case gets picked sometimes.
+//   - fairness: under load, one busy channel can't take every turn.
+//     Every ready case gets picked sometimes.
 //
 // Run: go run ./02-concurrency/03-select/02-random-pick
 package main
