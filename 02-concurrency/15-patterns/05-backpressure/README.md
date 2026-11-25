@@ -6,7 +6,7 @@ Ways to stop a fast producer from flooding a slow consumer.
 
 **Problem:** when values come in faster than they can be handled, they pile up somewhere. With no limit, that pile grows until the program runs out of memory.
 
-**Solution:** put a bounded buffer between the two sides, and decide what happens when it's full: the producer waits, the new value is dropped, or the caller is told "busy".
+**Solution:** put a buffer with a size limit between the two sides. Then decide what happens when it's full: the producer waits, the new value is dropped, or the caller is told "busy".
 
 ## API
 
