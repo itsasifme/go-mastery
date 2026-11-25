@@ -4,7 +4,7 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
 
 ## Repo layout
 
-- One Go module (`github.com/itsasifme/go-mastery`, Go 1.25) at the root. No third-party packages unless there's no other way.
+- One Go module (`github.com/itsasifme/go-mastery`, Go 1.26) at the root. No third-party packages unless there's no other way.
 - Three parts: `01-fundamentals/`, `02-concurrency/`, `03-standard-library/`.
 - Every folder starts with a 2-digit number in learning order. Numbers start at `01` in every folder and have no gaps. Planned topics already have a folder, so numbers never change.
 - Each example is its own folder with one `main.go`, run with `go run ./<path>`.
@@ -13,7 +13,14 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
 ## Writing style
 
 - Plain, easy English everywhere: comments, READMEs, commit messages. Short sentences, common words. It should sound like a person wrote it.
-- Don't use words like "leverage", "robust", "deliberately", "seamlessly", or long sentences with many parts.
+- Write for a learner whose first language isn't English. Read it as if you're explaining it to a friend at your desk.
+  - One idea per sentence. Most sentences under 20 words. Split a sentence that has "which", "while", "whereas" or several commas.
+  - Everyday words: "use" not "utilize", "show" not "demonstrate", "start" not "initiate", "stop" not "terminate", "get" not "obtain", "make sure" not "ensure", "enough" not "sufficient", "about" not "regarding", "to" not "in order to", "so" not "thus" or "hence".
+  - Talk to the reader with "you". Contractions like "don't" and "it's" are fine.
+  - Use a Go term only after it's been taught, or say what it means in a few words the first time.
+  - No semicolons in sentences, no "i.e.", "e.g.", "etc." (write "like" or "for example"), and no em dashes (—). Use a period and start a new sentence.
+  - Keep parentheses short. If the part in brackets is a full idea, make it its own sentence.
+- Don't use words like "leverage", "robust", "deliberately", "seamlessly", "crucial", "delve", "mechanism", "semantics", "facilitate", "aforementioned", or phrases like "it's important to note", "it's worth noting", "this ensures". They sound like a machine wrote them.
 
 ## Go code
 
@@ -108,6 +115,8 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
 
 ## Comments
 
+- Don't start comments with `!`, `?` or `*` to get colors. They aren't Go style, and they show up in `go doc` and on GitHub. `.vscode/settings.json` already colors the title on line 1 and the repo's own markers with the Highlight extension: `Problem:`/`// problem`, `Fix:`/`// fix:`, `Try:`, `Note:`, `Real use:`, `Run:` and `Race check:`. Case doesn't matter.
+
 - A comment doesn't repeat a number that can change. Put the number in the code once and describe it in words:
 
   ```go
@@ -164,7 +173,7 @@ Each topic README has these sections, in this order:
    - Every row says what kind of thing it is. Either add a `Kind` column, or, when there are several of each kind, use one table per kind (like context/README.md: Type, Method, Variable, Function).
    - Syntax tables (fundamentals, channels, select) have four columns: Syntax, Kind, What it does, Example. Kinds: `keyword` (`go`, `default:`), `statement` (`select`, `for range`), `operator` (`&x`, `ch <- v`, `v.(T)`), `built-in` (`make`, `close`, `len`, `new`), `type` (`*T`, `chan<- T`, `any`), `declaration` (`type T struct`, `func (r T) M()`), `literal` (`T{a, b}`), `field`, `tag`, `value` (`nil`), `function`, `method`, and `rule` for a behaviour rather than code you write ("several cases ready", "`ch <- v` when full"). Join two with `+` when a row mixes them.
    - Pattern tables (patterns/) name the first column `Idiom` instead of adding a Kind column. Every row is an idiom.
-   - Package function tables add `Kind`, `Returns` and `Go` (the version it was added in). `Kind` goes right after the API column and says what each row is: `type` (including `var x T`), `function` (called on the package, like `sync.OnceFunc`), `method` (called on a value, like `once.Do`), or `variable` (like `context.DeadlineExceeded`). Use `built-in` or `syntax` for rows like `make(chan T, n)`. Show newer APIs too, even ones this repo can't use yet: `x.NewThing() | 1.27 | ... | none (this repo uses Go 1.25)`.
+   - Package function tables add `Kind`, `Returns` and `Go` (the version it was added in). `Kind` goes right after the API column and says what each row is: `type` (including `var x T`), `function` (called on the package, like `sync.OnceFunc`), `method` (called on a value, like `once.Do`), or `variable` (like `context.DeadlineExceeded`). Use `built-in` or `syntax` for rows like `make(chan T, n)`. Show newer APIs too, even ones this repo can't use yet: `x.NewThing() | 1.27 | ... | none (this repo uses Go 1.26)`.
 4. `## Examples`: a table with Example, Run, and What it shows.
 5. `## Things to remember`: short bullets. Bold the most important part of each.
 6. `## Go version notes` if something changed in a Go version.
