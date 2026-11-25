@@ -5,8 +5,8 @@
 //	readLines -> parse -> keepErrors -> main
 //
 // main only wants the first few errors. Once it has them, it calls cancel.
-// Every step sends with a select that also watches ctx.Done(), so each
-// one stops instead of waiting forever on a send nobody reads. Each step
+// Every step sends with a select that also watches ctx.Done(). So each
+// one stops, instead of waiting forever on a send nobody reads. Each step
 // prints how many items it handled before it stopped.
 //
 // main waits for every step with a WaitGroup. If one didn't stop, Go
@@ -18,8 +18,8 @@
 // Real use:
 //   - "find the first N matches" over a big file or a stream, like
 //     grep -m.
-//   - a pipeline started for one HTTP request. When r.Context() is done
-//     (the client left), every step stops.
+//   - a pipeline started for one HTTP request. When the client leaves,
+//     r.Context() is done, and every step stops.
 //
 // Run: go run ./02-concurrency/15-patterns/04-pipeline/02-cancel
 package main
