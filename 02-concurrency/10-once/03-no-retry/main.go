@@ -5,15 +5,16 @@
 //
 // With sync.OnceValues, the first result is final, even an error. Every
 // later call gets the same old error, and the app can't recover without a
-// restart. (sync.Once is the same: if the function panics, Do still counts
-// it as done.)
+// restart. sync.Once is the same. If the function panics, Do still counts
+// it as done.
 //
 // lazyClient fixes it with a mutex. It saves the client only when connect
 // works. After a failure, the next call tries again.
 //
 // Real use:
-//   - connecting to a database, cache or API on first use, when the first
-//     try can fail for a moment (DNS not ready, service still starting).
+//   - connecting to a database, cache or API on first use. The first try
+//     can fail for a short time, like when DNS isn't ready or the service
+//     is still starting.
 //     Use Once only when a failure should stop the program, like a bad
 //     config file.
 //
