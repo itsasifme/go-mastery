@@ -78,7 +78,7 @@ func worker(ctx context.Context, id int, emails <-chan int, wg *sync.WaitGroup) 
 				fmt.Printf("worker %d: no more emails, sent %d, last subscriber %d\n", id, sent, last)
 				return
 			}
-			time.Sleep(sendTime) // simulate sending one email; a started email always finishes
+			time.Sleep(sendTime) // simulate sending one email. A started email always finishes
 			sent, last = sent+1, subscriber
 		case <-ctx.Done():
 			fmt.Printf("worker %d: stopped, sent %d, last subscriber %d\n", id, sent, last)
