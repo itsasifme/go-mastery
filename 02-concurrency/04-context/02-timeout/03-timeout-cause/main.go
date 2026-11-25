@@ -4,7 +4,7 @@
 // every timeout in the program. WithTimeoutCause takes an error, and
 // context.Cause(ctx) returns it once the time runs out. query reads rows
 // in its own goroutine. When the timeout stops it, it reports how far it
-// got and which limit was hit, and checks the cause with errors.Is.
+// got and which limit was hit. Then it checks the cause with errors.Is.
 //
 // Note: the cancel function it returns takes no cause. If you call
 // cancel before the timeout, Cause is just context.Canceled.
