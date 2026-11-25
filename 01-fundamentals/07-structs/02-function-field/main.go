@@ -13,21 +13,22 @@ package main
 
 import "fmt"
 
-// Initialize the function Rectangle
+// Rectangle is a function type. It takes a length and a breadth and
+// returns the area.
 type Rectangle func(int, int) int
 
-// Create structure
+// Shapes holds a size, and a function that works out the area.
 type Shapes struct {
 	length  int
 	breadth int
 
-	// Function as a field of struct
+	// A field that holds a function
 	rect Rectangle
 }
 
 func main() {
 
-	// Assign values to struct variables
+	// Set the fields by name. rect gets a function that multiplies the sides.
 	s := Shapes{
 		length:  10,
 		breadth: 20,
