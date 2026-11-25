@@ -4,7 +4,7 @@ A pointer holds the memory address of a value. You can use it to read or change 
 
 ## Why
 
-**Problem:** Go passes everything by value. A function gets a copy, so it can't change the caller's variable, and a big struct is copied on every call.
+**Problem:** Go passes everything by value. A function gets a copy, so it can't change the caller's variable. A big struct is also copied on every call.
 
 **Solution:** pass a pointer, which is the address of the value. The function can change the original, and only the address (8 bytes) is copied.
 
