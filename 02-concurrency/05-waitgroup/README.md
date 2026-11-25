@@ -6,7 +6,7 @@
 
 **Problem:** waiting for many goroutines with channels means one `done` signal per goroutine, and counting the receives by hand (like [channels/02-closing/02-broadcast](../02-channels/02-closing/02-broadcast/)).
 
-**Solution:** `sync.WaitGroup`, a counter. Add to it before starting goroutines, each one marks itself done, and `Wait` blocks until the count is 0.
+**Solution:** `sync.WaitGroup`, a counter. You add to it before starting goroutines. Each one marks itself done, and `Wait` blocks until the count is 0.
 
 ## API
 
@@ -23,7 +23,7 @@
 | Example | Run | What it shows |
 | --- | --- | --- |
 | `01-basic` | `go run ./02-concurrency/05-waitgroup/01-basic` | Wait for two goroutines before the program ends |
-| `02-parallel-fetch` | `go run ./02-concurrency/05-waitgroup/02-parallel-fetch` | Load profile, orders and settings at once; total time is the slowest call |
+| `02-parallel-fetch` | `go run ./02-concurrency/05-waitgroup/02-parallel-fetch` | Load profile, orders and settings at once. The total time is the slowest call |
 | `03-close-results` | `go run ./02-concurrency/05-waitgroup/03-close-results` | Check many sites at once and close the results channel after the last one |
 | `04-graceful-shutdown` | `go run ./02-concurrency/05-waitgroup/04-graceful-shutdown` | Let running jobs finish before the program exits |
 | `05-add-too-late` | `go run ./02-concurrency/05-waitgroup/05-add-too-late` | Problem: `Add` inside the goroutine lets `Wait` return too early |
