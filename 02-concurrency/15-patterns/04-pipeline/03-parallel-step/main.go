@@ -7,7 +7,7 @@
 // A pipeline is only as fast as its slowest step. Here geocode calls a
 // slow map API, so it gets geocodeWorkers goroutines. They all read from
 // the same channel (see fan-out/01-basic) and write to the same channel.
-// The last worker to finish closes it, using a WaitGroup.
+// closeWhenDone closes it once every worker is done, using a WaitGroup.
 //
 // The results come out in a different order than they went in. If order
 // matters, carry an index with each item and sort at the end.
