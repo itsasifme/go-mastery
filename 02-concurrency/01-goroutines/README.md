@@ -4,9 +4,9 @@ A goroutine is a function that runs at the same time as the rest of the program.
 
 ## Why
 
-**Problem:** a program that does one thing at a time waits on every slow step, like a network call. OS threads can run things at the same time, but they're heavy: about 1 MB each and slow to start, so you can't have thousands.
+**Problem:** a program that does one thing at a time waits on every slow step, like a network call. OS threads can run things at the same time, but they're heavy. Each one takes about 1 MB and is slow to start, so you can't have thousands.
 
-**Solution:** goroutines. They start with about 2 KB and are scheduled by the Go runtime, so thousands or even millions are fine. Start one with `go f()`.
+**Solution:** goroutines. Each one starts with about 2 KB, and the Go runtime schedules them for you. So thousands or even millions are fine. Start one with `go f()`.
 
 ## API
 
