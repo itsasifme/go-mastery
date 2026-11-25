@@ -4,9 +4,9 @@ A semaphore limits how many goroutines can do something at the same time.
 
 ## Why
 
-**Problem:** starting one goroutine per job is easy, but a thousand jobs at once can open too many connections, use too much memory, or get you blocked by an API.
+**Problem:** starting one goroutine per job is easy. But a thousand jobs at once can open too many connections, use too much memory, or get you blocked by an API.
 
-**Solution:** a semaphore with a fixed number of slots. A job takes a slot before it starts and gives it back when it ends. When all slots are taken, the next job waits. A buffered channel works for simple cases. `semaphore.Weighted` adds jobs of different sizes and waiting with a context.
+**Solution:** a semaphore with a fixed number of slots. A job takes a slot before it starts and gives it back when it ends. When all slots are taken, the next job waits. A buffered channel works for simple cases. `semaphore.Weighted` also handles jobs of different sizes, and it can wait with a context.
 
 ## API
 
