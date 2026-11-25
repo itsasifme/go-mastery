@@ -6,7 +6,7 @@
 
 **Problem:** a WaitGroup only waits. If a goroutine fails, you need your own error variable, a mutex to set it safely, and your own way to stop the others.
 
-**Solution:** `errgroup.Group`. Start each job with `g.Go`, and `g.Wait` returns the first error. `WithContext` also gives you a `ctx` that's cancelled when a job fails, and `SetLimit` caps how many jobs run at once.
+**Solution:** `errgroup.Group`. Start each job with `g.Go`, and `g.Wait` returns the first error. `WithContext` also gives you a `ctx` that's cancelled when a job fails. `SetLimit` limits how many jobs run at once.
 
 ## API
 
