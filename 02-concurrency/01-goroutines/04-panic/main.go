@@ -20,7 +20,7 @@ import (
 func main() {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("main recovered:", r) // never runs because recover only works in the goroutine that panics
+			fmt.Println("main recovered:", r) // never runs: recover only works in the goroutine that panics
 		}
 	}()
 
