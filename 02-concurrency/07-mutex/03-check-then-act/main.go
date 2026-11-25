@@ -13,9 +13,9 @@
 // the card after the ticket is reserved. Comment out the line marked
 // "problem", then uncomment the "fix:" line.
 //
-// Note: when the stock is just one number, atomic can do the check and the
-// take in one step with CompareAndSwap, without a lock (see
-// atomic/04-compare-and-swap). A mutex is still needed when more than one
+// Note: when the stock is just one number, you don't need a lock. Atomic's
+// CompareAndSwap can check and take in one step (see
+// atomic/04-compare-and-swap). You still need a mutex when more than one
 // value must change together.
 //
 // Real use:
