@@ -10,8 +10,8 @@
 //	200ms   sent 5      that frees a slot, so 5 goes in. The producer is done.
 //	1000ms  got 5       the receiver works through the rest, one every 200ms
 //
-// The times are a few ms later in real runs, because starting goroutines
-// and waking them up takes a little time.
+// In real runs the times are a few ms later. Starting goroutines and
+// waking them up takes a little time.
 //
 // Note: the producer is done at ~200ms, but the total is still ~1s. The
 // slow receiver needs 5 x 200ms no matter what. A buffer doesn't make the
@@ -22,7 +22,7 @@
 // producer is only done at ~800ms.
 //
 // Real use:
-//   - absorbing bursts: a logger buffers log lines, so request handlers
+//   - handling bursts: a logger buffers log lines, so request handlers
 //     don't wait on slow disk writes.
 //   - reading a file quickly while a slower step processes each line.
 //
