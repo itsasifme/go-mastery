@@ -10,14 +10,14 @@
 // deadlock!". In a real server, other goroutines keep running, so there's
 // no error. The requests just hang.
 //
-// Fix: move the work into a helper that doesn't lock (hitRateLocked), and
-// say in its comment that the caller must hold the lock. Both methods call
-// it. Comment out the line marked "problem", then uncomment the "fix:" line.
+// Fix: move the work into a helper that doesn't lock (hitRateLocked). Its
+// comment says the caller must hold the lock. Both methods call it.
+// Comment out the line marked "problem", then uncomment the "fix:" line.
 //
 // Real use:
 //   - any type with a mutex and several methods: Get calls a validate
-//     method, Save calls Get, and so on. The "...Locked" helper is a
-//     common naming habit in Go code, including the standard library.
+//     method, Save calls Get, and so on. Naming the helper "...Locked" is
+//     a common habit in Go code, even in the standard library.
 //
 // Run: go run ./02-concurrency/07-mutex/04-nested-lock
 // Race check: go run -race ./02-concurrency/07-mutex/04-nested-lock
