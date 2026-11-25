@@ -8,8 +8,8 @@
 // mixed in with normal ones.
 //
 // Fix: handleUrgentFirst first checks the urgent channel with a select
-// that has a default. Only when no urgent job is waiting does it wait on
-// both channels. All urgent jobs now run first. Use the "fix:" line
+// that has a default. It waits on both channels only when no urgent job
+// is waiting. All urgent jobs now run first. Use the "fix:" line
 // instead of the line above it.
 //
 // Real use:
