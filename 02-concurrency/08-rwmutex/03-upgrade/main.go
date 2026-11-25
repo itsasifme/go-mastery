@@ -9,9 +9,9 @@
 // waits for itself forever. Go stops with "fatal error: all goroutines
 // are asleep - deadlock!".
 //
-// Fix: GetOrLoad drops RLock first, then takes Lock and looks again,
-// because another goroutine may have loaded the user in between. Comment
-// out the line marked "problem", then uncomment the "fix:" line.
+// Fix: GetOrLoad drops RLock first, then takes Lock and looks again.
+// Another goroutine may have loaded the user in between. Comment out the
+// line marked "problem", then uncomment the "fix:" line.
 //
 // Note: same cause as mutex/04-nested-lock. A lock doesn't know who holds
 // it, so a goroutine that locks again waits for itself.
