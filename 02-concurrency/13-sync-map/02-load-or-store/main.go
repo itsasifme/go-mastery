@@ -3,18 +3,18 @@
 //
 // An API gateway keeps one client per partner host, made on first use.
 // Five requests for the same new host arrive together. LoadOrStore stores
-// the first client and hands that same client to every other caller
-// (loaded is true for them). Load followed by Store would be a
-// check-then-act bug (see mutex/03-check-then-act): several requests see
-// "missing", and each stores its own client.
+// the first client. Every other caller gets that same client, and loaded
+// is true for them. Load followed by Store would be a check-then-act bug
+// (see mutex/03-check-then-act). Several requests would see "missing",
+// and each would store its own client.
 //
-// Problem: LoadOrStore takes a ready value, so every request builds a
+// Problem: LoadOrStore takes a ready value. So every request builds a
 // client first, and only one is kept. The others are thrown away. A real
 // client holds open connections, so each thrown-away one is a leak.
 //
 // Fix: store a sync.OnceValue instead of the client (see
 // once/02-once-value). Making the func is cheap. Only the stored one ever
-// runs, so exactly one client is built, and the other requests wait for
+// runs. So exactly one client is built, and the other requests wait for
 // it. Use the "fix:" line instead of the line above it.
 //
 // Real use:
