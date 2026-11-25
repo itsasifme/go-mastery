@@ -4,9 +4,9 @@
 
 ## Why
 
-**Problem:** a plain Go map isn't safe for concurrent use. If one goroutine writes while another reads, the program crashes with "concurrent map read and map write". The usual fix is a map with a `Mutex` or `RWMutex`, but under heavy load every goroutine waits on that one lock.
+**Problem:** a plain Go map isn't safe to use from many goroutines at once. If one goroutine writes while another reads, the program crashes with "concurrent map read and map write". The usual fix is a map with a `Mutex` or `RWMutex`. But under heavy load, every goroutine waits on that one lock.
 
-**Solution:** `sync.Map`. It does its own locking inside, and it's built for two cases: keys that are written once and read many times, and goroutines that read and write different keys. For anything else, the `sync` docs say a plain map with a lock is better: it's simpler, and you get type safety.
+**Solution:** `sync.Map`. It does its own locking inside. It's built for two cases: keys that are written once and read many times, and goroutines that read and write different keys. For anything else, the `sync` docs say a plain map with a lock is better. It's simpler, and you get type safety.
 
 ## API
 
@@ -44,4 +44,4 @@
 ## Go version notes
 
 - `Swap`, `CompareAndSwap` and `CompareAndDelete` came in Go 1.20. `Clear` came in Go 1.23.
-- Go 1.24 changed how `sync.Map` works inside, which made changes to the map faster, especially when goroutines use different keys.
+- Go 1.24 changed how `sync.Map` works inside. Changes to the map got faster, especially when goroutines use different keys.
