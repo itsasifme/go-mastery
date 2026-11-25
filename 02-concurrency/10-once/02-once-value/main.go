@@ -1,20 +1,22 @@
 // Once value: OnceValues and OnceFunc, without a separate Once variable.
 //
-// sync.OnceValues wraps a function that returns a value and an error.
-// The first call runs it. Every later call returns the same value and
-// error, without running it again. Here several goroutines read the
-// config, but the file is read only once.
+// You give sync.OnceValues a function that returns a value and an error.
+// It gives you back a new function. The first call runs yours. Every later
+// call gets the same value and error, and yours doesn't run again. Here
+// several goroutines ask for the config, but the file is read only once.
 //
-// sync.OnceFunc wraps a function with no result. Here it prints a warning
-// about an old setting only once, no matter how many requests hit it.
+// sync.OnceFunc does the same for a function that returns nothing. Here it
+// prints a warning about an old setting only once, even when many workers
+// call it.
 //
-// Note: compare with 01-lazy-init. There, a Once and a package variable
-// had to be kept in sync by hand. OnceValues keeps the value for you.
+// Note: compare with 01-lazy-init. There, you needed a Once and a separate
+// variable to hold the pool. OnceValues keeps the value for you.
 //
 // Real use:
 //   - loading a config file or reading secrets once, the first time
 //     they're needed: var loadConfig = sync.OnceValues(readConfig).
-//   - logging a deprecation warning once, instead of on every request.
+//   - logging "this setting will go away soon" once, instead of on every
+//     request.
 //
 // Run: go run ./02-concurrency/10-once/02-once-value
 package main
@@ -63,7 +65,7 @@ func worker(id int, wg *sync.WaitGroup) {
 	fmt.Printf("worker %d: port %d, log level %s\n", id, cfg.port, cfg.logLevel)
 }
 
-// readConfig pretends to read and parse a config file.
+// readConfig pretends to read a config file and turn it into an appConfig.
 func readConfig() (appConfig, error) {
 	fmt.Println("reading config.json...")
 	time.Sleep(readTime)
