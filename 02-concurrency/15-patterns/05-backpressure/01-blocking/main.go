@@ -19,7 +19,8 @@
 // Real use:
 //   - a log or metrics shipper that must never lose data, so it's fine to
 //     slow the app down a little.
-//   - a bounded job queue between an HTTP handler and background workers.
+//   - a job queue with a size limit, between an HTTP handler and
+//     background workers.
 //
 // Run: go run ./02-concurrency/15-patterns/05-backpressure/01-blocking
 package main
