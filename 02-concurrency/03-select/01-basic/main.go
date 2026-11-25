@@ -4,9 +4,9 @@
 // select waits on both channels and runs the case that's ready first, so
 // the fast one always wins.
 //
-// The channels have a buffer of 1, so the slow lookup can still send its
-// answer and exit after main stops listening (no goroutine leak, see
-// channels/04-buffered/01-basic).
+// The channels have a buffer of 1. So the slow lookup can still send its
+// answer and exit after main stops listening. No goroutine is left stuck
+// (see channels/04-buffered/01-basic).
 //
 // Real use:
 //   - query two replicas or caches and use whichever answers first.
