@@ -1,8 +1,8 @@
 // Stop workers: one cancel call stops every goroutine that shares the ctx.
 //
 // This is channels/02-closing/02-broadcast with a context instead of a stop
-// channel. Every worker gets the same ctx. cancel closes ctx.Done() once,
-// and a closed channel wakes everyone waiting on it, so every worker stops.
+// channel. Every worker gets the same ctx. cancel closes ctx.Done() once.
+// A closed channel wakes everyone waiting on it, so every worker stops.
 //
 //	broadcast                 this example
 //	close(stop)               cancel()
@@ -49,7 +49,7 @@ func main() {
 	fmt.Println("all workers stopped")
 }
 
-// worker works every 100ms until ctx is cancelled.
+// worker does one step every stepTime until ctx is cancelled.
 func worker(ctx context.Context, id int, done chan<- struct{}) {
 	defer func() { done <- struct{}{} }() // send, not close: others share done
 
