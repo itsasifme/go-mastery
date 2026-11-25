@@ -2,11 +2,11 @@
 //
 // A shipping partner's API allows only maxCalls calls at once from us.
 // Requests arrive all at once. Each one waits for a slot, but only up to
-// waitLimit. If none frees up in time, Acquire returns the context's
-// error, and the request answers "busy, try again" (HTTP 503) instead of
+// waitLimit. If no slot frees up in time, Acquire returns the context's
+// error. Then the request answers "busy, try again" (HTTP 503) instead of
 // hanging.
 //
-// TryAcquire is the extreme version: it doesn't wait at all.
+// TryAcquire goes one step further: it doesn't wait at all.
 //
 // Note: compare with 02-weighted. There, jobs waited as long as needed.
 // Database connections don't need this: database/sql already limits them
@@ -15,8 +15,8 @@
 // Real use:
 //   - an HTTP handler that calls sem.Acquire(r.Context(), 1) before calling
 //     a partner API, so the wait also ends if the client hangs up.
-//   - protecting a slow downstream service: fail fast instead of piling
-//     up waiting requests.
+//   - protecting a slow service that your code calls. Answer "busy" right
+//     away, instead of letting waiting requests pile up.
 //
 // Run: go run ./02-concurrency/11-semaphore/03-acquire-timeout
 package main
