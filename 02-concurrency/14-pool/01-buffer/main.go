@@ -4,7 +4,7 @@
 // a pool, every request makes a new buffer, and the garbage collector has
 // to clean up each one. With a pool, a request takes a buffer with Get,
 // uses it, and gives it back with Put. New only runs when the pool is
-// empty, so a handful of buffers serve every request.
+// empty. So a few buffers serve every request.
 //
 // Each request calls Reset first, because a buffer from the pool still
 // holds the last request's data (see 02-reset).
@@ -15,8 +15,8 @@
 // connections or open files.
 //
 // Real use:
-//   - fmt, encoding/json and net/http use pools inside, for print state,
-//     encode buffers and bufio readers and writers.
+//   - fmt, encoding/json and net/http use pools inside. They pool print
+//     state, encode buffers, and bufio readers and writers.
 //   - a JSON API or logger that builds each response or log line in a
 //     pooled bytes.Buffer.
 //
