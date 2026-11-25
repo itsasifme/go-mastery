@@ -1,6 +1,6 @@
 # sync.Pool
 
-`sync.Pool` keeps used objects so they can be reused, instead of making new ones and leaving the old ones to the garbage collector.
+`sync.Pool` keeps used objects so you can use them again. You don't have to make new ones and leave the old ones to the garbage collector.
 
 ## Why
 
@@ -30,10 +30,10 @@
 - **Reset what you get.** A pooled object still holds the last user's data. Leaving it in is a data leak between requests (`02`).
 - **The pool can drop objects at any time,** like during a garbage collection, without telling you. Only pool things that are cheap to lose. Never pool connections or open files: use a real connection pool for those, like `database/sql` has.
 - **Don't put back objects that grew too big.** Check the size before `Put`, like `fmt` does with its 64 KB limit (`03`).
-- **Store pointers, like `*bytes.Buffer`.** Putting a plain value or slice in the `any` makes a new allocation on every `Put`.
+- **Store pointers, like `*bytes.Buffer`.** If you put a plain value or slice in, wrapping it in `any` allocates memory on every `Put`.
 - Measure first. A pool only helps on hot paths that make a lot of garbage. Use `go test -bench` with `-benchmem` to see if it does.
 - Don't copy a `sync.Pool` after first use.
 
 ## Go version notes
 
-- Since Go 1.13, objects survive one garbage collection in the pool before they're dropped, so a collection doesn't empty it right away.
+- Since Go 1.13, objects in the pool survive one garbage collection before they're dropped. So a collection doesn't empty the pool right away.
