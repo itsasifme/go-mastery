@@ -10,7 +10,7 @@
 // After stop, nobody reads b anymore. A plain "out <- v" in produce would
 // wait forever: a goroutine leak (see channels/03-unbuffered/05-leak).
 // So produce watches stop too, and gives up its send once the reader is
-// gone. main waits on done for both producers, so a stuck producer shows
+// gone. main waits on done for both producers. So a stuck producer shows
 // up as a deadlock instead of hiding.
 //
 // Try: comment out "close(stop)". The loop then ends by itself once b closes.
