@@ -3,17 +3,17 @@
 // One normal channel ch is shared by a sender and a reader. sendData gets
 // it as send-only (chan<- int), and readData as receive-only (<-chan int).
 //
-// Part 1 converts by hand. sendCh and readCh aren't copies: they print the
+// Part 1 converts by hand. sendCh and readCh aren't copies. They print the
 // same address as ch, and each value is still received only once.
 //
-// Part 2 writes no conversion at all. Go converts ch automatically when
-// it's passed to a chan<- int or <-chan int parameter. Real code does this.
+// Part 2 has no conversion at all. When ch is passed to a chan<- int or
+// <-chan int parameter, Go converts it for you. Real code does this.
 //
 // Try: uncomment a "compile error" line. go build refuses it.
 //
 // Real use:
 //   - producers and consumers declared as func(out chan<- T) and
-//     func(in <-chan T), so neither side can misuse the channel.
+//     func(in <-chan T), so neither side can use the channel the wrong way.
 //   - a constructor that returns only the receive side, like a file
 //     watcher returning <-chan Event.
 //
