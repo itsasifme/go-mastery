@@ -7,11 +7,11 @@
 // Problem: the send loop and the read loop are in the same goroutine, one
 // after the other. The 11th send waits for a reader, but the read loop
 // can't start until sending is done. Each waits for the other: deadlock.
-// A bigger buffer only changes when it breaks, so the bug comes back as
-// soon as there's more data.
+// A bigger buffer only changes when it breaks. The bug comes back as soon
+// as there's more data.
 //
 // Fix: put the send loop in its own goroutine, worker. Then sending and
-// reading run at the same time: when the buffer is full, worker waits only
+// reading run at the same time. When the buffer is full, worker only waits
 // until main reads one value. Any buffer size works, even 0. Use the
 // "fix:" line instead of the line above it.
 //
