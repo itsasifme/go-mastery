@@ -13,9 +13,9 @@
 // time. Uncomment the two "fix:" lines.
 //
 // Real use:
-//   - every HTTP handler runs in its own goroutine, so a plain counter or
-//     map shared between handlers needs a lock (or an atomic, see
-//     atomic/01-counter).
+//   - every HTTP handler runs in its own goroutine. So a plain counter or
+//     map shared between handlers needs a lock. For a counter, an atomic
+//     works too (see atomic/01-counter).
 //   - run your tests with "go test -race" in CI to catch this early.
 //
 // Run: go run ./02-concurrency/07-mutex/01-race
