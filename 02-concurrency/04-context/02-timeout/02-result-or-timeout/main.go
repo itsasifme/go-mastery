@@ -17,8 +17,9 @@
 // Try: change the timeout to 3 * time.Second. Now both fetches send data.
 //
 // Real use:
-//   - a handler starts a call to another service in the background and
-//     waits for it, but answers the user with an error after 1 second.
+//   - a handler calls another service in the background and waits for
+//     the answer. If it takes more than 1 second, the handler answers the
+//     user with an error.
 //
 // Run: go run ./02-concurrency/04-context/02-timeout/02-result-or-timeout
 package main
