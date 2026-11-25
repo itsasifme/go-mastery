@@ -6,11 +6,11 @@
 // It's mutex/01-race again, even though the map itself is safe now.
 //
 // Problem: the totals are lower than expected, and they change between
-// runs. "go run -race" finds nothing, because every map call is
-// synchronized. The bug is in the logic, not the memory.
+// runs. "go run -race" finds nothing, because sync.Map locks every call
+// for you. The bug is in the logic, not the memory.
 //
 // Fix: keep a *atomic.Int64 per page. LoadOrStore adds it the first time
-// a page is seen, and every view after that is one atomic Add (see
+// a page is seen. After that, every view is one atomic Add (see
 // atomic/01-counter). The map only changes when a new page shows up. Use
 // the "fix:" line instead of the line above it.
 //
@@ -72,8 +72,8 @@ func addViewUnsafe(views *sync.Map, page string) {
 	views.Store(page, n+1)
 }
 
-// addView adds 1 to the page's atomic counter, adding the counter first
-// if the page is new.
+// addView adds 1 to the page's atomic counter. If the page is new, it
+// adds the counter first.
 func addView(views *sync.Map, page string) {
 	v, _ := views.LoadOrStore(page, new(atomic.Int64))
 	v.(*atomic.Int64).Add(1)
