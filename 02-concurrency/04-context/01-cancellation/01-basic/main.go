@@ -39,7 +39,7 @@ func main() {
 	<-done   // wait until worker really stopped
 }
 
-// worker does one step every 100ms until ctx is cancelled.
+// worker does one step every stepTime until ctx is cancelled.
 func worker(ctx context.Context, done chan<- struct{}) {
 	defer close(done) // tells main we're finished, however we return
 
