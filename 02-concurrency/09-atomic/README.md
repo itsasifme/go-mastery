@@ -42,7 +42,7 @@ Call these on a variable of one of the types above, like `count.Add(1)`.
 | `01-counter` | `go run ./02-concurrency/09-atomic/01-counter` | Request and byte counters updated by many handlers, with no lost updates |
 | `02-flag` | `go run ./02-concurrency/09-atomic/02-flag` | A maintenance mode switch that workers check before each job |
 | `03-pointer` | `go run ./02-concurrency/09-atomic/03-pointer` | Hot reload: swap a whole config while handlers keep reading it |
-| `04-compare-and-swap` | `go run ./02-concurrency/09-atomic/04-compare-and-swap` | Problem: check then take hands out more coupons than exist, with no race reported. CompareAndSwap fixes it |
+| `04-compare-and-swap` | `go run ./02-concurrency/09-atomic/04-compare-and-swap` | Problem: checking, then taking, hands out more coupons than exist, and `-race` finds nothing. CompareAndSwap fixes it |
 | `05-late-read` | `go run ./02-concurrency/09-atomic/05-late-read` | Jobs read a shared atomic ID too late and get the same one. No race, still wrong |
 
 ## Things to remember
@@ -51,7 +51,8 @@ Call these on a variable of one of the types above, like `count.Add(1)`.
 - **Don't mix atomic and normal reads or writes on the same variable.** The typed atomics make that hard to do by mistake.
 - **Never change a value after you `Store` its pointer.** Build a new one and `Store` that (`03`).
 - A check followed by a separate change isn't safe. Use a `CompareAndSwap` loop (`04`).
-- **Atomic stops the race, not wrong logic.** A goroutine that needs the value from its round must get a copy before `go`, not read the shared value later (`05`).
+- **Give a `CompareAndSwap` loop a retry limit.** A swap only fails when another goroutine changed the value first, so the loop does end. But one unlucky goroutine can lose again and again. At the limit, return a "try again" error, so the user isn't left waiting (`04`).
+- **Atomic stops the race, but not wrong logic.** If a goroutine needs the value from its own loop round, give it a copy before `go`. Don't let it read the shared value later (`05`).
 - For a one-time "stop" that many goroutines must notice, use `ctx`. `atomic.Bool` is for a value that flips back and forth (`02`).
 
 ## Go version notes
