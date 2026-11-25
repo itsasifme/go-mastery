@@ -8,8 +8,8 @@
 //
 // Real use:
 //   - a handler returns early on an error and never reads the result. In a
-//     server this doesn't deadlock, it leaks a goroutine on every request
-//     (see 05-leak).
+//     server this doesn't deadlock. Instead, it leaks a goroutine on every
+//     request (see 05-leak).
 //
 // Run: go run ./02-concurrency/02-channels/03-unbuffered/02-blocked-send
 package main
