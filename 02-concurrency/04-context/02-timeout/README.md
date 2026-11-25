@@ -6,7 +6,7 @@ See the [full API overview](../README.md#api).
 
 ## Why
 
-**Problem:** a slow database or API call can hang a request forever. `time.After` in a `select` only stops the waiting, not the work, which keeps running ([select/04-timeout](../../03-select/04-timeout/)).
+**Problem:** a slow database or API call can hang a request forever. `time.After` in a `select` only stops the waiting. The work keeps running ([select/04-timeout](../../03-select/04-timeout/)).
 
 **Solution:** `WithTimeout` cancels the ctx after a set time. Work that watches `ctx.Done()` stops itself.
 
