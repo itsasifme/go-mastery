@@ -155,7 +155,9 @@ package main
 
 - Add a `Race check:` line right after `Run:` in every example about avoiding races (`mutex`, `rwmutex`, `atomic`), and in any other example where `go run -race` reports a race (like goroutines/03-loop-variable). Problem examples that show a race should say in the header that `-race` reports it. Fixed and safe examples should run clean.
 
-- Problem examples ship **showing the problem**. The fix stays commented out with a `// fix:` marker on the line. If lines must be removed, mark them `// problem`.
+- Problem examples show the problem and the fix. Pick the way that fits:
+  - **Both run:** when the problem doesn't stop the program, put the problem and the fix in two functions with clear names (like `averageIntDivide` and `averageFloatDivide`), and run both in `main`. One run shows the wrong result next to the right one. The header says "main runs both, so you can compare."
+  - **Comment toggle:** when the problem stops the program (deadlock, panic, a hang) or can't run next to the fix, ship **showing the problem**. The fix stays commented out with a `// fix:` marker on the line. If lines must be removed, mark them `// problem`.
 - **Real use** gives concrete production cases that name real APIs: `r.Context()`, `db.QueryContext`, `signal.NotifyContext`, `json.Unmarshal(data, &user)`. Don't write vague bullets like "useful in servers".
 - When an example builds on an earlier one, say what's different. For example: "Compare with select/04-timeout: there, main stopped waiting, but the work kept running." A small side-by-side table is fine too.
 - Links to other examples:
