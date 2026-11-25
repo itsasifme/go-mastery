@@ -12,11 +12,12 @@
 // away. ctx is cancelled, the other fetches print "stopped", and Wait
 // returns ghost's error. No total is printed.
 //
-// Note: cart and prices are linked only by index. Two slices kept in step
-// like this usually smell, because sorting or filtering one breaks the
-// link. Here it's the standard Go way to collect results (errgroup's own
-// docs do it): make the slice first, and each goroutine writes only its
-// own index. No lock is needed, and the results keep the cart's order.
+// Note: cart and prices are matched only by index. prices[i] is the price
+// of cart[i]. Two slices kept in step like this are usually a bad sign. If
+// you sort or filter one, the match breaks. Here it's fine. It's the usual
+// Go way to collect results, and errgroup's own docs do it too. Make the
+// slice first, and let each goroutine write only to its own index. Then
+// no lock is needed, and the results stay in the cart's order.
 //
 // Real use:
 //   - an API that loads several things for one response (prices, stock,
