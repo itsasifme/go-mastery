@@ -2,7 +2,7 @@
 //
 // query reads rows in its own goroutine. Reading every row takes 2
 // seconds, but ctx times out after 500ms. query takes ctx as its first
-// parameter and checks ctx.Done() between rows, so it stops itself and
+// parameter and checks ctx.Done() between rows. So it stops itself and
 // reports ctx.Err(): "context deadline exceeded".
 //
 // Compare with select/04-timeout: there, main stopped waiting, but the
