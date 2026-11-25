@@ -1,12 +1,12 @@
 // Errors: keep going when some jobs fail, and collect what failed.
 //
 // A billing job charges a list of invoices. Some cards are declined. One
-// failure shouldn't stop the others, so each result carries its own err.
+// failure shouldn't stop the others, so each result holds its own err.
 // main collects the failures into a list to retry later or show to
 // support.
 //
 // Note: compare with errgroup/03-with-context. There, the first error
-// stopped everything. Pick based on the job: "all or nothing" or "do as
+// stopped everything. Pick what fits the job: "all or nothing" or "do as
 // many as you can".
 //
 // Real use:
