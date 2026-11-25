@@ -93,7 +93,7 @@ func (u *User) GetName() string   // ❌
 // Constructors: New + type
 func NewServer() *Server          // ✅
 
-// Receivers: 1–2 letters, the same in every method
+// Receivers: 1 or 2 letters, the same in every method
 func (s *Server) Start()          // ✅
 func (this *Server) Start()       // ❌
 
@@ -273,7 +273,7 @@ Google follows all of Part 1. This part shows what it adds.
 
 **Order of importance:** 1. Clarity → 2. Simplicity → 3. Concision → 4. Maintainability → 5. Consistency
 
-**Least mechanism:** use plain language features (slice, map, channel, loop) before a library, and the standard library before an outside package.
+**Least mechanism** (Google's name for "use the simplest tool"): use plain language features (slice, map, channel, loop) before a library. Use the standard library before an outside package.
 
 ### 🏷️ Naming
 
@@ -301,7 +301,7 @@ import foopb "example.com/foo/proto"
 
 ### 💬 Comments
 
-Say what the caller must know: is it safe for goroutines, does the zero value work, what errors come back.
+Say what the caller needs to know. Is it safe to use from several goroutines? Does the zero value work? What errors can come back?
 
 ```go
 // Server handles HTTP requests for the user API.
@@ -561,7 +561,7 @@ const (
 
 **Order in a file:** `const` → `var` → types → `NewX()` → methods → plain functions.
 
-**Also:** avoid mutable globals and `init()`, keep variable scope small, use raw strings to avoid escaping.
+**Also:** avoid global variables that change, and avoid `init()`. Keep variable scope small. Use raw strings so you don't need escapes.
 
 **Line length:** soft limit of **99 characters**.
 
@@ -619,7 +619,7 @@ The most important and most popular rules from all three, in one place.
 | 3 | Acronyms in one case | `userID`, `ServeHTTP` | Go |
 | 4 | Short package names, no repeating | `user.New()`, not `user.NewUser()` | Go |
 | 5 | No `Get` in getters | `u.Name()` | Go |
-| 6 | Receivers: 1–2 letters | `func (s *Server)` | Go |
+| 6 | Receivers: 1 or 2 letters | `func (s *Server)` | Go |
 | 7 | `error` last, always checked first | `if err != nil { return err }` | Go |
 | 8 | Wrap errors with short context | `fmt.Errorf("get user: %w", err)` | Go · Google · Uber |
 | 9 | Log or return an error, not both | `return fmt.Errorf(...)` | Uber |
