@@ -15,6 +15,11 @@
 // every request got the same pool. The fake pool here has no connections
 // inside, because this lesson is about Once.
 //
+// Note: "once" means once per running program. With many servers, each one
+// opens its own pool, and that's what you want. For something that must
+// happen once for the whole app, like sending a welcome email, use a
+// unique key in the database instead.
+//
 // Real use:
 //   - opening a sql.DB, a Redis client or an S3 client on first use.
 //   - compiling a big regexp.MustCompile or loading a template only when
@@ -62,6 +67,8 @@ func handle(id int, wg *sync.WaitGroup) {
 
 // getDB returns the shared pool, opening it on the first call.
 func getDB() *dbPool {
+	// Do also makes openPool's write to pool visible here, so reading pool
+	// below needs no lock.
 	dbOnce.Do(openPool)
 	return pool
 }
