@@ -17,6 +17,8 @@ package main
 import "fmt"
 
 func main() {
+	// Buffer of 1, so main can send to its own channels and then select on
+	// them. Unbuffered, the first send would wait forever.
 	a := make(chan int, 1)
 	b := make(chan int, 1)
 	wins := map[string]int{}
