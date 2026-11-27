@@ -47,11 +47,16 @@ func main() {
 	}
 	wg.Wait()
 
-	fmt.Println("expected", workerCount*viewsPerWorker, "per page")
+	const expected = workerCount * viewsPerWorker // views per page
+	var total int64
 	for _, page := range pages {
 		v, _ := views.Load(page)
-		fmt.Printf("%-9s %d\n", page, viewCount(v))
+		counted := viewCount(v)
+		total += counted
+		fmt.Printf("%-9s %6d of %d, lost %d\n", page, counted, expected, expected-counted)
 	}
+	totalExpected := int64(expected * len(pages))
+	fmt.Printf("%-9s %6d of %d, lost %d\n", "total", total, totalExpected, totalExpected-total)
 }
 
 // countViews counts viewsPerWorker views on every page.
@@ -79,8 +84,8 @@ func addView(views *sync.Map, page string) {
 	v.(*atomic.Int64).Add(1)
 }
 
-// viewCount reads a stored count: an int from addViewUnsafe, or a
-// *atomic.Int64 from addView.
+// viewCount reads a stored count: an int from addViewUnsafe, or
+// a *atomic.Int64 from addView.
 func viewCount(v any) int64 {
 	switch n := v.(type) {
 	case int:
