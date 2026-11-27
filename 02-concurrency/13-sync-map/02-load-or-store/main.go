@@ -1,21 +1,24 @@
-// Load or store: get the value for a key, or add it if it's missing, in
-// one step.
+// Load or store: get a key's value, or add it if the key is missing.
 //
-// An API gateway keeps one client per partner host, made on first use.
-// Five requests for the same new host arrive together. LoadOrStore stores
-// the first client. Every other caller gets that same client, and loaded
-// is true for them. Load followed by Store would be a check-then-act bug
-// (see mutex/03-check-then-act). Several requests would see "missing",
-// and each would store its own client.
+// A gateway calls partner APIs. It keeps one client per partner host, and
+// makes it the first time that host is needed. Here, several requests for
+// the same new host arrive at once.
 //
-// Problem: LoadOrStore takes a ready value. So every request builds a
-// client first, and only one is kept. The others are thrown away. A real
-// client holds open connections, so each thrown-away one is a leak.
+// LoadOrStore does "get it, or add it" in one step. The first caller adds
+// its client, and everyone after gets that same client back. Load, then
+// Store, would be two steps. Several requests could all see "missing" and
+// each add their own (see mutex/03-check-then-act).
 //
-// Fix: store a sync.OnceValue instead of the client (see
-// once/02-once-value). Making the func is cheap. Only the stored one ever
-// runs. So exactly one client is built, and the other requests wait for
-// it. Use the "fix:" line instead of the line above it.
+// Problem: you must build the client before you call LoadOrStore. So every
+// request builds one, but only one is kept. The rest are thrown away. A
+// real client opens connections, so those are wasted.
+//
+// Fix: store a sync.OnceValue instead (see once/02-once-value). It's a
+// small func that builds the client the first time it's called. Making the
+// func costs almost nothing. Only the stored one is ever called, so only
+// one client is built, and the other requests wait for it. It also calls
+// Load first, so once the host is stored, no new func is made at all. Use
+// the "fix:" line instead of the line above it.
 //
 // Real use:
 //   - one HTTP or gRPC client per upstream host, one DB pool per tenant,
@@ -56,17 +59,47 @@ func (g *gateway) Client(host string) *client {
 	c := g.newClient(host)
 	v, loaded := g.clients.LoadOrStore(host, c)
 	if loaded {
-		fmt.Printf("  client #%d thrown away\n", c.id)
+		fmt.Printf("  client #%d built, then thrown away\n", c.id) // another was stored first
+	} else {
+		fmt.Printf("  client #%d built and kept\n", c.id)
 	}
 	return v.(*client)
 }
 
-// ClientOnce returns the client for host. Only the first caller's build
-// runs, and the others wait for it.
+// ClientOnce returns the client for host. Only the stored builder is
+// called, so one client is built, and the other callers wait for it.
 func (g *gateway) ClientOnce(host string) *client {
+	// Fast path: the host is already stored, so nothing new is made. Most
+	// calls stop here.
+	if v, ok := g.clients.Load(host); ok {
+		fmt.Println("  builder already stored, nothing new made")
+		return v.(func() *client)()
+	}
+
+	// Slow path: the host is missing. Several requests can get here at
+	// once, so use LoadOrStore, not Store. The first build is kept, and the
+	// others are thrown away without ever being called.
 	build := sync.OnceValue(func() *client { return g.newClient(host) })
-	v, _ := g.clients.LoadOrStore(host, build)
-	return v.(func() *client)()
+	v, loaded := g.clients.LoadOrStore(host, build)
+	if loaded {
+		// This request's builder is dropped. Nobody calls it, so the
+		// newClient inside it never runs. c below is the winner's client.
+		fmt.Println("  my builder wasn't stored, so newClient never ran for it")
+	}
+	c := v.(func() *client)()
+	if !loaded {
+		fmt.Printf("  client #%d built and kept\n", c.id)
+	}
+	return c
+}
+
+// keptCount returns how many clients the map holds, one per host.
+func (g *gateway) keptCount() (kept int64) {
+	g.clients.Range(func(_, _ any) bool {
+		kept++
+		return true // keep going to the next host
+	})
+	return kept
 }
 
 // buildTime is how long building one client takes.
@@ -86,12 +119,13 @@ func main() {
 	}
 	wg.Wait()
 
-	fmt.Println("clients built:", g.built.Load(), "- kept: 1")
+	built, kept := g.built.Load(), g.keptCount()
+	fmt.Println("clients built:", built, "- kept:", kept, "- thrown away:", built-kept)
 }
 
 // handle is one request that needs the client for host.
 func handle(g *gateway, request int, host string) {
 	c := g.Client(host) // problem: builds a client even when one is already stored
-	// c := g.ClientOnce(host) // fix: only the stored build runs
+	// c := g.ClientOnce(host) // fix: only the stored builder is called
 	fmt.Printf("request %d uses client #%d\n", request, c.id)
 }
