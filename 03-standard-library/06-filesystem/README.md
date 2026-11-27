@@ -4,6 +4,20 @@
 
 Read, write, and walk through files with `os` and `path/filepath`.
 
+## Import
+
+```go
+import (
+	"os"
+	"path/filepath"
+)
+```
+
+Standard library, so there is nothing to download.
+
+- `os`: you write `os.ReadFile`.
+- `path/filepath`: the package name is `filepath`, the last part of the path, so you write `filepath.Join`.
+
 ## Examples to add
 
 - `01-read-write`: `os.ReadFile` and `os.WriteFile`
