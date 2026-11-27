@@ -8,6 +8,16 @@
 
 **Solution:** `errgroup.Group`. Start each job with `g.Go`, and `g.Wait` returns the first error. `WithContext` also gives you a `ctx` that's cancelled when a job fails. `SetLimit` limits how many jobs run at once.
 
+## Import
+
+```go
+import "golang.org/x/sync/errgroup"
+```
+
+Not in the standard library. It comes from the `golang.org/x/sync` module. `go.mod` says which version this repo uses.
+
+- `golang.org/x/sync/errgroup`: the package name is `errgroup`, the last part of the path, so you write `errgroup.WithContext`.
+
 ## API
 
 | API | Kind | Returns | What it does | Example |
@@ -36,7 +46,3 @@
 - `g.Go` takes a `func() error`. Keep the closure to one line that calls a named function.
 - Each goroutine can write to its own slice index without a lock. Read the slice only after `Wait` (`04`).
 - If you want every job to run even when some fail, use a worker pool that collects errors instead (see [patterns/03-worker-pool/03-errors](../15-patterns/03-worker-pool/03-errors/)).
-
-## Package note
-
-`errgroup` isn't in the standard library. It comes from `golang.org/x/sync`. This repo uses `v0.16.0`.
