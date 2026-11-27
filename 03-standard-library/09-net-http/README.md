@@ -4,6 +4,20 @@
 
 Small HTTP servers and clients. Big REST API projects don't belong in this repo.
 
+## Import
+
+```go
+import (
+	"net/http"
+	"net/http/httptest"
+)
+```
+
+Standard library, so there is nothing to download.
+
+- `net/http`: the package name is `http`, the last part of the path, so you write `http.HandleFunc`.
+- `net/http/httptest`: the package name is `httptest`, the last part of the path, so you write `httptest.NewRecorder`.
+
 ## Examples to add
 
 - `01-server`: routes like `GET /items/{id}` with `http.ServeMux`
