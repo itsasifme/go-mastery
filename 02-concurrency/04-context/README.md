@@ -14,6 +14,16 @@ A `context.Context` tells goroutines when to stop. It can carry a cancel signal,
 
 **Solution:** one standard type for all of it. Google published it as `golang.org/x/net/context` in 2014, and it joined the standard library in Go 1.7 (2016). You pass `ctx` as the first parameter through the whole call chain. It carries the cancel signal, the deadline, and request values. The standard library uses it everywhere: `r.Context()` in net/http, `db.QueryContext`, `exec.CommandContext`.
 
+## Import
+
+```go
+import "context"
+```
+
+Standard library, so there is nothing to download.
+
+- `context`: you write `context.WithCancel`.
+
 ## API
 
 The whole package: 3 types, 4 interface methods, 2 errors and 12 functions.
