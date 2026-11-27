@@ -14,6 +14,16 @@ See the [full API overview](../README.md#api).
 
 **Solution:** `WithoutCancel` keeps the values but drops the cancellation.
 
+## Import
+
+```go
+import "context"
+```
+
+Standard library, so there is nothing to download.
+
+- `context`: you write `context.AfterFunc`.
+
 ## API
 
 | API | Kind | Returns | Go | What it does | Example |
