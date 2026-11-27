@@ -8,6 +8,11 @@
 // Both sides watch ctx.Done() in a select. Without that, queueEmails
 // would block forever on a send that no worker will take.
 //
+// When ctx is done, queueEmails also closes emails. Then both cases in a
+// worker's select are ready, and Go picks one at random. So each worker
+// prints "stopped" or "no more emails", and it changes between runs. Both
+// mean it stopped.
+//
 // Note: compare with 01-basic. There, the pool always ran until jobs was
 // empty.
 //
