@@ -18,6 +18,11 @@
 // atomic/04-compare-and-swap). You still need a mutex when more than one
 // value must change together.
 //
+// Note: a mutex only works inside one server. The tickets belong to the
+// whole app, so with many servers each one has its own lock, and the last
+// ticket gets sold again. Let the database check and take in one step:
+// UPDATE tickets SET left = left - 1 WHERE id = $1 AND left > 0.
+//
 // Real use:
 //   - selling the last item in stock, booking the last seat, or using a
 //     coupon that has a limit.
