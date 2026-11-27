@@ -8,6 +8,16 @@
 
 **Solution:** `sync.Mutex`. Call `Lock` before you touch the data and `Unlock` after. While one goroutine holds the lock, the others wait at `Lock`.
 
+## Import
+
+```go
+import "sync"
+```
+
+Standard library, so there is nothing to download.
+
+- `sync`: you write `sync.Mutex`.
+
 ## API
 
 | API | Kind | Returns | Go | What it does | Example |
@@ -36,6 +46,7 @@
 - **`Lock` only waits for the same mutex. It doesn't guard a variable by itself.** Give each piece of data one mutex, and share it by pointer. Lock it everywhere the data is read or written (`06`).
 - **Never copy a mutex.** A copy is a separate mutex that protects nothing. `go vet` warns you about it (`06`).
 - **A lock on each step isn't enough.** A check and the change that depends on it must happen under one lock (`03`).
+- **A mutex only works inside one server.** Fine for a counter or cache in this server. For ticket stock or account balances, let the database check and change in one step (`03`). See [One server or many?](../README.md#one-server-or-many).
 - **Locking the same mutex twice in one goroutine gets it stuck forever.** Go mutexes don't know who holds them (`04`).
 - **Use `TryLock` to skip a job that's already running. It only works inside one server.** If it returns `false`, don't call `Unlock`. Across servers, use a database lock (`05`).
 - Find races with `go run -race` or `go test -race`. On Windows, `-race` needs `CGO_ENABLED=1` and a C compiler like gcc.
