@@ -54,6 +54,8 @@ func main() {
 		c.data <- m
 	}
 
+	// c.Close is a method value: a func that remembers c, so AfterFunc can
+	// call it later with no arguments.
 	stop := context.AfterFunc(ctx, c.Close) // close the connection when ctx is done
 	defer stop()
 
