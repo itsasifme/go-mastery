@@ -9,6 +9,10 @@
 // one stops, instead of waiting forever on a send nobody reads. Each step
 // prints how many items it handled before it stopped.
 //
+// A step that's waiting to receive stops a different way: the step before
+// it closes its channel, so its range loop ends. That's why parse sometimes
+// prints "input closed" instead of "stopped". Both mean it stopped.
+//
 // main waits for every step with a WaitGroup. If one didn't stop, Go
 // would report a deadlock.
 //
