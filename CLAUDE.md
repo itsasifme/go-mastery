@@ -4,7 +4,7 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
 
 ## Repo layout
 
-- One Go module (`github.com/itsasifme/go-mastery`, Go 1.26) at the root. No third-party packages unless there's no other way.
+- One Go module (`github.com/itsasifme/go-mastery`) at the root. The Go version is set in `go.mod`. No third-party packages unless there's no other way.
 - Three parts: `01-fundamentals/`, `02-concurrency/`, `03-standard-library/`.
 - Every folder starts with a 2-digit number in learning order. Numbers start at `01` in every folder and have no gaps. Planned topics already have a folder, so numbers never change.
 - Each example is its own folder with one `main.go`, run with `go run ./<path>`.
@@ -20,6 +20,7 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
   - Use a Go term only after it's been taught, or say what it means in a few words the first time.
   - No semicolons in sentences, no "i.e.", "e.g.", "etc." (write "like" or "for example"), and no em dashes (—). Use a period and start a new sentence.
   - Keep parentheses short. If the part in brackets is a full idea, make it its own sentence.
+- Don't write versions that change over time: the repo's Go version, or a package version like `golang.org/x/sync v0.16.0`. They go stale after the next upgrade. Say "see `go.mod`" instead. The Go version that **added** a feature is fine (the `Go` column, "Go 1.25+"), because that never changes.
 - Don't use words like "leverage", "robust", "deliberately", "seamlessly", "crucial", "delve", "mechanism", "semantics", "facilitate", "aforementioned", or phrases like "it's important to note", "it's worth noting", "this ensures". They sound like a machine wrote them.
 
 ## Go code
@@ -45,7 +46,7 @@ Rules for working on this repo. The goal: learn Go from basic to advanced, with 
   - the closure is the lesson (like the loop variable example)
   - `defer func() { recover() }()`
   - `defer func() { done <- struct{}{} }()` when several goroutines share one `done`
-  - an API that only takes a func, like errgroup's `g.Go` or singleflight's `g.Do`. Keep it to one line that calls a named function: `g.Go(func() error { return fetch(ctx, url) })`. All the work stays in the named function.
+  - an API that only takes a func, like errgroup's `g.Go`, singleflight's `g.Do` or `wg.Go`. Keep it to one line that calls a named function: `g.Go(func() error { return fetch(ctx, url) })`. All the work stays in the named function. The one exception is `Range` (`sync.Map`, `iter`): one statement, then `return true` to keep going.
 
 - A function name says exactly what it does. `printBoth` prints two channels. `merge` would sound like fan-in, which returns a channel. Other good names: `readUntilDone`, `stopAfter`, `handleUrgentFirst`.
 - Examples under `02-concurrency/` run their work in a goroutine, even when the lesson could be shown in `main` alone. That's what the topic is about.
@@ -159,6 +160,7 @@ package main
   - **Both run:** when the problem doesn't stop the program, put the problem and the fix in two functions with clear names (like `averageIntDivide` and `averageFloatDivide`), and run both in `main`. One run shows the wrong result next to the right one. The header says "main runs both, so you can compare."
   - **Comment toggle:** when the problem stops the program (deadlock, panic, a hang) or can't run next to the fix, ship **showing the problem**. The fix stays commented out with a `// fix:` marker on the line. If lines must be removed, mark them `// problem`.
 - **Real use** gives concrete production cases that name real APIs: `r.Context()`, `db.QueryContext`, `signal.NotifyContext`, `json.Unmarshal(data, &user)`. Don't write vague bullets like "useful in servers".
+- When an example uses a tool that only works inside one program (mutex, atomic, Once, singleflight, semaphore, a cache in memory) for something that real apps run on many servers, add a `Note:` that says so. Decide with "what breaks if each server does this on its own?". If the result would be **wrong** (shared stock, a limit for the whole app, "only once ever"), name the shared fix: the database, Redis or a queue. If it's only **extra work** or copies that differ for a short time, say it's usually fine. Start with "This only works inside one server." or similar, like mutex/05-try-lock. The rule is explained in 02-concurrency/README.md ("One server or many?").
 - When an example builds on an earlier one, say what's different. For example: "Compare with select/04-timeout: there, main stopped waiting, but the work kept running." A small side-by-side table is fine too.
 - Links to other examples:
   - another topic: the topic name without its number, then the example folder with its number, like `(see channels/02-closing/02-broadcast)` or `(see waitgroup/01-basic)`. Never `(see 05-waitgroup)` or `(see 02-closing)`.
@@ -171,14 +173,22 @@ Each topic README has these sections, in this order:
 
 1. Title and one or two lines on what it is. A sub-topic README adds `See the [full API overview](../README.md#api).` under it.
 2. `## Why`: **Problem:** and **Solution:**, each in its own paragraph (with a blank line between them).
-3. `## API`: a table of the syntax or functions, with a link to the example that shows each one (`none` if no example shows it).
+3. `## Import`: only for topics whose API comes from a package (like `sync`, `context`, `encoding/json`, `golang.org/x/sync/semaphore`). Skip it for syntax topics (goroutines, channels, select, patterns, most fundamentals). It has:
+   - a Go code block with the `import` line, like `import "sync/atomic"`, or an `import (...)` block when the topic uses several packages.
+   - one line on where it comes from: "Standard library, so there is nothing to download." Or, for anything else: "Not in the standard library. It comes from the `golang.org/x/sync` module. `go.mod` says which version this repo uses."
+   - one bullet per import path with the package name and how you call it. When the name isn't the whole path, say it's the last part: "`encoding/json`: the package name is `json`, the last part of the path, so you write `json.Marshal`."
+   - Terms: the **import path** is what goes in `import "..."`. The **package name** is what you type in code. The **module** is what `go.mod` lists (`golang.org/x/sync`).
+   - A planned topic with no `## Why` yet puts `## Import` right before its first section.
+4. `## API`: a table of the syntax or functions, with a link to the example that shows each one (`none` if no example shows it).
    - Every row says what kind of thing it is. Either add a `Kind` column, or, when there are several of each kind, use one table per kind (like context/README.md: Type, Method, Variable, Function).
    - Syntax tables (fundamentals, channels, select) have four columns: Syntax, Kind, What it does, Example. Kinds: `keyword` (`go`, `default:`), `statement` (`select`, `for range`), `operator` (`&x`, `ch <- v`, `v.(T)`), `built-in` (`make`, `close`, `len`, `new`), `type` (`*T`, `chan<- T`, `any`), `declaration` (`type T struct`, `func (r T) M()`), `literal` (`T{a, b}`), `field`, `tag`, `value` (`nil`), `function`, `method`, and `rule` for a behaviour rather than code you write ("several cases ready", "`ch <- v` when full"). Join two with `+` when a row mixes them.
+   - When a topic has both a built-in way (no import) and a package way, use one table for each, with a short heading like "Built in: a buffered channel" and "`golang.org/x/sync/semaphore`".
    - Pattern tables (patterns/) name the first column `Idiom` instead of adding a Kind column. Every row is an idiom.
-   - Package function tables add `Kind`, `Returns` and `Go` (the version it was added in). `Kind` goes right after the API column and says what each row is: `type` (including `var x T`), `function` (called on the package, like `sync.OnceFunc`), `method` (called on a value, like `once.Do`), or `variable` (like `context.DeadlineExceeded`). Use `built-in` or `syntax` for rows like `make(chan T, n)`. Show newer APIs too, even ones this repo can't use yet: `x.NewThing() | 1.27 | ... | none (this repo uses Go 1.26)`.
-4. `## Examples`: a table with Example, Run, and What it shows.
-5. `## Things to remember`: short bullets. Bold the most important part of each.
-6. `## Go version notes` if something changed in a Go version.
+   - Package function tables add `Kind`, `Returns` and `Go` (the version it was added in). `Kind` goes right after the API column and says what each row is: `type` (including `var x T`), `function` (called on the package, like `sync.OnceFunc`), `method` (called on a value, like `once.Do`), or `variable` (like `context.DeadlineExceeded`). Use `built-in` or `syntax` for rows like `make(chan T, n)`. Show newer APIs too, even ones this repo can't use yet: `x.NewThing() | 1.27 | ... | none (newer than this repo's Go version)`.
+5. `## Examples`: a table with Example, Run, and What it shows.
+6. `## X or Y?`, only when the topic has a tool people mix it up with, like "`once.Do` or `OnceFunc`?", "singleflight or `Once`?" and "Atomic or `Mutex`?". One short line on what they share, a comparison table, and a line on which to pick. Optional.
+7. `## Things to remember`: short bullets. Bold the most important part of each.
+8. `## Go version notes` if something changed in a Go version.
 
 When a topic gets code:
 
