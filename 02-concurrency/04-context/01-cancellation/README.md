@@ -10,6 +10,16 @@ See the [full API overview](../README.md#api).
 
 **Solution:** `WithCancel` gives you a `ctx` and a `cancel` function. Any code that takes `ctx` can stop when `ctx.Done()` closes.
 
+## Import
+
+```go
+import "context"
+```
+
+Standard library, so there is nothing to download.
+
+- `context`: you write `context.WithCancel`.
+
 ## API
 
 | API | Kind | Returns | Go | What it does | Example |
