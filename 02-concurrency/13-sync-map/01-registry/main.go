@@ -10,6 +10,11 @@
 // and read many times (see 02-load-or-store). For anything else, a plain
 // map with a Mutex or RWMutex is simpler (see rwmutex/01-cache).
 //
+// The sync.Map is kept inside a registry type, and only its methods touch
+// it. Callers can only add a *session, so the type assertion in Broadcast
+// can't fail. This is how production code usually uses sync.Map, because
+// its keys and values are any.
+//
 // Range visits the keys in no fixed order, so the broadcast order can
 // change between runs.
 //
@@ -34,6 +39,42 @@ type session struct {
 	device string
 }
 
+// Send pretends to send msg to s.
+func (s *session) Send(msg string) {
+	fmt.Printf("  to %s (%s)\n", s.user, s.device)
+}
+
+// registry tracks who's online. Use it through a pointer, because a
+// sync.Map must not be copied after first use.
+type registry struct {
+	sessions sync.Map // user -> *session. Only the methods below touch it
+}
+
+// Add marks s as online.
+func (r *registry) Add(s *session) {
+	r.sessions.Store(s.user, s)
+}
+
+// Remove marks user as offline.
+func (r *registry) Remove(user string) {
+	r.sessions.Delete(user)
+}
+
+// IsOnline reports whether user has a session.
+func (r *registry) IsOnline(user string) bool {
+	_, ok := r.sessions.Load(user)
+	return ok
+}
+
+// Broadcast sends msg to every session that's online right now.
+func (r *registry) Broadcast(msg string) {
+	fmt.Printf("broadcast %q:\n", msg)
+	r.sessions.Range(func(_, v any) bool {
+		v.(*session).Send(msg) // v is any. Add only stores *session, so this is safe
+		return true            // keep going to the next session
+	})
+}
+
 // broadcastAt is when main sends the broadcast. One user has left by then.
 const broadcastAt = 150 * time.Millisecond
 
@@ -47,48 +88,29 @@ func main() {
 		{"nadia", "phone", 300 * time.Millisecond},
 	}
 
-	var online sync.Map // user -> *session
+	online := &registry{}
 
 	var wg sync.WaitGroup
 	for _, v := range visits {
-		wg.Go(func() { visit(&online, &session{user: v.user, device: v.device}, v.stay) })
+		wg.Go(func() { visit(online, &session{user: v.user, device: v.device}, v.stay) })
 	}
 
 	time.Sleep(broadcastAt)
-	broadcast(&online, "server restarts in 5 minutes")
-	fmt.Println("rahim online?", isOnline(&online, "rahim"))
-	fmt.Println("karim online?", isOnline(&online, "karim"))
+	online.Broadcast("server restarts in 5 minutes")
+	fmt.Println("rahim online?", online.IsOnline("rahim"))
+	fmt.Println("karim online?", online.IsOnline("karim"))
 
 	wg.Wait()
-	fmt.Println("karim online at the end?", isOnline(&online, "karim"))
+	fmt.Println("karim online at the end?", online.IsOnline("karim"))
 }
 
 // visit adds s to online, stays for a while, then removes it.
-func visit(online *sync.Map, s *session, stay time.Duration) {
-	online.Store(s.user, s)
+func visit(online *registry, s *session, stay time.Duration) {
+	online.Add(s)
 	fmt.Println(s.user, "connected")
 
 	time.Sleep(stay)
 
-	online.Delete(s.user)
+	online.Remove(s.user)
 	fmt.Println(s.user, "left")
-}
-
-// broadcast sends msg to every session that's online right now.
-func broadcast(online *sync.Map, msg string) {
-	fmt.Printf("broadcast %q:\n", msg)
-	online.Range(func(_, v any) bool { return send(v.(*session), msg) })
-}
-
-// send pretends to send msg to one session. It returns true, so Range
-// goes on to the next one.
-func send(s *session, msg string) bool {
-	fmt.Printf("  to %s (%s)\n", s.user, s.device)
-	return true
-}
-
-// isOnline reports whether user has a session.
-func isOnline(online *sync.Map, user string) bool {
-	_, ok := online.Load(user)
-	return ok
 }
