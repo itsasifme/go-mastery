@@ -4,6 +4,16 @@
 
 Match and replace text with regular expressions.
 
+## Import
+
+```go
+import "regexp"
+```
+
+Standard library, so there is nothing to download.
+
+- `regexp`: you write `regexp.MustCompile`.
+
 ## Examples to add
 
 - `01-match`: `MatchString`, `FindString`, `FindAllString`
