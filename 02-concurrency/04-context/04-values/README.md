@@ -10,6 +10,16 @@ See the [full API overview](../README.md#api).
 
 **Solution:** `WithValue` attaches the data to the ctx, which every function already gets.
 
+## Import
+
+```go
+import "context"
+```
+
+Standard library, so there is nothing to download.
+
+- `context`: you write `context.WithValue`.
+
 ## API
 
 | API | Kind | Returns | Go | What it does | Example |
