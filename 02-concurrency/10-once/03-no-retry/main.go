@@ -78,6 +78,8 @@ const (
 
 func main() {
 	fmt.Println("with sync.OnceValues:")
+	// (&connector{}).connect makes a new connector and gives back its connect
+	// method, tied to it. So each run starts with 0 attempts.
 	onceGet := sync.OnceValues((&connector{}).connect)
 	done := make(chan struct{}) // pay -> main: "I'm finished"
 	go pay(onceGet, done)
