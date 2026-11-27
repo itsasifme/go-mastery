@@ -4,6 +4,16 @@
 
 Convert between strings and numbers.
 
+## Import
+
+```go
+import "strconv"
+```
+
+Standard library, so there is nothing to download.
+
+- `strconv`: you write `strconv.Atoi`.
+
 ## Examples to add
 
 - `01-parse`: `Atoi`, `ParseInt`, `ParseFloat`, `ParseBool`
