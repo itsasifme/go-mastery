@@ -4,6 +4,16 @@
 
 Turn Go values into JSON and back. Basic struct tags are already shown in [structs/03-json-tags](../../01-fundamentals/07-structs/03-json-tags/).
 
+## Import
+
+```go
+import "encoding/json"
+```
+
+Standard library, so there is nothing to download.
+
+- `encoding/json`: the package name is `json`, the last part of the path, so you write `json.Marshal`.
+
 ## Examples to add
 
 - `01-marshal-unmarshal`: struct to JSON and back, with `omitempty` and `"-"`
