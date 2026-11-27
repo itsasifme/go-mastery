@@ -8,6 +8,12 @@
 // The rule: never change a config after it's stored. Build a new one and
 // Store it. Handlers may still be using the old one.
 //
+// Note: each server reloads its own config. For a moment, servers can run
+// different versions. That's fine for most settings, like a banner. If an
+// old setting causes a mistake, like a broken feature you just switched
+// off, keep the config in one shared place, like etcd or AWS AppConfig,
+// and have each server watch it.
+//
 // Real use:
 //   - reloading a config file on SIGHUP without restarting the server.
 //   - swapping a routing table or a TLS certificate while requests are
