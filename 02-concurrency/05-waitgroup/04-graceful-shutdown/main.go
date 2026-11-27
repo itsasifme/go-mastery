@@ -72,7 +72,7 @@ func worker(ctx context.Context, id int, wg *sync.WaitGroup) {
 		case <-ctx.Done():
 			fmt.Printf("worker %d: stopping after %d jobs\n", id, jobs)
 			return
-		default:
+		default: // ctx isn't done yet, so don't wait: go on to the next job
 		}
 
 		time.Sleep(jobTime) // simulate one job. It isn't stopped halfway
