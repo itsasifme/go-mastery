@@ -4,6 +4,16 @@
 
 Work with dates, durations, time zones, timers, and tickers.
 
+## Import
+
+```go
+import "time"
+```
+
+Standard library, so there is nothing to download.
+
+- `time`: you write `time.Now`.
+
 ## Examples to add
 
 - `01-durations`: add and compare durations, and use `time.Since`
