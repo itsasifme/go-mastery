@@ -8,6 +8,16 @@
 
 **Solution:** atomic types. `count++` is really three steps: read the number, add 1, write it back. Two goroutines can mix up those steps and lose an update. An atomic method like `count.Add(1)` does all three as one step, so no other goroutine can get in between. There is no lock, so nobody waits.
 
+## Import
+
+```go
+import "sync/atomic"
+```
+
+Standard library, so there is nothing to download.
+
+- `sync/atomic`: the package name is `atomic`, the last part of the path, so you write `atomic.Int64`.
+
 ## API
 
 ### Types
@@ -45,12 +55,38 @@ Call these on a variable of one of the types above, like `count.Add(1)`.
 | `04-compare-and-swap` | `go run ./02-concurrency/09-atomic/04-compare-and-swap` | Problem: checking, then taking, hands out more coupons than exist, and `-race` finds nothing. CompareAndSwap fixes it |
 | `05-late-read` | `go run ./02-concurrency/09-atomic/05-late-read` | Jobs read a shared atomic ID too late and get the same one. No race, still wrong |
 
+## Atomic or `Mutex`?
+
+Both stop data races, and both work inside one server only. The difference is how much they can protect, and whether anyone waits.
+
+| | `sync/atomic` | `sync.Mutex` |
+| --- | --- | --- |
+| Protects | one value: a number, a bool or a pointer | any data: several fields, a map, a slice |
+| Others wait | no, nobody waits | yes, at `Lock` |
+| Check, then change | a `CompareAndSwap` loop ([04](04-compare-and-swap/)) | check and change under one lock ([mutex/03-check-then-act](../07-mutex/03-check-then-act/)) |
+| Fair turns | no: an unlucky goroutine can lose many times, so give the loop a retry limit ([04](04-compare-and-swap/)) | yes: once someone has waited too long, it goes first come, first served |
+| Easy mistake | using it when two values must change together | forgetting to lock, or copying the mutex |
+
+Which one for common jobs:
+
+| Job | Use |
+| --- | --- |
+| Count requests | atomic `Add` ([01](01-counter/)) |
+| An on/off switch | `atomic.Bool` ([02](02-flag/)) |
+| Swap a whole config | `atomic.Pointer` ([03](03-pointer/)) |
+| Take one from a stock that's just one number | atomic `CompareAndSwap` ([04](04-compare-and-swap/)) |
+| Move money between two accounts | mutex: two values change together |
+| A map or a slice | mutex ([mutex/02-safe-type](../07-mutex/02-safe-type/)) |
+
+If you're not sure, start with a mutex. Switch to atomic when it's one value that many goroutines touch all the time.
+
 ## Things to remember
 
 - **Use atomic for one value. Use a mutex when several fields must change together.**
 - **Don't mix atomic and normal reads or writes on the same variable.** The typed atomics make that hard to do by mistake.
 - **Never change a value after you `Store` its pointer.** Build a new one and `Store` that (`03`).
 - A check followed by a separate change isn't safe. Use a `CompareAndSwap` loop (`04`).
+- **Atomic only works inside one server.** Fine for a request counter or config in `atomic.Pointer`. For coupon stock, use the database or Redis `INCR` (`04`). See [One server or many?](../README.md#one-server-or-many).
 - **Give a `CompareAndSwap` loop a retry limit.** A swap only fails when another goroutine changed the value first, so the loop does end. But one unlucky goroutine can lose again and again. At the limit, return a "try again" error, so the user isn't left waiting (`04`).
 - **Atomic stops the race, but not wrong logic.** If a goroutine needs the value from its own loop round, give it a copy before `go`. Don't let it read the shared value later (`05`).
 - For a one-time "stop" that many goroutines must notice, use `ctx`. `atomic.Bool` is for a value that flips back and forth (`02`).
