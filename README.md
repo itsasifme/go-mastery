@@ -162,9 +162,9 @@ Some examples print in a different order each run. Some crash on purpose (a dead
 
 ## Go version
 
-This repo uses Go 1.26 (set in `go.mod`). Older versions may not work. When a topic uses a newer Go feature, its README says which version added it.
+The Go version this repo needs is set in `go.mod`. Older versions may not work. When a topic uses a newer Go feature, its README says which version added it.
 
-The only outside package is `golang.org/x/sync`, for the errgroup, semaphore and singleflight examples. It's pinned to `v0.16.0`.
+The only outside package is `golang.org/x/sync`, for the errgroup, semaphore and singleflight examples. Its version is pinned in `go.mod`.
 
 ## Notes
 
