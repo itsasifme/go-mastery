@@ -4,6 +4,20 @@
 
 The simple `log` package, and structured logs with `log/slog`.
 
+## Import
+
+```go
+import (
+	"log"
+	"log/slog"
+)
+```
+
+Standard library, so there is nothing to download.
+
+- `log`: you write `log.Println`.
+- `log/slog`: the package name is `slog`, the last part of the path, so you write `slog.Info`.
+
 ## Examples to add
 
 - `01-log`: `log.Println`, flags, and prefixes
