@@ -13,6 +13,12 @@
 // g.Do only takes a func() (any, error), so each call is a one-line
 // closure that calls a named function.
 //
+// Note: the group lives in this server's memory. With many servers, each
+// one makes its own call, so the database gets one call per server. That's
+// only extra work, not a wrong answer, so it's usually fine. If it must be
+// one call for the whole app, use a Redis lock, or send each key to one
+// server.
+//
 // Real use:
 //   - an API where a viral post or a popular product gets many requests
 //     at once: one db.QueryRowContext instead of hundreds.
