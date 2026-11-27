@@ -65,6 +65,9 @@ func stopAfter(d time.Duration, stop chan<- struct{}) {
 // produce sends each value after a delay, then closes the channel.
 // It stops early if stop is closed.
 func produce(values []int, delay time.Duration, out chan<- int, stop <-chan struct{}, done chan<- struct{}) {
+	// Defers run in reverse order: close(out) first, then the done send.
+	// The other way round, this send would wait for main, while main is
+	// still reading out and waiting for it to close.
 	defer func() { done <- struct{}{} }() // send, not close: others share done
 	defer close(out)
 
