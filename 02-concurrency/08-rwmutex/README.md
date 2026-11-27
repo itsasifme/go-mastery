@@ -8,6 +8,16 @@
 
 **Solution:** `sync.RWMutex` has two kinds of lock. `RLock` can be held by many readers at once. `Lock` waits until every reader is gone, then lets one writer in alone.
 
+## Import
+
+```go
+import "sync"
+```
+
+Standard library, so there is nothing to download.
+
+- `sync`: you write `sync.RWMutex`.
+
 ## API
 
 | API | Kind | Returns | Go | What it does | Example |
@@ -33,3 +43,4 @@
 - **You can't upgrade `RLock` to `Lock`.** Release the read lock, take the write lock, then check again (`03`).
 - **Don't call `RLock` twice in the same goroutine.** It works in tests, then gets stuck when a writer calls `Lock` in between. Use a `...Locked` helper (`04`).
 - A writer that's waiting blocks new readers. So a steady stream of reads can't keep a writer waiting forever.
+- **Each server has its own copy of the data.** Fine when old data is harmless, like a banner. When old data is a mistake, like a price or a balance, use Redis or the database (`01`). See [One server or many?](../README.md#one-server-or-many).
