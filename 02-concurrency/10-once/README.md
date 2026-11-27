@@ -8,6 +8,16 @@
 
 **Solution:** `sync.Once`. `once.Do(f)` runs `f` for the first caller only. The other callers wait until `f` is finished, then go on. Since Go 1.21, `OnceFunc`, `OnceValue` and `OnceValues` wrap a function so you don't need a separate `Once` variable.
 
+## Import
+
+```go
+import "sync"
+```
+
+Standard library, so there is nothing to download.
+
+- `sync`: you write `sync.Once`.
+
 ## API
 
 | API | Kind | Returns | Go | What it does | Example |
@@ -18,7 +28,15 @@
 | `sync.OnceValue(f)` | function | `func() T` | 1.21 | Runs `f` once and returns its result every time | none |
 | `sync.OnceValues(f)` | function | `func() (T, error)` | 1.21 | Same, for a value and an error | [02-once-value](02-once-value/), [03-no-retry](03-no-retry/) |
 
-### `once.Do` or `OnceFunc`?
+## Examples
+
+| Example | Run | What it shows |
+| --- | --- | --- |
+| `01-lazy-init` | `go run ./02-concurrency/10-once/01-lazy-init` | Open a database pool on first use, once, while requests arrive together |
+| `02-once-value` | `go run ./02-concurrency/10-once/02-once-value` | Read a config file once with `OnceValues`, and warn once with `OnceFunc` |
+| `03-no-retry` | `go run ./02-concurrency/10-once/03-no-retry` | `OnceValues` keeps a failed connect forever. A mutex version tries again |
+
+## `once.Do` or `OnceFunc`?
 
 Both run the function once, and other callers wait for it. `OnceFunc` uses a `sync.Once` inside. The difference is where the `Once` lives, and what happens after a panic.
 
@@ -44,20 +62,13 @@ func (c *Client) get() *conn {
 var loadConfig = sync.OnceValues(readConfig)
 ```
 
-## Examples
-
-| Example | Run | What it shows |
-| --- | --- | --- |
-| `01-lazy-init` | `go run ./02-concurrency/10-once/01-lazy-init` | Open a database pool on first use, once, while requests arrive together |
-| `02-once-value` | `go run ./02-concurrency/10-once/02-once-value` | Read a config file once with `OnceValues`, and warn once with `OnceFunc` |
-| `03-no-retry` | `go run ./02-concurrency/10-once/03-no-retry` | `OnceValues` keeps a failed connect forever. A mutex version tries again |
-
 ## Things to remember
 
 - **The first result is final, even an error.** If setup can fail for a moment, use a mutex and save the result only on success (`03`).
 - **If the function panics, `once.Do` still counts it as done.** Later calls do nothing, and the code goes on without the setup. `OnceFunc`, `OnceValue` and `OnceValues` panic again on every call, so you keep seeing the problem.
 - **Pick by where the `Once` lives.** Use `once.Do` for a `Once` field inside a struct. Use `OnceFunc`, `OnceValue` or `OnceValues` for a package variable.
 - Calling `once.Do` inside its own function gets stuck forever.
+- **Once means once per server.** Fine for opening a database pool or parsing templates. For "send the welcome email once", use a unique key in the database (`01`). See [One server or many?](../README.md#one-server-or-many).
 - Use `OnceValues` instead of a `Once` plus a package variable. Then the value and the "done" state can't get out of sync (`02`).
 
 ## Go version notes
