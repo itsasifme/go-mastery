@@ -10,6 +10,16 @@ See the [full API overview](../README.md#api).
 
 **Solution:** `WithDeadline` sets a fixed end time. `ctx.Deadline()` tells every step when that is, and a child can only make it earlier.
 
+## Import
+
+```go
+import "context"
+```
+
+Standard library, so there is nothing to download.
+
+- `context`: you write `context.WithDeadline`.
+
 ## API
 
 | API | Kind | Returns | Go | What it does | Example |
