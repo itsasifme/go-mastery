@@ -12,6 +12,11 @@
 // Database connections don't need this: database/sql already limits them
 // with db.SetMaxOpenConns.
 //
+// Note: maxCalls counts calls from this server only. The partner's limit is
+// for the whole app, so with 20 servers the partner can get 20 times
+// maxCalls at once. For a limit shared by every server, keep the count in
+// Redis or use a shared rate limiter.
+//
 // Real use:
 //   - an HTTP handler that calls sem.Acquire(r.Context(), 1) before calling
 //     a partner API, so the wait also ends if the client hangs up.
