@@ -8,6 +8,16 @@
 
 **Solution:** `sync.Pool`. `Get` hands out an object from the pool, or makes one with `New` if the pool is empty. `Put` gives it back for the next caller. A few objects end up serving thousands of requests. It's safe to use from many goroutines.
 
+## Import
+
+```go
+import "sync"
+```
+
+Standard library, so there is nothing to download.
+
+- `sync`: you write `sync.Pool`.
+
 ## API
 
 | API | Kind | Returns | Go | What it does | Example |
