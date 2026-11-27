@@ -5,9 +5,12 @@
 // each job take as many units as it needs. Acquire blocks until there's
 // enough room. Release gives the units back.
 //
-// Weighted is fair: jobs get their units in the order they asked. A big
-// job that's waiting isn't passed by small jobs behind it, so it never
-// waits forever.
+// Here main asks for units one job at a time, in loop order, and waits
+// inside Acquire. So the start order you see comes from the loop, not from
+// Weighted. Weighted is also fair on its own: when many goroutines wait at
+// once, like HTTP handlers, they get their units in the order they asked.
+// A big job that's waiting isn't passed by small jobs behind it, so it
+// never waits forever.
 //
 // Note: compare with 01-channel. There, every job took exactly one slot.
 //
