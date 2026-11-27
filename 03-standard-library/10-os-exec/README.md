@@ -4,6 +4,16 @@
 
 Run other programs from Go.
 
+## Import
+
+```go
+import "os/exec"
+```
+
+Standard library, so there is nothing to download.
+
+- `os/exec`: the package name is `exec`, the last part of the path, so you write `exec.Command`.
+
 ## Examples to add
 
 - `01-output`: run a command and read its output
