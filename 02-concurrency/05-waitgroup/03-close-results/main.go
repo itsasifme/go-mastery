@@ -51,6 +51,9 @@ func main() {
 		go check(site, status, results, &wg)
 	}
 
+	// Wait in its own goroutine. If main called wg.Wait() here, every check
+	// would wait to send on results, nobody would read them, and it would
+	// deadlock.
 	go closeWhenDone(&wg, results)
 
 	for r := range results { // stops when closeWhenDone closes results
