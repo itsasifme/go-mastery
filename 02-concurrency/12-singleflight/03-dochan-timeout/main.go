@@ -61,6 +61,8 @@ func fetchReport(caller string, limit time.Duration, g *singleflight.Group, wg *
 	ctx, cancel := context.WithTimeout(context.Background(), limit)
 	defer cancel()
 
+	// DoChan's channel has a buffer of 1. If this caller gives up, the result
+	// can still be sent, so nothing leaks. buildReport keeps running, though.
 	ch := g.DoChan("daily-report", buildReport)
 	select {
 	case res := <-ch:
