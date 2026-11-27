@@ -4,6 +4,20 @@
 
 `io.Reader` and `io.Writer` are used all over Go. This topic shows how they work and fit together.
 
+## Import
+
+```go
+import (
+	"bufio"
+	"io"
+)
+```
+
+Standard library, so there is nothing to download.
+
+- `bufio`: you write `bufio.Scanner`.
+- `io`: you write `io.Reader`.
+
 ## Examples to add
 
 - `01-reader-writer`: write a small `io.Reader` yourself
