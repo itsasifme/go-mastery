@@ -55,5 +55,5 @@ func respond(user string) string {
 	defer bufPool.Put(buf)
 
 	fmt.Fprintf(buf, `{"email":%q}`, user+"@example.com")
-	return buf.String()
+	return buf.String() // a copy, so it stays valid after Put gives buf to someone else
 }
