@@ -47,6 +47,8 @@ func main() {
 	go fetch(ctx, "fast fetch", fastTime, result, done)
 	go fetch(ctx, "slow fetch", slowTime, result, done)
 
+	// Once ctx is done, Done() stays ready. So every answer that's still
+	// missing takes the ctx.Done() case right away, one "gave up" each.
 	for range fetchCount { // one answer per fetch: its data, or the timeout
 		select {
 		case r := <-result: // a fetch finished in time
