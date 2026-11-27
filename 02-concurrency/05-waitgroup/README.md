@@ -8,6 +8,16 @@
 
 **Solution:** `sync.WaitGroup`, a counter. You add to it before starting goroutines. Each one marks itself done, and `Wait` blocks until the count is 0.
 
+## Import
+
+```go
+import "sync"
+```
+
+Standard library, so there is nothing to download.
+
+- `sync`: you write `sync.WaitGroup`.
+
 ## API
 
 | API | Kind | Go | What it does | Example |
