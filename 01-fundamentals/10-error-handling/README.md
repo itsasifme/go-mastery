@@ -4,6 +4,20 @@
 
 In Go, an error is just a value that a function returns.
 
+## Import
+
+```go
+import (
+	"errors"
+	"fmt"
+)
+```
+
+Standard library, so there is nothing to download.
+
+- `errors`: you write `errors.Is`.
+- `fmt`: you write `fmt.Errorf`.
+
 ## Examples to add
 
 - `01-basics`: return an error and check `if err != nil`
