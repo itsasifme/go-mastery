@@ -9,6 +9,11 @@
 // Note: with a plain Mutex (see mutex/02-safe-type), readers would wait for
 // each other, even though reading doesn't change anything.
 //
+// Note: each server has its own copy of this cache. After a change, one
+// server may show new data and another old data for a few seconds. That's
+// fine for a product description. If old data causes a mistake, like
+// charging an old price, use a shared cache like Redis or read the database.
+//
 // Real use:
 //   - exchange rates, feature flags or a list of allowed API keys that
 //     every request reads and a background job refreshes.
