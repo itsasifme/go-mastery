@@ -4,6 +4,16 @@
 
 Search, split, and build text with the `strings` package.
 
+## Import
+
+```go
+import "strings"
+```
+
+Standard library, so there is nothing to download.
+
+- `strings`: you write `strings.Split`.
+
 ## Examples to add
 
 - `01-search-split`: `Contains`, `Index`, `Split`, `Fields`, `Cut`
